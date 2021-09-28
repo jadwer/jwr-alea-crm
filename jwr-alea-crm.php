@@ -32,7 +32,7 @@ if (!defined('ABSPATH')) {
  */
 function crm_init()
 {
-    //crm_setup();
+    crm_setup();
 }
 register_activation_hook(__FILE__, 'crm_init');
 
@@ -48,28 +48,40 @@ register_deactivation_hook(__FILE__, 'crm_deactivation');
 /**
  * Setup the configuration when you start the plugin
  */
-function crm_setup()
-{
-    echo "<script> console.log(\"%cEl plugin JwR-Alea-CRM fue programado por gabino\", \"color:yellow\"); </script>";
+function crm_setup() {
+//    echo "<script> console.log(\"%cEl plugin JwR-Alea-CRM fue programado por gabino\", \"color:yellow\"); </script>";
+
+    if(!post_exists( "Our New Auto-Created Page",'','','page')){
+        $my_page = array(
+            'post_title' => 'Our New Auto-Created Page',
+            'post_content' => 'This is a new page. You can add any content you want here, including shortcodes.',
+            'post_status' => 'publish',
+            'post_type' => 'page',
+            'post_author' => 1,
+            'post_date' => date('Y-m-d H:i:s')
+        );
+        $post_id = wp_insert_post($my_page);    //crm_setup();    
+    }
+
+    //wp_delete_post()
 }
-add_action('init', 'crm_setup');
 
 function create_menu()
 {
     add_menu_page(
-        'Titulo', //get_plugin_data(__FILE__),
+        'JwR Alea CRM', //get_plugin_data(__FILE__),
         'Alea CRM',
         'manage_options',
         'jwr-crm-config',
         'mostrar_contenido',
         plugin_dir_url(__FILE__) . '/admin/img/icon.png',
-        '1'
+        55
     );
 
     add_submenu_page(
         'jwr-crm-config',
-        get_admin_page_title(),
-        'pagina 1',
+        'Formularios de consulta',
+        'Formularios de consulta',
         'manage_options',
         'pagina-1',
         'mostrar_contenido2',
@@ -83,15 +95,24 @@ add_action('admin_menu', 'create_menu');
 
 function mostrar_contenido()
 {
-    echo "<h1>Titulo</h1>";
+    echo "<h1>".get_admin_page_title()."</h1>";
+    echo "<br>";
+    echo get_page_template('pag1');
+    echo "<br>";
+    echo plugin_dir_path(__FILE__) . 'admin/pag1.php';
+    echo "<br>";
+    echo plugins_url( 'admin/pag1.php', __FILE__ );
+    echo "<br>";
+    echo get_template_directory();
 }
 
 function mostrar_contenido2()
 {
-    echo "<h1>Pagina 1</h1>";
+    echo "<h1>".get_admin_page_title()."</h1>";
 }
 
 function validate_JwR_Theme()
 {
     return true;
 }
+
