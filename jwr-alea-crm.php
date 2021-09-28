@@ -27,6 +27,11 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
+function validate_JwR_Theme()
+{
+    return true;
+}
+
 /**
  * Activate the plugin.
  */
@@ -41,6 +46,8 @@ register_activation_hook(__FILE__, 'crm_init');
  */
 function crm_deactivation()
 {
+    wp_delete_post(get_option('jwr_alea_crm_page_id'));
+    delete_option('jwr_alea_crm_page_id');
     flush_rewrite_rules();
 }
 register_deactivation_hook(__FILE__, 'crm_deactivation');
@@ -51,16 +58,17 @@ register_deactivation_hook(__FILE__, 'crm_deactivation');
 function crm_setup() {
 //    echo "<script> console.log(\"%cEl plugin JwR-Alea-CRM fue programado por gabino\", \"color:yellow\"); </script>";
 
-    if(!post_exists( "Our New Auto-Created Page",'','','page')){
+    if(!post_exists( "Alea CRM",'','','page','publish')){
         $my_page = array(
-            'post_title' => 'Our New Auto-Created Page',
-            'post_content' => 'This is a new page. You can add any content you want here, including shortcodes.',
+            'post_title' => 'Alea CRM',
+            'post_content' => '[Alea-CRM]',
             'post_status' => 'publish',
             'post_type' => 'page',
             'post_author' => 1,
             'post_date' => date('Y-m-d H:i:s')
         );
-        $post_id = wp_insert_post($my_page);    //crm_setup();    
+        $post_id = wp_insert_post($my_page);
+        add_option( 'jwr_alea_crm_page_id', $post_id);
     }
 
     //wp_delete_post()
@@ -111,8 +119,20 @@ function mostrar_contenido2()
     echo "<h1>".get_admin_page_title()."</h1>";
 }
 
-function validate_JwR_Theme()
-{
-    return true;
+function prueba($atts = [], $content = null, $tag = ''){
+    ob_start();
+    $atts = array_change_key_case( (array) $atts, CASE_LOWER );
+    echo "<h1>Pruebita de Shortcode</h1>";
+    echo "<pre>". var_dump($atts)."</pre>";
+    $output = ob_get_clean();
+    return $output;
 }
 
+
+/**
+ * Central location to create all shortcodes.
+ */
+function jwr_crm_shortcodes_init() {
+    add_shortcode("Alea-CRM", "prueba");
+}
+add_action( 'init', 'jwr_crm_shortcodes_init' );

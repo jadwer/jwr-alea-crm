@@ -1,0 +1,22 @@
+CREATE TABLE IF NOT EXISTS `jwr_alea_facturas` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `referencia` varchar(15) NOT NULL,
+  `fecha` datetime NOT NULL,
+  `cliente` int NOT NULL,
+  `dietaid` int NOT NULL,
+  `nombre` varchar(50) NOT NULL,
+  `apellidos` varchar(100) NOT NULL,
+  `nif` varchar(20) NOT NULL,
+  `calle` varchar(200) NOT NULL,
+  `numero` smallint NOT NULL,
+  `pisoLetra` varchar(5) NOT NULL,
+  `cp` varchar(5) NOT NULL,
+  `ciudad` varchar(50) NOT NULL,
+  `provincia` varchar(50) NOT NULL,
+  `concepto` varchar(255) NOT NULL DEFAULT '',
+  `precio` float(5, 2) NOT NULL,
+  `iva` float(5, 2) NOT NULL DEFAULT '0.00',
+  `total` float(5, 2) NOT NULL,
+  `state` tinyint NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE = InnoDB AUTO_INCREMENT = 28114 DEFAULT CHARSET = utf8mb3;
