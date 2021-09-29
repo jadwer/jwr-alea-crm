@@ -1,5 +1,7 @@
 <?php
+
 namespace JWR;
+
 class Utils
 {
     public static function createPage($title, $shortcode, $option)
@@ -8,7 +10,7 @@ class Utils
             $newCRMPage = array(
                 'post_title' => $title,
                 'post_excerpt' => '&nbsm;_',
-                'post_content' => '['.$shortcode.']',
+                'post_content' => '[' . $shortcode . ']',
                 'post_status' => 'publish',
                 'post_type' => 'page',
                 'post_author' => 1,
@@ -17,5 +19,11 @@ class Utils
             $post_id = wp_insert_post($newCRMPage);
             add_option($option, $post_id);
         }
+    }
+
+    public static function deletePage($option)
+    {
+        wp_delete_post(get_option($option));
+        delete_option($option);
     }
 } // EOF

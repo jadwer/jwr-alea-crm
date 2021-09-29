@@ -24,11 +24,15 @@ class AleaCRM
     public static function createCRMPages()
     {
         AleaCRMRequest::createRequestPages();
+        AleaCRMInvoice::createInvoicePages();
+        AleaSurvey::createSurveyPages();
     }
 
     public static function deleteCRMPages()
     {
         AleaCRMRequest::deleteRequestPages();
+        AleaCRMInvoice::deleteInvoicePages();
+        AleaSurvey::deleteSurveyPages();
     }
 
 } //EOC
