@@ -1,5 +1,4 @@
 <?php
-
 /**
  * JwR-Alea-CRM
  *
@@ -27,17 +26,17 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-function validate_JwR_Theme()
-{
-    return true;
-}
+include_once "classes/AleaCRM.php";
+use AleaCRM;
+
 
 /**
  * Activate the plugin.
  */
 function crm_init()
 {
-    crm_setup();
+    AleaCRM::createCRMPages();
+    //create_crm_pages();
 }
 register_activation_hook(__FILE__, 'crm_init');
 
@@ -46,33 +45,16 @@ register_activation_hook(__FILE__, 'crm_init');
  */
 function crm_deactivation()
 {
-    wp_delete_post(get_option('jwr_alea_crm_page_id'));
-    delete_option('jwr_alea_crm_page_id');
-    flush_rewrite_rules();
+    AleaCRM::deleteCRMPages();
+    //flush_rewrite_rules();
 }
 register_deactivation_hook(__FILE__, 'crm_deactivation');
+
 
 /**
  * Setup the configuration when you start the plugin
  */
-function crm_setup() {
-//    echo "<script> console.log(\"%cEl plugin JwR-Alea-CRM fue programado por gabino\", \"color:yellow\"); </script>";
 
-    if(!post_exists( "Alea CRM",'','','page','publish')){
-        $my_page = array(
-            'post_title' => 'Alea CRM',
-            'post_content' => '[Alea-CRM]',
-            'post_status' => 'publish',
-            'post_type' => 'page',
-            'post_author' => 1,
-            'post_date' => date('Y-m-d H:i:s')
-        );
-        $post_id = wp_insert_post($my_page);
-        add_option( 'jwr_alea_crm_page_id', $post_id);
-    }
-
-    //wp_delete_post()
-}
 
 function create_menu()
 {
@@ -136,3 +118,8 @@ function jwr_crm_shortcodes_init() {
     add_shortcode("Alea-CRM", "prueba");
 }
 add_action( 'init', 'jwr_crm_shortcodes_init' );
+
+function validate_JwR_Theme()
+{
+    return true;
+}
