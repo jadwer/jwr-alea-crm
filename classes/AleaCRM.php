@@ -10,16 +10,15 @@ require_once "AleaModel.php";
 require_once "AleaSurvey.php";
 require_once "AleaExportXLS.php";
 
+use AleaCRM as GlobalAleaCRM;
 use JWR\{AleaCRMRequest, AleaCRMInvoice, AleaModel, AleaSurvey, AleaExportXLS};
 
 class AleaCRM
 {
-     
-
-    //$invoice = new AleaCRMInvoice();
-    //$model = new AleaModel();
-    //$survey = new AleaSurvey();
-    //$xls = new AleaExportXLS();
+    public function __construct()
+    {
+        return;    
+    }
 
     public static function createCRMPages()
     {
@@ -33,6 +32,18 @@ class AleaCRM
         AleaCRMRequest::deleteRequestPages();
         AleaCRMInvoice::deleteInvoicePages();
         AleaSurvey::deleteSurveyPages();
+    }
+
+    public static function testModel(){
+        AleaModel::test();
+    }
+
+    public static function createTables(){
+        AleaModel::createTables();
+    }
+
+    public static function deleteTables(){
+        AleaModel::deleteTables();
     }
 
 } //EOC

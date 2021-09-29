@@ -1,6 +1,57 @@
 <?php
+
 namespace JWR;
 
-class AleaModel {
+class AleaModel
+{
 
+    public static function createTables()
+    {
+        global $wpdb;
+
+        $table_name = $wpdb->prefix."alea_clientes";
+
+        $query = "
+            CREATE TABLE IF NOT EXISTS `{$table_name}` (
+                `id` int NOT NULL AUTO_INCREMENT,
+                `sexo` tinyint NOT NULL,
+                `telefono` varchar(20) NOT NULL,
+                `nacimiento` date DEFAULT NULL,
+                `state` tinyint(1) NOT NULL,
+                `nif` varchar(20) NOT NULL,
+                `email` varchar(70) NOT NULL DEFAULT '',
+                `nombre` varchar(50) NOT NULL,
+                `apellidos` varchar(100) NOT NULL,
+                `calle` varchar(100) NOT NULL,
+                `numero` smallint DEFAULT NULL,
+                `pisoLetra` varchar(5) NOT NULL,
+                `cp` varchar(5) NOT NULL,
+                `ciudad` varchar(50) NOT NULL,
+                `provincia` varchar(50) NOT NULL,
+                PRIMARY KEY (`id`)
+              ) ENGINE = InnoDB AUTO_INCREMENT = 44668 DEFAULT CHARSET = utf8mb3;
+              ";
+        if ($wpdb->get_var("SHOW TABLES LIKE '$table_name'") != $table_name) {
+            $wpdb->query($query);
+        }
+    }
+
+    public static function deleteTables()
+    {
+        global $wpdb;
+
+        $table_name = $wpdb->prefix."alea_clientes";
+
+        $query = "
+            DROP TABLE {$table_name};
+              ";
+            $wpdb->query($query);
+    }
+
+    public static function test()
+    {
+        global $wpdb;
+        $result = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}options WHERE option_id = 1", OBJECT);
+        echo "<pre>" . var_dump($result) . "</pre>";
+    }
 } // EOC

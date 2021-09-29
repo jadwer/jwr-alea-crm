@@ -36,7 +36,7 @@ use AleaCRM;
 function crm_init()
 {
     AleaCRM::createCRMPages();
-    //create_crm_pages();
+    AleaCRM::createTables();
 }
 register_activation_hook(__FILE__, 'crm_init');
 
@@ -46,7 +46,7 @@ register_activation_hook(__FILE__, 'crm_init');
 function crm_deactivation()
 {
     AleaCRM::deleteCRMPages();
-    //flush_rewrite_rules();
+    AleaCRM::deleteTables();
 }
 register_deactivation_hook(__FILE__, 'crm_deactivation');
 
@@ -54,8 +54,6 @@ register_deactivation_hook(__FILE__, 'crm_deactivation');
 /**
  * Setup the configuration when you start the plugin
  */
-
-
 function create_menu()
 {
     add_menu_page(
@@ -103,9 +101,14 @@ function mostrar_contenido2()
 
 function prueba($atts = [], $content = null, $tag = ''){
     ob_start();
+
+    AleaCRM::testModel();
+
     $atts = array_change_key_case( (array) $atts, CASE_LOWER );
     echo "<h1>Pruebita de Shortcode</h1>";
     echo "<pre>". var_dump($atts)."</pre>";
+
+
     $output = ob_get_clean();
     return $output;
 }
@@ -115,7 +118,7 @@ function prueba($atts = [], $content = null, $tag = ''){
  * Central location to create all shortcodes.
  */
 function jwr_crm_shortcodes_init() {
-    add_shortcode("Alea-CRM", "prueba");
+    add_shortcode("alea-request", "prueba");
 }
 add_action( 'init', 'jwr_crm_shortcodes_init' );
 
