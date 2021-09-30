@@ -4,12 +4,12 @@ namespace JWR;
 
 class Utils
 {
-    public static function createPage($title, $shortcode, $option)
+    public static function createPage($title, $slug, $shortcode, $option)
     {
         if (!post_exists($title, '', '', 'page', 'publish')) {
             $newCRMPage = array(
                 'post_title' => $title,
-                'post_excerpt' => '&nbsm;_',
+                'post_name' => $slug,
                 'post_content' => '[' . $shortcode . ']',
                 'post_status' => 'publish',
                 'post_type' => 'page',
