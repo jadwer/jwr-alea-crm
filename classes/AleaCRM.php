@@ -1,5 +1,7 @@
 <?php
+
 namespace JWR;
+
 if (!defined('ABSPATH')) {
     exit;
 }
@@ -17,7 +19,7 @@ class AleaCRM
 {
     public function __construct()
     {
-        return;    
+        return;
     }
 
     public static function createCRMPages()
@@ -34,16 +36,44 @@ class AleaCRM
         AleaSurvey::deleteSurveyPages();
     }
 
-    public static function testModel(){
+    public static function testModel()
+    {
         AleaModel::test();
     }
 
-    public static function createTables(){
+    public static function createTables()
+    {
         AleaModel::createTables();
     }
 
-    public static function deleteTables(){
+    public static function deleteTables()
+    {
         AleaModel::deleteTables();
     }
 
+
+    function shortcode_request($atts = [], $content = null, $tag = '')
+    {
+        ob_start();
+
+        //        AleaCRM::testModel();
+        $url = get_rest_url().'alea-crm/request/1';
+        print_r($url);
+        $response = file_get_contents($url);
+        if ($response) {
+//            print_r($response);
+            $response_results = json_decode($response);
+            echo "<pre>";
+            print_r($response_results->data[0]->email);
+            echo "</pre>";
+        }
+
+        $atts = array_change_key_case((array) $atts, CASE_LOWER);
+        echo "<h1>Pruebita de Shortcode</h1>";
+        echo "<pre>" . var_dump($atts) . "</pre>";
+
+
+        $output = ob_get_clean();
+        return $output;
+    }
 } //EOC

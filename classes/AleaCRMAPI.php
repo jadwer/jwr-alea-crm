@@ -1,25 +1,8 @@
 <?php
-// add_action('rest_api_init', 'alea_crm_request_route');
-
-// function alea_crm_request_route()
-// {
-//     register_rest_route(
-//         'alea-crm',
-//         'request',
-//         array(
-//             'methods' => 'GET',
-//             'callback' => 'get_clients',
-//         )
-//     );
-// }
-
-// function get_clients()
-// {
-//     return wp_send_json(rest_ensure_response('Hello World! This is my first REST API'));
-// }
 
 namespace JWR;
-
+include_once "AleaModel.php";
+use JWR\AleaModel;
 
 class ALeaAPI
 {
@@ -38,7 +21,7 @@ class ALeaAPI
                 'methods' => 'GET',
                 'callback' => array($this, 'get_clients'),
                 'permission_callback' => '__return_true'
-                )
+            )
         );
         register_rest_route(
             $namespace,
@@ -47,12 +30,14 @@ class ALeaAPI
                 'methods' => 'GET',
                 'callback' => array($this, 'get_clients'),
                 'permission_callback' => '__return_true'
-                )
+            )
         );
     }
 
     function get_clients($data)
     {
-        return wp_send_json(rest_ensure_response('Hello World! This is my first REST API: '. $data['id']));
+        $response = new AleaModel();
+        return wp_send_json(rest_ensure_response($response->getAllCustomers()));
+//        return wp_send_json(rest_ensure_response('Hello World! This is my first REST API: ' . $data['id']));
     }
 }

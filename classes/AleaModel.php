@@ -5,6 +5,15 @@ namespace JWR;
 class AleaModel
 {
 
+    public function getAllCustomers()
+    {
+        global $wpdb;
+        $table_name = $wpdb->prefix . "alea_clientes";
+        $query = "SELECT * FROM {$table_name} WHERE 1 ORDER BY id DESC LIMIT 2";
+        $result = $wpdb->get_results($query);
+        return $result;
+    }
+
     private static function createAleaClientesTable()
     {
         global $wpdb;
