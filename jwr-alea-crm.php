@@ -27,7 +27,11 @@ if (!defined('ABSPATH')) {
 }
 
 include_once "classes/AleaCRM.php";
-use AleaCRM;
+include_once "classes/AleaCRMAPI.php";
+use JWR\{AleaCRM,ALeaAPI} ;
+
+$API = new ALeaAPI();
+add_action('rest_api_init', array($API, 'register_routes'));
 
 
 /**

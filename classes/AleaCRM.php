@@ -1,5 +1,5 @@
 <?php
-
+namespace JWR;
 if (!defined('ABSPATH')) {
     exit;
 }
