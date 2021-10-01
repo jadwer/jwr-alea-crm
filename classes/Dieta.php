@@ -127,7 +127,6 @@ namespace JWR {
          */
         private function __construct_data()
         {
-
         }
 
         /**
@@ -138,7 +137,6 @@ namespace JWR {
          */
         private function __construct_void()
         {
-
         }
 
 
@@ -185,20 +183,20 @@ namespace JWR {
 
             $table_name = $wpdb->prefix . "alea_clientes";
 
-            if ($wpdb->get_var("SHOW TABLES LIKE '".$table."'") == $table) {
+            if ($wpdb->get_var("SHOW TABLES LIKE '" . $table . "'") == $table) {
 
-                $query = "INSERT INTO $table_name SELECT * FROM `".$database."`.`".$table."`;";
+                $query = "INSERT INTO $table_name SELECT * FROM `" . $database . "`.`" . $table . "`;";
                 $wpdb->query($query);
             }
         }
 
-        public static function deleteTableAleaFacturas(){
+        public static function deleteTableAleaFacturas()
+        {
             global $wpdb;
 
             $table_name = $wpdb->prefix . "alea_clientes";
             $query = "DROP TABLE {$table_name};";
             $wpdb->query($query);
-
         }
     } //namespace
 } //EOC
