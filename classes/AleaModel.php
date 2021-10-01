@@ -2,6 +2,8 @@
 
 namespace JWR;
 
+require_once "Customer.php";
+USE \JWR\Customer;
 class AleaModel
 {
 
@@ -9,12 +11,43 @@ class AleaModel
     {
         global $wpdb;
         $table_name = $wpdb->prefix . "alea_clientes";
-        $query = "SELECT * FROM {$table_name} WHERE 1 ORDER BY id DESC LIMIT 2";
+        $query = "SELECT * FROM {$table_name} WHERE 1 ORDER BY id DESC";
         $result = $wpdb->get_results($query);
         return $result;
     }
 
-    private static function createAleaClientesTable()
+    public function getCustomers($start, $quantity)
+    {
+        $start--;
+        global $wpdb;
+        $table_name = $wpdb->prefix . "alea_clientes";
+        $query = "SELECT * FROM {$table_name} WHERE 1 ORDER BY id DESC LIMIT {$start},{$quantity}";
+        $result = $wpdb->get_results($query);
+        return $result;
+    }
+
+    public function getCustomerData($id)
+    {
+        global $wpdb;
+        $table_name = $wpdb->prefix . "alea_clientes";
+        $query = "SELECT * FROM {$table_name} WHERE id = {$id}";
+        $result = $wpdb->get_results($query);
+        return $result;
+    }
+    public function setCustomerData($id)
+    {
+        global $wpdb;
+        $table_name = $wpdb->prefix . "alea_clientes";
+        $query = "SELECT * FROM {$table_name} WHERE id = {$id}";
+        $result = $wpdb->get_results($query);
+        return $result;
+    }
+
+    /**
+     * Create, migrate and delete database tables
+     */
+
+     private static function createAleaClientesTable()
     {
         global $wpdb;
 
@@ -124,9 +157,9 @@ class AleaModel
 
     public static function createTables()
     {
+        Customer::createTableAleaClientes();
         Self::createAleaDietasTable();
         Self::createAleaFacturasTable();
-        Self::createAleaClientesTable();
         return;
     }
 
@@ -134,11 +167,9 @@ class AleaModel
     {
         set_time_limit(0);
 
-        global $wpdb;
+        Customer::deleteTableAleaClientes();
 
-        $table_name = $wpdb->prefix . "alea_clientes";
-        $query = "DROP TABLE {$table_name};";
-        $wpdb->query($query);
+        global $wpdb;
 
         $table_name = $wpdb->prefix . "alea_dietas";
         $query = "DROP TABLE {$table_name};";

@@ -26,4 +26,11 @@ class Utils
         wp_delete_post(get_option($option));
         delete_option($option);
     }
+
+    public static function set_object_vars($object, array $vars) {
+        $has = get_object_vars($object);
+        foreach ($has as $name => $oldValue) {
+            $object->$name = isset($vars[$name]) ? $vars[$name] : NULL;
+        }
+    }
 } // EOF
