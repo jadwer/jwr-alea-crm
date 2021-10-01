@@ -12,12 +12,27 @@ namespace JWR {
     abstract class JwRObject
     {
 
+        const TABLE_NAME = SELF::TABLE_NAME;
+        const NUM_FIELDS = SELF::NUM_FIELDS;
+
         /**
          * Constructor: Defines the type of subconstructor will be used to create the customer
          * 
          * @param mixed
          */
-        abstract public function __construct();
+        public function __construct()
+        {
+            $params = func_get_args();
+            $num_params = func_num_args();
+
+            if ($num_params == 1) {
+                call_user_func_array(array($this, '__construct_array'), $params);
+            } else if ($num_params == SELF::NUM_FIELDS) {
+                call_user_func_array(array($this, '__construct_data'), $params);
+            } else {
+                call_user_func_array(array($this, '__construct_void'), $params);
+            }
+        }
 
 
         // Methods of use
@@ -25,15 +40,21 @@ namespace JWR {
         /**
          * 
          */
+
+        /**
+         * Convert the object to an associative array
+         */
+        abstract public function toArray();
+
         abstract public function save();
 
-        protected function setObject($table)
+        protected function setObject($data, $table)
         {
             global $wpdb;
 
             $table_name = $wpdb->prefix . $table;
-            $data = get_object_vars($this);
-            if ($data["id"] == null) {
+            var_dump($data);
+            if (isset($data['id']) && $data["id"] == null) {
                 unset($data["id"]);
             }
             $wpdb->insert($table_name, $data);
@@ -51,14 +72,6 @@ namespace JWR {
          * 
          */
         abstract protected function __construct_array($data);
-
-        /**
-         * Create a new customer object from an params
-         * 
-         * @param mixed 
-         * 
-         */
-        abstract protected function __construct_data();
 
 
         /**

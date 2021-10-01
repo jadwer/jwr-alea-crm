@@ -10,6 +10,11 @@ namespace JWR {
 
     class Factura extends JwRObject
     {
+
+        const TABLE_NAME = "alea_facturas";
+        const NUM_FIELDS = 19;
+
+
         private ?int $id;
         private ?string $referencia;
         private ?string $fecha;
@@ -29,27 +34,34 @@ namespace JWR {
         private ?float $iva;
         private ?float $total;
         private ?int $state;
-        /**
-         * Constructor: Defines the type of subconstructor will be used to create the customer
-         * 
-         * @param mixed
-         */
-        public function __construct()
-        {
-            $params = func_get_args();
-            $num_params = func_num_args();
-
-            if ($num_params == 1) {
-                call_user_func_array(array($this, '__construct_array'), $params);
-            } else if ($num_params == 19) {
-                call_user_func_array(array($this, '__construct_data'), $params);
-            } else {
-                call_user_func_array(array($this, '__construct_void'), $params);
-            }
-        }
 
 
         // Methods of use
+
+        public function toArray()
+        {
+            return array(
+                'id' => $this->id,
+                'referencia' => $this->referencia,
+                'fecha' => $this->fecha,
+                'cliente' => $this->cliente,
+                'dietaid' => $this->dietaid,
+                'nombre' => $this->nombre,
+                'apellidos' => $this->apellidos,
+                'nif' => $this->nif,
+                'calle' => $this->calle,
+                'numero' => $this->numero,
+                'pisoLetra' => $this->pisoLetra,
+                'cp' => $this->cp,
+                'ciudad' => $this->ciudad,
+                'provincia' => $this->provincia,
+                'concepto' => $this->concepto,
+                'precio' => $this->precio,
+                'iva' => $this->iva,
+                'total' => $this->total,
+                'state' => $this->state
+            );
+        }
 
         /**
          * 
@@ -62,12 +74,164 @@ namespace JWR {
         private function setFactura()
         {
 
-            $this->setObject("alea_clientes");
-            global $wpdb;
+            $this->setObject($this->toArray(), SELF::TABLE_NAME);
         }
 
 
         // Getters and Setters
+        public function getId()
+        {
+            return $this->id;
+        }
+        public function setId($id)
+        {
+            $this->id = $id;
+        }
+        public function getReferencia()
+        {
+            return $this->referencia;
+        }
+        public function setReferencia($referencia)
+        {
+            $this->referencia = $referencia;
+        }
+        public function getFecha()
+        {
+            return $this->fecha;
+        }
+        public function setFecha($fecha)
+        {
+            $this->fecha = $fecha;
+        }
+        public function getCliente()
+        {
+            return $this->cliente;
+        }
+        public function setCliente($cliente)
+        {
+            $this->cliente = $cliente;
+        }
+        public function getDietaId()
+        {
+            return $this->dietaid;
+        }
+        public function setDietaId($dietaid)
+        {
+            $this->dietaid = $dietaid;
+        }
+        public function getNombre()
+        {
+            return $this->nombre;
+        }
+        public function setNombre($nombre)
+        {
+            $this->nombre = $nombre;
+        }
+        public function getApellidos()
+        {
+            return $this->apellidos;
+        }
+        public function setApellidos($apellidos)
+        {
+            $this->apellidos = $apellidos;
+        }
+        public function getNif()
+        {
+            return $this->nif;
+        }
+        public function setNif($nif)
+        {
+            $this->nif = $nif;
+        }
+        public function getCalle()
+        {
+            return $this->calle;
+        }
+        public function setCalle($calle)
+        {
+            $this->calle = $calle;
+        }
+        public function getNumero()
+        {
+            return $this->numero;
+        }
+        public function setNumero($numero)
+        {
+            $this->numero = $numero;
+        }
+        public function getPisoLetra()
+        {
+            return $this->pisoLetra;
+        }
+        public function setPisoLetra($pisoLetra)
+        {
+            $this->pisoLetra = $pisoLetra;
+        }
+        public function getCp()
+        {
+            return $this->cp;
+        }
+        public function setCp($cp)
+        {
+            $this->cp = $cp;
+        }
+        public function getCiudad()
+        {
+            return $this->ciudad;
+        }
+        public function setCiudad($ciudad)
+        {
+            $this->ciudad = $ciudad;
+        }
+        public function getProvincia()
+        {
+            return $this->provincia;
+        }
+        public function setProvincia($provincia)
+        {
+            $this->provincia = $provincia;
+        }
+        public function getConcepto()
+        {
+            return $this->concepto;
+        }
+        public function setConcepto($concepto)
+        {
+            $this->concepto = $concepto;
+        }
+        public function getPrecio()
+        {
+            return $this->precio;
+        }
+        public function setPrecio($precio)
+        {
+            $this->precio = $precio;
+        }
+        public function getIVA()
+        {
+            return $this->iva;
+        }
+        public function setIVA($iva)
+        {
+            $this->iva = $iva;
+        }
+        public function getTotal()
+        {
+            return $this->total;
+        }
+        public function setTotal($total)
+        {
+            $this->total = $total;
+        }
+        public function getState()
+        {
+            return $this->state;
+        }
+        public function setState($state)
+        {
+            $this->state = $state;
+        }
+
 
         // subconstructors
 
@@ -77,67 +241,67 @@ namespace JWR {
          * @param array 
          * 
          */
-        private function __construct_array($data)
+        protected function __construct_array($data)
         {
             $this->__construct_void();
 
             if (is_array($data)) {
 
-                if(isset($data['id'])) {
+                if (isset($data['id'])) {
                     $this->id = $data['id'];
                 }
-                if(isset($data['referencia'])) {
+                if (isset($data['referencia'])) {
                     $this->referencia = $data['referencia'];
                 }
-                if(isset($data['fecha'])) {
+                if (isset($data['fecha'])) {
                     $this->fecha = $data['fecha'];
                 }
-                if(isset($data['cliente'])) {
+                if (isset($data['cliente'])) {
                     $this->cliente = $data['cliente'];
                 }
-                if(isset($data['dietaid'])) {
+                if (isset($data['dietaid'])) {
                     $this->dietaid = $data['dietaid'];
                 }
-                if(isset($data['nombre'])) {
+                if (isset($data['nombre'])) {
                     $this->nombre = $data['nombre'];
                 }
-                if(isset($data['apellidos'])) {
+                if (isset($data['apellidos'])) {
                     $this->apellidos = $data['apellidos'];
                 }
-                if(isset($data['nif'])) {
+                if (isset($data['nif'])) {
                     $this->nif = $data['nif'];
                 }
-                if(isset($data['calle'])) {
+                if (isset($data['calle'])) {
                     $this->calle = $data['calle'];
                 }
-                if(isset($data['numero'])) {
+                if (isset($data['numero'])) {
                     $this->numero = $data['numero'];
                 }
-                if(isset($data['pisoLetra'])) {
+                if (isset($data['pisoLetra'])) {
                     $this->pisoLetra = $data['pisoLetra'];
                 }
-                if(isset($data['cp'])) {
+                if (isset($data['cp'])) {
                     $this->cp = $data['cp'];
                 }
-                if(isset($data['ciudad'])) {
+                if (isset($data['ciudad'])) {
                     $this->ciudad = $data['ciudad'];
                 }
-                if(isset($data['provincia'])) {
+                if (isset($data['provincia'])) {
                     $this->provincia = $data['provincia'];
                 }
-                if(isset($data['concepto'])) {
+                if (isset($data['concepto'])) {
                     $this->concepto = $data['concepto'];
                 }
-                if(isset($data['precio'])) {
+                if (isset($data['precio'])) {
                     $this->precio = $data['precio'];
                 }
-                if(isset($data['iva'])) {
+                if (isset($data['iva'])) {
                     $this->iva = $data['iva'];
                 }
-                if(isset($data['total'])) {
+                if (isset($data['total'])) {
                     $this->total = $data['total'];
                 }
-                if(isset($data['state'])) {
+                if (isset($data['state'])) {
                     $this->state = $data['state'];
                 }
             }
@@ -149,7 +313,7 @@ namespace JWR {
          * @param mixed 
          * 
          */
-        private function __construct_data($id, $referencia, $fecha, $cliente, $dietaid, $nombre, $apellidos, $nif, $calle, $numero, $pisoLetra, $cp, $ciudad, $provincia, $concepto, $precio, $iva, $total, $state)
+        protected function __construct_data($id, $referencia, $fecha, $cliente, $dietaid, $nombre, $apellidos, $nif, $calle, $numero, $pisoLetra, $cp, $ciudad, $provincia, $concepto, $precio, $iva, $total, $state)
         {
             $this->id = $id;
             $this->referencia = $referencia;
@@ -178,7 +342,7 @@ namespace JWR {
          * @param array 
          * 
          */
-        private function __construct_void()
+        protected function __construct_void()
         {
             $this->id = null;
             $this->referencia = "";
@@ -209,7 +373,7 @@ namespace JWR {
         public static function createTableAleaFacturas()
         {
             global $wpdb;
-            $table_name = $wpdb->prefix . "alea_facturas";
+            $table_name = $wpdb->prefix . SELF::TABLE_NAME;
 
             $query = "CREATE TABLE IF NOT EXISTS `{$table_name}` (
                 `id` int NOT NULL AUTO_INCREMENT,
@@ -232,20 +396,20 @@ namespace JWR {
                 `total` float(5, 2) NOT NULL,
                 `state` tinyint NOT NULL,
                 PRIMARY KEY (`id`)
-              ) ENGINE = InnoDB AUTO_INCREMENT = 28114 DEFAULT CHARSET = utf8mb3;";
+              ) ENGINE = InnoDB DEFAULT CHARSET = utf8 COLLATE utf8_spanish_ci;";
 
-            SELF::createTable("alea_facturas", $query);
+            SELF::createTable(SELF::TABLE_NAME, $query);
             SELF::migrateTableAleaFacturas("aleacons_crm", "alea_alea_facturas");
         }
 
         public static function migrateTableAleaFacturas($database, $table)
         {
-            SELF::migrateTable("alea_facturas", $database, $table);
+            SELF::migrateTable(SELF::TABLE_NAME, $database, $table);
         }
 
         public static function deleteTableAleaFacturas()
         {
-            SELF::deleteTable("alea_facturas");
+            SELF::deleteTable(SELF::TABLE_NAME);
         }
     } //namespace
 } //EOC

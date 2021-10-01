@@ -2,13 +2,18 @@
 
 namespace JWR {
 
-    include_once "Utils.php";
+    require_once "Utils.php";
+    require_once "JwRObject.php";
 
-    use JWR\Utils;
+    use JWR\{Utils, JwRObject};
     use wpdb;
 
-    class Customer
+    class Customer extends JwRObject
     {
+
+        const TABLE_NAME = "alea_clientes";
+        const NUM_FIELDS = 15;
+
         private ?int $id;
         private ?int $sexo;
         private ?string $telefono;
@@ -25,27 +30,29 @@ namespace JWR {
         private ?string $ciudad;
         private ?string $provincia;
 
-        /**
-         * Constructor: Defines the type of subconstructor will be used to create the customer
-         * 
-         * @param mixed
-         */
-        public function __construct()
-        {
-            $params = func_get_args();
-            $num_params = func_num_args();
-
-            if ($num_params == 1) {
-                call_user_func_array(array($this, '__construct_array'), $params);
-            } else if ($num_params == 15) {
-                call_user_func_array(array($this, '__construct_data'), $params);
-            } else {
-                call_user_func_array(array($this, '__construct_void'), $params);
-            }
-        }
-
 
         // Methods of use
+
+        public function toArray()
+        {
+            return array(
+                'id' => $this->id,
+                'sexo' => $this->sexo,
+                'telefono' => $this->telefono,
+                'nacimiento' => $this->nacimiento,
+                'state' => $this->state,
+                'nif' => $this->nif,
+                'email' => $this->email,
+                'nombre' => $this->nombre,
+                'apellidos' => $this->apellidos,
+                'calle' => $this->calle,
+                'numero' => $this->numero,
+                'pisoLetra' => $this->pisoLetra,
+                'cp' => $this->cp,
+                'ciudad' => $this->ciudad,
+                'provincia' => $this->provincia
+            );
+        }
 
         /**
          * 
@@ -57,15 +64,7 @@ namespace JWR {
 
         private function setCustomer()
         {
-            global $wpdb;
-
-            $table_name = $wpdb->prefix . "alea_clientes";
-            $data = get_object_vars($this);
-            if ($data["id"] == null) {
-                unset($data["id"]);
-            }
-            $wpdb->insert($table_name, $data);
-            echo $wpdb->insert_id;
+            $this->setObject($this->toArray(), SELF::TABLE_NAME);
         }
 
 
@@ -200,7 +199,7 @@ namespace JWR {
          * @param array 
          * 
          */
-        private function __construct_array($data)
+        protected function __construct_array($data)
         {
             $this->__construct_void();
 
@@ -260,7 +259,7 @@ namespace JWR {
          * @param mixed 
          * 
          */
-        private function __construct_data($id, $sexo, $telefono, $nacimiento, $state, $nif, $email, $nombre, $apellidos, $calle, $numero, $pisoLetra, $cp, $ciudad, $provincia)
+        protected function __construct_data($id, $sexo, $telefono, $nacimiento, $state, $nif, $email, $nombre, $apellidos, $calle, $numero, $pisoLetra, $cp, $ciudad, $provincia)
         {
             $this->id = $id;
             $this->sexo = $sexo;
@@ -285,7 +284,7 @@ namespace JWR {
          * @param array 
          * 
          */
-        private function __construct_void()
+        protected function __construct_void()
         {
             $this->id = NULL;
             $this->sexo = 0;
@@ -312,11 +311,9 @@ namespace JWR {
         public static function createTableAleaClientes()
         {
             global $wpdb;
+            $table_name = $wpdb->prefix . SELF::TABLE_NAME;
 
-            $table_name = $wpdb->prefix . "alea_clientes";
-
-            $query = "
-            CREATE TABLE IF NOT EXISTS `{$table_name}` (
+            $query = "CREATE TABLE IF NOT EXISTS `{$table_name}` (
                 `id` int NOT NULL AUTO_INCREMENT,
                 `sexo` tinyint NOT NULL,
                 `telefono` varchar(20) NOT NULL,
@@ -333,35 +330,19 @@ namespace JWR {
                 `ciudad` varchar(50) NOT NULL,
                 `provincia` varchar(50) NOT NULL,
                 PRIMARY KEY (`id`)
-              ) ENGINE = InnoDB AUTO_INCREMENT = 44668 DEFAULT CHARSET = utf8mb3;
-              ";
-            if ($wpdb->get_var("SHOW TABLES LIKE '$table_name'") != $table_name) {
-                $wpdb->query($query);
-            }
-
+                ) ENGINE = InnoDB DEFAULT CHARSET = utf8 COLLATE utf8_spanish_ci;";
+            SELF::createTable(SELF::TABLE_NAME, $query);
             SELF::migrateTableAleaClientes("aleacons_crm", "alea_alea_clientes");
         }
 
         public static function migrateTableAleaClientes($database, $table)
         {
-            global $wpdb;
-
-            $table_name = $wpdb->prefix . "alea_clientes";
-
-            if ($wpdb->get_var("SHOW TABLES LIKE '" . $table . "'") == $table) {
-
-                $query = "INSERT INTO $table_name SELECT * FROM `" . $database . "`.`" . $table . "`;";
-                $wpdb->query($query);
-            }
+            SELF::migrateTable(SELF::TABLE_NAME, $database, $table);
         }
 
         public static function deleteTableAleaClientes()
         {
-            global $wpdb;
-
-            $table_name = $wpdb->prefix . "alea_clientes";
-            $query = "DROP TABLE {$table_name};";
-            $wpdb->query($query);
+            SELF::deleteTable(SELF::TABLE_NAME);
         }
     } //namespace
 } //EOC

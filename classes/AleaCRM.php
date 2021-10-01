@@ -12,10 +12,12 @@ require_once "AleaModel.php";
 require_once "AleaSurvey.php";
 require_once "AleaExportXLS.php";
 require_once "Customer.php";
+require_once "Factura.php";
+require_once "Dieta.php";
 require_once "Utils.php";
 
 
-use JWR\{AleaCRMRequest, AleaCRMInvoice, AleaModel, AleaSurvey, AleaExportXLS, Customer, Utils};
+use JWR\{AleaCRMRequest, AleaCRMInvoice, AleaModel, AleaSurvey, AleaExportXLS, Customer, Factura, Dieta, Utils};
 use ParagonIE\Sodium\Core\Util;
 
 class AleaCRM
@@ -59,6 +61,8 @@ class AleaCRM
     {
         ob_start();
 
+        echo "<h1>Pruebita de Shortcode</h1>";
+
         $url = get_rest_url() . 'alea-crm/customer/1/2/';
         print_r($url);
         echo "<br />";
@@ -72,16 +76,16 @@ class AleaCRM
         }
 
         $atts = array_change_key_case((array) $atts, CASE_LOWER);
-        echo "<h1>Pruebita de Shortcode</h1>";
+        echo "<h1>Customer TEST</h1>";
 
         $data = array(
             'sexo' => 1,
             'telefono' => 'telefono',
-            'nacimiento' => '27-01-02',
+            'fecha' => '2022-01-20',
             'state' => 1,
             'nif' => 'nif',
             'email' => 'email',
-            'nombre' => 'nombre',
+            'nombre' => 'nombre_prueba',
             'apellidos' => 'apellidos',
             'calle' => 'calle',
             'numero' => 1,
@@ -91,11 +95,65 @@ class AleaCRM
             'provincia' => 'provincia'
         );
 
-        $customer2  = new Customer($data);
+        $customer  = new Customer($data);
         echo "<br />";
-        echo $customer2->getNombre();
-        $customer2->save();
+        echo $customer->getNombre();
+        $customer->save();
+        echo "<br />";
 
+        echo "<h1>Factura TEST</h1>";
+
+        $data = array(
+            'id' => null,
+            'referencia' => 'referencia',
+            'fecha' => '2022-01-20',
+            'cliente' => 1,
+            'dietaid' => 1,
+            'nombre' => 'nombre',
+            'apellidos' => 'apellidos',
+            'nif' => 'nif',
+            'calle' => 'calle',
+            'numero' => 1,
+            'pisoLetra' => 'piso',
+            'cp' => 'cp',
+            'ciudad' => 'ciudad',
+            'provincia' => 'provincia',
+            'concepto' => 'concepto',
+            'precio' => 21.21,
+            'iva' => 21.21,
+            'total' => 21.21,
+            'state' => 0
+        );
+
+        $invoice  = new Factura($data);
+        echo "<br />";
+        echo $invoice->getNombre();
+        $invoice->save();
+        echo "<br />";
+
+        echo "<h1>Dieta TEST</h1>";
+
+        $data = array(
+            'id' => null,
+            'cliente' => 1,
+            'nif' => 'nif',
+            'tipo' => 0,
+            'fecha' => '2022-01-20',
+            'parametros' => 'parametros',
+            'state' => 0,
+            'order' => 'order',
+            'enviado' => 0,
+            'opc' => 0,
+            'recordar' => 0,
+            'tipoDieta' => 0,
+            'nuevoModelo' => 0
+        );
+
+        $diet  = new Dieta($data);
+        echo "<br />";
+        echo $diet->getOrder();
+        $diet->save();
+        echo "<br />";
 
         $output = ob_get_clean();
 

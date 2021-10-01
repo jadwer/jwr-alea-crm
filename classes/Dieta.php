@@ -3,59 +3,173 @@
 namespace JWR {
 
     include_once "Utils.php";
+    include_once "JwRObject.php";
 
-    use JWR\Utils;
+    use JWR\{Utils, JwRObject};
     use wpdb;
 
-    class Dieta
+    class Dieta extends JwRObject
     {
 
+        const TABLE_NAME = "alea_dietas";
+        const NUM_FIELDS = 13;
 
-        /**
-         * Constructor: Defines the type of subconstructor will be used to create the customer
-         * 
-         * @param mixed
-         */
-        public function __construct()
-        {
-            $params = func_get_args();
-            $num_params = func_num_args();
-
-            if ($num_params == 1) {
-                call_user_func_array(array($this, '__construct_array'), $params);
-            } else if ($num_params == 15) {
-                call_user_func_array(array($this, '__construct_data'), $params);
-            } else {
-                call_user_func_array(array($this, '__construct_void'), $params);
-            }
-        }
-
+        private ?int $id;
+        private ?int $cliente;
+        private ?string $nif;
+        private ?int $tipo;
+        private ?string $fecha;
+        private ?string $parametros;
+        private ?int $state;
+        private ?string $order;
+        private ?int $enviado;
+        private ?int $opc;
+        private ?int $recordar;
+        private ?int $tipoDieta;
+        private ?int $nuevoModelo;
 
         // Methods of use
+        public function toArray()
+        {
+            return array(
+                'id' => $this->id,
+                'cliente' => $this->cliente,
+                'nif' => $this->nif,
+                'tipo' => $this->tipo,
+                'fecha' => $this->fecha,
+                'parametros' => $this->parametros,
+                'state' => $this->state,
+                'order' => $this->order,
+                'enviado' => $this->enviado,
+                'opc' => $this->opc,
+                'recordar' => $this->recordar,
+                'tipoDieta' => $this->tipoDieta,
+                'nuevoModelo' => $this->nuevoModelo
+            );
+        }
+
 
         /**
          * 
          */
         public function save()
         {
-            $this->setCustomer();
+            $this->setDieta();
         }
 
-        private function setCustomer()
+        private function setDieta()
         {
-            global $wpdb;
-
-            $table_name = $wpdb->prefix . "alea_clientes";
-            $data = get_object_vars($this);
-            if ($data["id"] == null) {
-                unset($data["id"]);
-            }
-            $wpdb->insert($table_name, $data);
-            echo $wpdb->insert_id;
+            $this->setObject($this->toArray(), SELF::TABLE_NAME);
         }
 
 
         // Getters and Setters
+
+        public function getId()
+        {
+            return $this->id;
+        }
+        public function setId($id)
+        {
+            $this->id = $id;
+        }
+        public function getCliente()
+        {
+            return $this->cliente;
+        }
+        public function setCliente($cliente)
+        {
+            $this->cliente = $cliente;
+        }
+        public function getNif()
+        {
+            return $this->nif;
+        }
+        public function setNif($nif)
+        {
+            $this->nif = $nif;
+        }
+        public function getTipo()
+        {
+            return $this->tipo;
+        }
+        public function setTipo($tipo)
+        {
+            $this->tipo = $tipo;
+        }
+        public function getFecha()
+        {
+            return $this->fecha;
+        }
+        public function setFecha($fecha)
+        {
+            $this->fecha = $fecha;
+        }
+        public function getParametros()
+        {
+            return $this->parametros;
+        }
+        public function setParametros($parametros)
+        {
+            $this->parametros = $parametros;
+        }
+        public function getState()
+        {
+            return $this->state;
+        }
+        public function setState($state)
+        {
+            $this->state = $state;
+        }
+        public function getOrder()
+        {
+            return $this->order;
+        }
+        public function setOrder($order)
+        {
+            $this->order = $order;
+        }
+        public function getEnviado()
+        {
+            return $this->enviado;
+        }
+        public function setEnviado($enviado)
+        {
+            $this->enviado = $enviado;
+        }
+        public function getOpc()
+        {
+            return $this->opc;
+        }
+        public function setOpc($opc)
+        {
+            $this->opc = $opc;
+        }
+        public function getRecordar()
+        {
+            return $this->recordar;
+        }
+        public function setRecordar($recordar)
+        {
+            $this->recordar = $recordar;
+        }
+        public function getTipoDieta()
+        {
+            return $this->tipoDieta;
+        }
+        public function setTipoDieta($tipoDieta)
+        {
+            $this->tipoDieta = $tipoDieta;
+        }
+        public function getNuevoModelo()
+        {
+            return $this->nuevoModelo;
+        }
+        public function setNuevoModelo($nuevoModelo)
+        {
+            $this->nuevoModelo = $nuevoModelo;
+        }
+
 
         // subconstructors
 
@@ -65,7 +179,7 @@ namespace JWR {
          * @param array 
          * 
          */
-        private function __construct_array($data)
+        protected function __construct_array($data)
         {
             $this->__construct_void();
 
@@ -74,47 +188,41 @@ namespace JWR {
                 if (isset($data['id'])) {
                     $this->id = $data['id'];
                 }
-                if (isset($data['sexo'])) {
-                    $this->sexo = $data['sexo'];
-                }
-                if (isset($data['telefono'])) {
-                    $this->telefono = $data['telefono'];
-                }
-                if (isset($data['nacimiento'])) {
-                    $this->nacimiento = $data['nacimiento'];
-                }
-                if (isset($data['state'])) {
-                    $this->state = $data['state'];
+                if (isset($data['cliente'])) {
+                    $this->cliente = $data['cliente'];
                 }
                 if (isset($data['nif'])) {
                     $this->nif = $data['nif'];
                 }
-                if (isset($data['email'])) {
-                    $this->email = $data['email'];
+                if (isset($data['tipo'])) {
+                    $this->tipo = $data['tipo'];
                 }
-                if (isset($data['nombre'])) {
-                    $this->nombre = $data['nombre'];
+                if (isset($data['fecha'])) {
+                    $this->fecha = $data['fecha'];
                 }
-                if (isset($data['apellidos'])) {
-                    $this->apellidos = $data['apellidos'];
+                if (isset($data['parametros'])) {
+                    $this->parametros = $data['parametros'];
                 }
-                if (isset($data['calle'])) {
-                    $this->calle = $data['calle'];
+                if (isset($data['state'])) {
+                    $this->state = $data['state'];
                 }
-                if (isset($data['numero'])) {
-                    $this->numero = $data['numero'];
+                if (isset($data['order'])) {
+                    $this->order = $data['order'];
                 }
-                if (isset($data['pisoLetra'])) {
-                    $this->pisoLetra = $data['pisoLetra'];
+                if (isset($data['enviado'])) {
+                    $this->enviado = $data['enviado'];
                 }
-                if (isset($data['cp'])) {
-                    $this->cp = $data['cp'];
+                if (isset($data['opc'])) {
+                    $this->opc = $data['opc'];
                 }
-                if (isset($data['ciudad'])) {
-                    $this->ciudad = $data['ciudad'];
+                if (isset($data['recordar'])) {
+                    $this->recordar = $data['recordar'];
                 }
-                if (isset($data['provincia'])) {
-                    $this->provincia = $data['provincia'];
+                if (isset($data['tipoDieta'])) {
+                    $this->tipoDieta = $data['tipoDieta'];
+                }
+                if (isset($data['nuevoModelo'])) {
+                    $this->nuevoModelo = $data['nuevoModelo'];
                 }
             }
         }
@@ -125,8 +233,21 @@ namespace JWR {
          * @param mixed 
          * 
          */
-        private function __construct_data()
+        protected function __construct_data($id, $cliente, $nif, $tipo, $fecha, $parametros, $state, $order, $enviado, $opc, $recordar, $tipoDieta, $nuevoModelo)
         {
+            $this->id = $id;
+            $this->cliente = $cliente;
+            $this->nif = $nif;
+            $this->tipo = $tipo;
+            $this->fecha = $fecha;
+            $this->parametros = $parametros;
+            $this->state = $state;
+            $this->order = $order;
+            $this->enviado = $enviado;
+            $this->opc = $opc;
+            $this->recordar = $recordar;
+            $this->tipoDieta = $tipoDieta;
+            $this->nuevoModelo = $nuevoModelo;
         }
 
         /**
@@ -135,8 +256,21 @@ namespace JWR {
          * @param array 
          * 
          */
-        private function __construct_void()
+        protected function __construct_void()
         {
+            $this->id = null;
+            $this->cliente = null;
+            $this->nif = "";
+            $this->tipo = 0;
+            $this->fecha = "";
+            $this->parametros = "";
+            $this->state = 0;
+            $this->order = "";
+            $this->enviado = 0;
+            $this->opc = 0;
+            $this->recordar = 0;
+            $this->tipoDieta = 0;
+            $this->nuevoModelo = 1;
         }
 
 
@@ -144,59 +278,40 @@ namespace JWR {
         /**
          * Create and migrate the table alea_clientes for the customers data
          */
-        public static function createTableAleaFacturas()
+        public static function createTableAleaDieta()
         {
             global $wpdb;
+            $table_name = $wpdb->prefix . SELF::TABLE_NAME;
 
-            $table_name = $wpdb->prefix . "alea_clientes";
-
-            $query = "
-            CREATE TABLE IF NOT EXISTS `{$table_name}` (
+            $query = "CREATE TABLE IF NOT EXISTS `{$table_name}` (
                 `id` int NOT NULL AUTO_INCREMENT,
-                `sexo` tinyint NOT NULL,
-                `telefono` varchar(20) NOT NULL,
-                `nacimiento` date DEFAULT NULL,
-                `state` tinyint(1) NOT NULL,
-                `nif` varchar(20) NOT NULL,
-                `email` varchar(70) NOT NULL DEFAULT '',
-                `nombre` varchar(50) NOT NULL,
-                `apellidos` varchar(100) NOT NULL,
-                `calle` varchar(100) NOT NULL,
-                `numero` smallint DEFAULT NULL,
-                `pisoLetra` varchar(5) NOT NULL,
-                `cp` varchar(5) NOT NULL,
-                `ciudad` varchar(50) NOT NULL,
-                `provincia` varchar(50) NOT NULL,
+                `cliente` int NOT NULL,
+                `nif` varchar(20) NOT NULL DEFAULT '',
+                `tipo` tinyint(1) NOT NULL COMMENT 'nueva o continua',
+                `fecha` datetime NOT NULL,
+                `parametros` mediumtext NOT NULL,
+                `state` tinyint NOT NULL,
+                `order` varchar(13) NOT NULL DEFAULT '',
+                `enviado` tinyint NOT NULL DEFAULT '0',
+                `opc` tinyint NOT NULL DEFAULT '0',
+                `recordar` tinyint NOT NULL DEFAULT '0',
+                `tipoDieta` tinyint NOT NULL DEFAULT '0',
+                `nuevoModelo` tinyint NOT NULL DEFAULT '1',
                 PRIMARY KEY (`id`)
-              ) ENGINE = InnoDB AUTO_INCREMENT = 44668 DEFAULT CHARSET = utf8mb3;
-              ";
-            if ($wpdb->get_var("SHOW TABLES LIKE '$table_name'") != $table_name) {
-                $wpdb->query($query);
-            }
+                ) ENGINE = InnoDB DEFAULT CHARSET = utf8 COLLATE utf8_spanish_ci;";
 
-            SELF::migrateTableAleaFacturas("aleacons_crm", "alea_alea_clientes");
+            SELF::createTable(SELF::TABLE_NAME, $query);
+            SELF::migrateTableAleaDietas("aleacons_crm", "alea_alea_dietas");
         }
 
-        public static function migrateTableAleaFacturas($database, $table)
+        public static function migrateTableAleaDietas($database, $table)
         {
-            global $wpdb;
-
-            $table_name = $wpdb->prefix . "alea_clientes";
-
-            if ($wpdb->get_var("SHOW TABLES LIKE '" . $table . "'") == $table) {
-
-                $query = "INSERT INTO $table_name SELECT * FROM `" . $database . "`.`" . $table . "`;";
-                $wpdb->query($query);
-            }
+            SELF::migrateTable(SELF::TABLE_NAME, $database, $table);
         }
 
-        public static function deleteTableAleaFacturas()
+        public static function deleteTableAleaDieta()
         {
-            global $wpdb;
-
-            $table_name = $wpdb->prefix . "alea_clientes";
-            $query = "DROP TABLE {$table_name};";
-            $wpdb->query($query);
+            SELF::deleteTable(SELF::TABLE_NAME);
         }
     } //namespace
 } //EOC

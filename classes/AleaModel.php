@@ -3,7 +3,11 @@
 namespace JWR;
 
 require_once "Customer.php";
-USE \JWR\Customer;
+require_once "Factura.php";
+require_once "Dieta.php";
+
+USE \JWR\{ Customer, Factura, Dieta };
+
 class AleaModel
 {
 
@@ -158,8 +162,8 @@ class AleaModel
     public static function createTables()
     {
         Customer::createTableAleaClientes();
-        Self::createAleaDietasTable();
-        Self::createAleaFacturasTable();
+        Dieta::createTableAleaDieta();
+        Factura::createTableAleaFacturas();
         return;
     }
 
@@ -168,16 +172,8 @@ class AleaModel
         set_time_limit(0);
 
         Customer::deleteTableAleaClientes();
-
-        global $wpdb;
-
-        $table_name = $wpdb->prefix . "alea_dietas";
-        $query = "DROP TABLE {$table_name};";
-        $wpdb->query($query);
-
-        $table_name = $wpdb->prefix . "alea_facturas";
-        $query = "DROP TABLE {$table_name};";
-        $wpdb->query($query);
+        Dieta::deleteTableAleaDieta();
+        Factura::deleteTableAleaFacturas();
 
         return;
     }
