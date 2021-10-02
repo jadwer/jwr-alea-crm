@@ -1,11 +1,11 @@
 <?php
 
-namespace JWR {
+namespace JWR\Alea {
 
-    require_once "Utils.php";
-    require_once "JwRObject.php";
+    // require_once "Utils.php";
+    // require_once "JwRObject.php";
 
-    use JWR\{Utils, JwRObject};
+    use JWR\Alea\{Utils, JwRObject};
     use wpdb;
 
     class Customer extends JwRObject
@@ -59,12 +59,21 @@ namespace JWR {
          */
         public function save()
         {
-            $this->setCustomer();
+            return $this->setCustomer();
+
         }
 
         private function setCustomer()
         {
-            $this->setObject($this->toArray(), SELF::TABLE_NAME);
+            return $this->setObject($this->toArray(), SELF::TABLE_NAME);
+        }
+
+        public function getCustomerById($id)
+        {
+            $data = $this->getObjectById(SELF::TABLE_NAME, $id);
+
+            $this->__construct_array($data);
+            return $this;
         }
 
 
@@ -344,5 +353,5 @@ namespace JWR {
         {
             SELF::deleteTable(SELF::TABLE_NAME);
         }
-    } //namespace
-} //EOC
+    } // EOC
+} // namespace

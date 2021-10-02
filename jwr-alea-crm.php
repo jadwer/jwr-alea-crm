@@ -26,9 +26,12 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-include_once "classes/AleaCRM.php";
-include_once "classes/AleaCRMAPI.php";
-use JWR\{AleaCRM,ALeaAPI} ;
+require_once('autoloader.php');
+
+// include_once "classes/AleaCRM.php";
+// include_once "API/AleaCRMAPI.php";
+
+use JWR\Alea\{AleaCRM,ALeaAPI};
 
 $API = new ALeaAPI();
 add_action('rest_api_init', array($API, 'register_routes'));
@@ -131,3 +134,4 @@ function validate_JwR_Theme()
 {
     return true;
 }
+

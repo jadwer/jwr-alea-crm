@@ -1,6 +1,8 @@
 <?php
-namespace JWR;
+namespace JWR\Alea {
 
-class AleaExportXLS {
+    class AleaExportXLS {
 
-} // EOC
+    } // EOC
+} // namespace
+

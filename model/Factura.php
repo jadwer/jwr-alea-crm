@@ -1,11 +1,11 @@
 <?php
 
-namespace JWR {
+namespace JWR\Alea {
 
-    include_once "Utils.php";
-    include_once "JwRObject.php";
+    // include_once "Utils.php";
+    // include_once "JwRObject.php";
 
-    use JWR\{Utils, JwRObject};
+    use JWR\Alea\{Utils, JwRObject};
     use wpdb;
 
     class Factura extends JwRObject
@@ -68,14 +68,34 @@ namespace JWR {
          */
         public function save()
         {
-            $this->setFactura();
+            return $this->setFactura();
         }
 
         private function setFactura()
         {
 
-            $this->setObject($this->toArray(), SELF::TABLE_NAME);
+            return $this->setObject($this->toArray(), SELF::TABLE_NAME);
         }
+
+        public function getFacturaById($id)
+        {
+            $data = $this->getObjectById(SELF::TABLE_NAME, $id);
+
+            $this->__construct_array($data);
+            return $this;
+        }
+
+        public function getFacturasByCustomerId($customer_id)
+        {
+            $data = $this->getObjectsByParam(SELF::TABLE_NAME, "cliente", $customer_id);
+            $invoices = array();
+            foreach($data as &$invoice){
+                $this->__construct_array($invoice);
+                $invoices[] = $this;
+            }
+            return $invoices;
+        }
+
 
 
         // Getters and Setters
@@ -411,5 +431,5 @@ namespace JWR {
         {
             SELF::deleteTable(SELF::TABLE_NAME);
         }
-    } //namespace
-} //EOC
+    } // EOC
+} // namespace

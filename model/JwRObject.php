@@ -1,10 +1,11 @@
 <?php
 
-namespace JWR {
+namespace JWR\Alea {
 
-    require_once "Utils.php";
+    // require_once "Utils.php";
 
-    use JWR\Utils;
+    use JWR\Alea\Utils;
+    use wpdb;
 
     /**
      * This is a general Model class
@@ -44,6 +45,23 @@ namespace JWR {
         /**
          * Convert the object to an associative array
          */
+
+        public function getObjectById($table, $id){
+            global $wpdb;
+            $table_name = $wpdb->prefix . $table;
+            $query = $wpdb->prepare("SELECT * FROM {$table_name} WHERE id= %d LIMIT 1", $id);
+            $result = $wpdb->get_results($query, ARRAY_A);
+            return $result[0];
+
+        }
+        public function getObjectsByParam($table, $param, $value){
+            global $wpdb;
+            $table_name = $wpdb->prefix . $table;
+            $query = "SELECT * FROM {$table_name} WHERE {$param} = {$value};";
+            $result = $wpdb->get_results($query, ARRAY_A);
+            return $result;
+
+        }
         abstract public function toArray();
 
         abstract public function save();
@@ -53,12 +71,11 @@ namespace JWR {
             global $wpdb;
 
             $table_name = $wpdb->prefix . $table;
-            var_dump($data);
             if (isset($data['id']) && $data["id"] == null) {
                 unset($data["id"]);
             }
-            $wpdb->insert($table_name, $data);
-            echo $wpdb->insert_id;
+            $wpdb->replace($table_name, $data);
+            return $wpdb->insert_id;
         }
 
 
@@ -119,5 +136,5 @@ namespace JWR {
             $query = "DROP TABLE {$table_name};";
             $wpdb->query($query);
         }
-    }
-}
+    }// EOC
+}// namespace

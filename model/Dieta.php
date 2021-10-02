@@ -1,11 +1,11 @@
 <?php
 
-namespace JWR {
+namespace JWR\Alea {
 
-    include_once "Utils.php";
-    include_once "JwRObject.php";
+    // include_once "Utils.php";
+    // include_once "JwRObject.php";
 
-    use JWR\{Utils, JwRObject};
+    use JWR\Alea\{Utils, JwRObject};
     use wpdb;
 
     class Dieta extends JwRObject
@@ -54,14 +54,32 @@ namespace JWR {
          */
         public function save()
         {
-            $this->setDieta();
+            return $this->setDieta();
         }
 
         private function setDieta()
         {
-            $this->setObject($this->toArray(), SELF::TABLE_NAME);
+            return $this->setObject($this->toArray(), SELF::TABLE_NAME);
         }
 
+        public function getDietaById($id)
+        {
+            $data = $this->getObjectById(SELF::TABLE_NAME, $id);
+
+            $this->__construct_array($data);
+            return $this;
+        }
+
+        public function getDietsByCustomerId($customer_id)
+        {
+            $data = $this->getObjectsByParam(SELF::TABLE_NAME, "cliente", $customer_id);
+            $diets = array();
+            foreach($data as &$diet){
+                $this->__construct_array($diet);
+                $diets[] = $this;
+            }
+            return $diets;
+        }
 
         // Getters and Setters
 
@@ -313,5 +331,5 @@ namespace JWR {
         {
             SELF::deleteTable(SELF::TABLE_NAME);
         }
-    } //namespace
-} //EOC
+    } // EOC
+} // namespace
