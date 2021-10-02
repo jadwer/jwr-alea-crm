@@ -72,7 +72,7 @@ namespace JWR\Alea {
 
         public function getDietsByCustomerId($customer_id)
         {
-            $data = $this->getObjectsByParam(SELF::TABLE_NAME, "cliente", $customer_id);
+            $data = $this->getObjectsByField(SELF::TABLE_NAME, "cliente", $customer_id);
             $diets = array();
             foreach($data as &$diet){
                 $this->__construct_array($diet);

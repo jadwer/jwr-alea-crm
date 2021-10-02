@@ -46,21 +46,38 @@ namespace JWR\Alea {
          * Convert the object to an associative array
          */
 
-        public function getObjectById($table, $id){
+        public function getObjectById($table, $id)
+        {
             global $wpdb;
             $table_name = $wpdb->prefix . $table;
             $query = $wpdb->prepare("SELECT * FROM {$table_name} WHERE id= %d LIMIT 1", $id);
             $result = $wpdb->get_results($query, ARRAY_A);
             return $result[0];
-
         }
-        public function getObjectsByParam($table, $param, $value){
+        public function getObjectsByField($table, $field, $value)
+        {
             global $wpdb;
             $table_name = $wpdb->prefix . $table;
-            $query = "SELECT * FROM {$table_name} WHERE {$param} = {$value};";
+            $query = "SELECT * FROM {$table_name} WHERE {$field} = {$value};";
             $result = $wpdb->get_results($query, ARRAY_A);
             return $result;
+        }
+        public function getObjectsBetweenDates($table, $field, $startDate, $endDate)
+        {
+            global $wpdb;
+            $table_name = $wpdb->prefix . $table;
+            $query = "SELECT * FROM {$table_name} WHERE ({$field} BETWEEN '{$startDate}' AND '{$endDate}') ORDER BY {$field} DESC;";
+            $result = $wpdb->get_results($query, ARRAY_A);
+            return $result;
+        }
+        public function getObjectsBetweenDatesFiltered($table, $field, $startDate, $endDate, $filter, $value)
+        {
+            global $wpdb;
+            $table_name = $wpdb->prefix . $table;
+            $query = "SELECT * FROM {$table_name} WHERE ({$filter} = {$value}) AND ({$field} BETWEEN '{$startDate}' AND '{$endDate}') ORDER BY {$field} DESC;";
+            $result = $wpdb->get_results($query, ARRAY_A);
 
+            return $result;
         }
         abstract public function toArray();
 
@@ -136,5 +153,5 @@ namespace JWR\Alea {
             $query = "DROP TABLE {$table_name};";
             $wpdb->query($query);
         }
-    }// EOC
+    } // EOC
 }// namespace

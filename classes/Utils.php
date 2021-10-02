@@ -32,6 +32,38 @@ namespace JWR\Alea {
                 $object->$name = isset($vars[$name]) ? $vars[$name] : NULL;
             }
         }
+
+        public static function returnTrimestre($period, $year){
+            $start = $year."-";
+            $end = $year."-";
+            switch ($period) {
+                case '1':
+                    $start .= "01-01";
+                    $end .= "03-31";
+                            break;
+                case '2':
+                    $start .= "04-01";
+                    $end .= "06-30";
+                            break;
+                case '3':
+                    $start .= "07-01";
+                    $end .= "09-30";
+                            break;
+                case '4':
+                    $start .= "10-01";
+                    $end .= "12-31";
+                            break;
+                default:
+            }
+
+            $start .= " 00:00:00";
+            $end .= " 23:59:59";
+            $dates = array(
+                'start' => $start,
+                'end' => $end
+            );
+            return $dates;
+        }
     } // EOF
 } // namespace
 

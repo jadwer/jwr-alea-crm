@@ -87,15 +87,43 @@ namespace JWR\Alea {
 
         public function getFacturasByCustomerId($customer_id)
         {
-            $data = $this->getObjectsByParam(SELF::TABLE_NAME, "cliente", $customer_id);
+            $data = $this->getObjectsByField(SELF::TABLE_NAME, "cliente", $customer_id);
             $invoices = array();
-            foreach($data as &$invoice){
+            foreach ($data as &$invoice) {
                 $this->__construct_array($invoice);
                 $invoices[] = $this;
             }
             return $invoices;
         }
 
+
+        public function getFacturasByTrimestre($period, $year)
+        {
+            $dates = Utils::returnTrimestre($period, $year);
+
+
+            $data = $this->getObjectsBetweenDates(SELF::TABLE_NAME, "fecha", $dates['start'], $dates['end']);
+            $invoices = array();
+            foreach ($data as $invoice) {
+                $obj = new $this($invoice);
+                $invoices[] = $obj;
+            }
+            return $invoices;
+        }
+
+        public function getFacturasByTrimestreFiltered($period, $year, $state)
+        {
+            $dates = Utils::returnTrimestre($period, $year);
+
+
+            $data = $this->getObjectsBetweenDatesFiltered(SELF::TABLE_NAME, "fecha", $dates['start'], $dates['end'], "state", $state);
+            $invoices = array();
+            foreach ($data as $invoice) {
+                $obj = new $this($invoice);
+                $invoices[] = $obj;
+            }
+            return $invoices;
+        }
 
 
         // Getters and Setters

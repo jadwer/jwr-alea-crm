@@ -76,6 +76,12 @@ namespace JWR\Alea {
             return $this;
         }
 
+        public function getCustomerByNIF($nif)
+        {
+            $data = $this->getObjectsByField(SELF::TABLE_NAME, "nif", $nif);
+            return $this->__construct_array($data[0]);
+        }
+
 
         // Getters and Setters
         public function getId()

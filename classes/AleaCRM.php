@@ -18,7 +18,7 @@ namespace JWR\Alea {
     
     
     use JWR\Alea\{AleaCRMRequest, AleaCRMInvoice, AleaModel, AleaSurvey, AleaExportXLS, Customer, Factura, Dieta, Utils};
-    
+    use WP_Query;
     class AleaCRM
     {
         public function __construct()
@@ -59,7 +59,12 @@ namespace JWR\Alea {
         function shortcode_request($atts = [], $content = null, $tag = '')
         {
             ob_start();
-    
+
+            var_dump($_GET);
+            global $wp_query;    
+            if( isset( $wp_query->query['test'] ) ) { 
+                echo "entro";
+            }                
             echo "<h1>Pruebita de Shortcode</h1>";
     
             $url = get_rest_url() . 'alea-crm/customer/1/2/';
@@ -138,6 +143,13 @@ namespace JWR\Alea {
             echo "<pre>";
             var_dump($invoices);
             echo "<pre>";
+
+            $invoices = $invoice->getFacturasByTrimestreFiltered(1,"2021", 0);
+            echo "<pre>";
+            var_dump($invoices);
+            echo "<pre>";
+
+            
     
     
             echo "<h1>Dieta TEST</h1>";
