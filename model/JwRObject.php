@@ -46,12 +46,54 @@ namespace JWR\Alea {
          * Convert the object to an associative array
          */
 
+        public function getJoinedObjectsPaged($table1, $table2, $selected, $on1, $on2, $orderBy = null, $page, $rows)
+        {
+            $field = (isset($orderBy['field']))? Utils::escape($orderBy['field']) : 'id';
+            $order = (isset($orderBy['order']))? Utils::escape($orderBy['order']) : 'DESC';
+            global $wpdb;
+            $page = ($page == 1)? 0 : ($page * $rows)-1;
+            $table_name1 = $wpdb->prefix . $table1;
+            $table_name2 = $wpdb->prefix . $table2;
+
+            $query = "SELECT {$selected} FROM {$table_name1} 
+            INNER JOIN {$table_name2} 
+            ON {$table_name1}.{$on1} = {$table_name2}.{$on2}
+            ORDER BY {$field} {$order}
+            limit {$page},{$rows};";
+
+            $result = $wpdb->get_results($query, ARRAY_A);
+
+            return $result;
+        }
+
+        public function getJoinedObjectsByParamPaged($table1, $table2, $selected, $on1, $on2, $param, $orderBy = null)
+        {
+            $field = (isset($orderBy['field']))? Utils::escape($orderBy['field']) : 'id';
+            $order = (isset($orderBy['order']))? Utils::escape($orderBy['order']) : 'DESC';
+            $field_filter = (isset($param['field']))? Utils::escape($param['field']) : 'id';
+            $value_filter = (isset($param['value']))? Utils::escape($param['value']) : 'id';
+
+            global $wpdb;
+            $table_name1 = $wpdb->prefix . $table1;
+            $table_name2 = $wpdb->prefix . $table2;
+
+            $query = "SELECT {$selected} FROM {$table_name1} 
+            INNER JOIN {$table_name2} 
+            ON {$table_name1}.{$on1} = {$table_name2}.{$on2}
+            WHERE {$field_filter} = {$value_filter}
+            ORDER BY {$field} {$order};";
+
+            $result = $wpdb->get_results($query, ARRAY_A);
+
+            return $result;
+        }
+
         public function getObjectsPaged($table, $orderBy = null, $page, $rows)
         {
             $field = (isset($orderBy['field']))? Utils::escape($orderBy['field']) : 'id';
             $order = (isset($orderBy['order']))? Utils::escape($orderBy['order']) : 'DESC';
             global $wpdb;
-            $page = ($page * $rows) - 1;
+            $page = ($page == 1)? 0 : ($page * $rows)-1;
             $table_name = $wpdb->prefix . $table;
             $query = "SELECT * FROM {$table_name} 
             ORDER BY {$field} {$order}
@@ -99,7 +141,7 @@ namespace JWR\Alea {
         public function getObjectsBetweenDatesFilteredPaged($table, $field, $startDate, $endDate, $filter, $value,$page,$rows)
         {
             global $wpdb;
-            $page = ($page * $rows) - 1;
+            $page = ($page == 1)? 0 : ($page * $rows)-1;
             $table_name = $wpdb->prefix . $table;
             $query = "SELECT * FROM {$table_name} 
             WHERE ({$filter} = {$value}) 

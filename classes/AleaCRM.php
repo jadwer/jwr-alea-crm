@@ -17,7 +17,7 @@ namespace JWR\Alea {
     // require_once "Utils.php";
 
 
-    use JWR\Alea\{AleaCRMDiet, AleaCRMInvoice, AleaModel, AleaSurvey, AleaExportXLS, Customer, Factura, Dieta, Utils};
+    use JWR\Alea\{AleaCRMRequest, AleaCRMDiet, AleaCRMInvoice, AleaModel, AleaSurvey, AleaExportXLS, Customer, Factura, Dieta, Utils};
     use WP_Query;
 
     class AleaCRM
@@ -29,14 +29,16 @@ namespace JWR\Alea {
 
         public static function createCRMPages()
         {
-            AleaCRMDiet::createRequestPages();
+            AleaCRMRequest::createRequestPages();
+            AleaCRMDiet::createDietPages();
             AleaCRMInvoice::createInvoicePages();
             AleaSurvey::createSurveyPages();
         }
 
         public static function deleteCRMPages()
         {
-            AleaCRMDiet::deleteRequestPages();
+            AleaCRMRequest::deleteRequestPages();
+            AleaCRMDiet::deleteDietPages();
             AleaCRMInvoice::deleteInvoicePages();
             AleaSurvey::deleteSurveyPages();
         }
@@ -184,7 +186,7 @@ namespace JWR\Alea {
         /**
          * shortodes
          */
-        function shortcode_request($atts = [], $content = null, $tag = '')
+        function shortcode_test($atts = [], $content = null, $tag = '')
         {
             ob_start();
 
@@ -326,6 +328,10 @@ namespace JWR\Alea {
         function shortcode_diets($atts = [], $content = null, $tag = '')
         {
             AleaCRMDiet::dietPages();
+        }
+        function shortcode_request($atts = [], $content = null, $tag = '')
+        {
+            AleaCRMRequest::requestPages();
         }
 
     } //EOC

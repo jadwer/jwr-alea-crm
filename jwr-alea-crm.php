@@ -81,5 +81,6 @@ function jwr_crm_shortcodes_init()
     add_shortcode("alea-invoice-online", array($aleaCRM, 'shortcode_invoices_online'));
     add_shortcode("alea-invoice-physical", array($aleaCRM, 'shortcode_invoices_physical'));
     add_shortcode("alea-diet", array($aleaCRM, 'shortcode_diets'));
+    add_shortcode("alea-request", array($aleaCRM, 'shortcode_request'));
 }
 add_action('init', 'jwr_crm_shortcodes_init');
