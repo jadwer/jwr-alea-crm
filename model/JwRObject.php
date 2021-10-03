@@ -46,6 +46,21 @@ namespace JWR\Alea {
          * Convert the object to an associative array
          */
 
+        public function getObjectsPaged($table, $orderBy = null, $page, $rows)
+        {
+            $field = (isset($orderBy['field']))? Utils::escape($orderBy['field']) : 'id';
+            $order = (isset($orderBy['order']))? Utils::escape($orderBy['order']) : 'DESC';
+            global $wpdb;
+            $page = ($page * $rows) - 1;
+            $table_name = $wpdb->prefix . $table;
+            $query = "SELECT * FROM {$table_name} 
+            ORDER BY {$field} {$order}
+            LIMIT {$page},{$rows};";
+            $result = $wpdb->get_results($query, ARRAY_A);
+
+            return $result;
+        }
+
         public function getObjectById($table, $id)
         {
             global $wpdb;

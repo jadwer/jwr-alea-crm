@@ -89,7 +89,7 @@ namespace JWR\Alea {
         {
             $data = $this->getObjectsByField(SELF::TABLE_NAME, "cliente", $customer_id);
             $invoices = array();
-            foreach ($data as &$invoice) {
+            foreach ($data as $invoice) {
                 $this->__construct_array($invoice);
                 $invoices[] = $this;
             }

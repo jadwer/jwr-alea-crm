@@ -62,6 +62,19 @@ namespace JWR\Alea {
             return $this->setObject($this->toArray(), SELF::TABLE_NAME);
         }
 
+        public function getDietasPaged($page)
+        {
+
+            $data = $this->getObjectsPaged(SELF::TABLE_NAME, array('fecha','DESC'), $page, 100);
+            $diets = array();
+            foreach ($data as $diet) {
+                $obj = new $this($diet);
+                $diets[] = $obj;
+            }
+            return $diets;
+
+        }
+
         public function getDietaById($id)
         {
             $data = $this->getObjectById(SELF::TABLE_NAME, $id);

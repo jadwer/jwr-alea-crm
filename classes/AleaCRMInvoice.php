@@ -38,7 +38,7 @@ namespace JWR\Alea {
             }
         }
 
-        private static function listInvoices($state,$page)
+        private static function listInvoices($state, $page)
         {
             global $wp_query;
             $invoice  = new Factura();

@@ -77,8 +77,9 @@ add_action('rest_api_init', array($API, 'register_routes'));
 function jwr_crm_shortcodes_init()
 {
     $aleaCRM = new AleaCRM();
-    add_shortcode("alea-request", array($aleaCRM, 'shortcode_request'));
+//    add_shortcode("alea-request", array($aleaCRM, 'shortcode_request'));
     add_shortcode("alea-invoice-online", array($aleaCRM, 'shortcode_invoices_online'));
     add_shortcode("alea-invoice-physical", array($aleaCRM, 'shortcode_invoices_physical'));
+    add_shortcode("alea-diet", array($aleaCRM, 'shortcode_diets'));
 }
 add_action('init', 'jwr_crm_shortcodes_init');
