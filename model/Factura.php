@@ -125,6 +125,20 @@ namespace JWR\Alea {
             return $invoices;
         }
 
+        public function getFacturasByTrimestreFilteredPaged($period, $year, $state, $page)
+        {
+            $dates = Utils::returnTrimestre($period, $year);
+
+
+            $data = $this->getObjectsBetweenDatesFilteredPaged(SELF::TABLE_NAME, "fecha", $dates['start'], $dates['end'], "state", $state, $page, 100);
+            $invoices = array();
+            foreach ($data as $invoice) {
+                $obj = new $this($invoice);
+                $invoices[] = $obj;
+            }
+            return $invoices;
+        }
+
 
         // Getters and Setters
         public function getId()

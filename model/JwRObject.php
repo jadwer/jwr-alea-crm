@@ -28,7 +28,7 @@ namespace JWR\Alea {
 
             if ($num_params == 1) {
                 call_user_func_array(array($this, '__construct_array'), $params);
-            } else if ($num_params == SELF::NUM_FIELDS) {
+            } else if ($num_params == static::NUM_FIELDS) {
                 call_user_func_array(array($this, '__construct_data'), $params);
             } else {
                 call_user_func_array(array($this, '__construct_void'), $params);
@@ -68,6 +68,8 @@ namespace JWR\Alea {
             $table_name = $wpdb->prefix . $table;
             $query = "SELECT * FROM {$table_name} WHERE ({$field} BETWEEN '{$startDate}' AND '{$endDate}') ORDER BY {$field} DESC;";
             $result = $wpdb->get_results($query, ARRAY_A);
+
+
             return $result;
         }
         public function getObjectsBetweenDatesFiltered($table, $field, $startDate, $endDate, $filter, $value)
@@ -75,6 +77,20 @@ namespace JWR\Alea {
             global $wpdb;
             $table_name = $wpdb->prefix . $table;
             $query = "SELECT * FROM {$table_name} WHERE ({$filter} = {$value}) AND ({$field} BETWEEN '{$startDate}' AND '{$endDate}') ORDER BY {$field} DESC;";
+            $result = $wpdb->get_results($query, ARRAY_A);
+
+            return $result;
+        }
+        public function getObjectsBetweenDatesFilteredPaged($table, $field, $startDate, $endDate, $filter, $value,$page,$rows)
+        {
+            global $wpdb;
+            $page = ($page * $rows) - 1;
+            $table_name = $wpdb->prefix . $table;
+            $query = "SELECT * FROM {$table_name} 
+            WHERE ({$filter} = {$value}) 
+            AND ({$field} BETWEEN '{$startDate}' AND '{$endDate}')
+            ORDER BY {$field} DESC
+            LIMIT {$page},{$rows};";
             $result = $wpdb->get_results($query, ARRAY_A);
 
             return $result;

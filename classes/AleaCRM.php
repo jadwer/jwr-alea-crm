@@ -5,7 +5,7 @@ namespace JWR\Alea {
     if (!defined('ABSPATH')) {
         exit;
     }
-    
+
     // require_once "AleaCRMRequest.php";
     // require_once "AleaCRMInvoice.php";
     // require_once "AleaModel.php";
@@ -15,58 +15,186 @@ namespace JWR\Alea {
     // require_once "../model/Factura.php";
     // require_once "../model/Dieta.php";
     // require_once "Utils.php";
-    
-    
+
+
     use JWR\Alea\{AleaCRMRequest, AleaCRMInvoice, AleaModel, AleaSurvey, AleaExportXLS, Customer, Factura, Dieta, Utils};
     use WP_Query;
+
     class AleaCRM
     {
         public function __construct()
         {
             return;
         }
-    
+
         public static function createCRMPages()
         {
             AleaCRMRequest::createRequestPages();
             AleaCRMInvoice::createInvoicePages();
             AleaSurvey::createSurveyPages();
         }
-    
+
         public static function deleteCRMPages()
         {
             AleaCRMRequest::deleteRequestPages();
             AleaCRMInvoice::deleteInvoicePages();
             AleaSurvey::deleteSurveyPages();
         }
-    
+
         public static function testModel()
         {
             AleaModel::test();
         }
-    
+
         public static function createTables()
         {
             AleaModel::createTables();
         }
-    
+
         public static function deleteTables()
         {
             AleaModel::deleteTables();
         }
-    
-    
+
+        public static function create_menu_admin()
+        {
+            add_menu_page(
+                'JwR Alea CRM', //get_plugin_data(__FILE__),
+                'Alea CRM',
+                'manage_options',
+                'jwr-crm-config',
+                array(SELF::class, 'admin_options'),
+                null,
+                55
+            );
+
+            add_submenu_page(
+                'jwr-crm-config',
+                'Migración de datos',
+                'Migración',
+                'manage_options',
+                'admin-migration',
+                array(SELF::class, 'admin_data_migrations'),
+                null
+            );
+            add_submenu_page(
+                'jwr-crm-config',
+                'Aministración de encuestas',
+                'Encuestas',
+                'manage_options',
+                'admin-surveys',
+                array(SELF::class, 'admin_surveys'),
+                null
+            );
+            add_submenu_page(
+                'jwr-crm-config',
+                'Reporte especializado de datos',
+                'Reportes',
+                'manage_options',
+                'admin-reports',
+                array(SELF::class, 'admin_reports'),
+                null
+            );
+            add_submenu_page(
+                'jwr-crm-config',
+                'CRM REST API',
+                'CRM API',
+                'manage_options',
+                'admin-API',
+                array(SELF::class, 'admin_api'),
+                null
+            );
+        }
+
+        // content plugin admin
+
+        public static function admin_options()
+        {
+            echo "<h1>" . get_admin_page_title() . "</h1>";
+            echo "<br>";
+            echo get_page_template('pag1');
+            echo "<br>";
+            echo plugin_dir_path(__FILE__) . 'admin/pag1.php';
+            echo "<br>";
+            echo plugins_url('admin/pag1.php', __FILE__);
+            echo "<br>";
+            echo get_template_directory();
+?>
+            <h2 class="title">Subtitulo de mi admin</h2>
+            <p>Pasándome de rosca con el hardcodeo.</p>
+        <?php
+        }
+
+        public static function admin_data_migrations()
+        {
+            echo "<h1>" . get_admin_page_title() . "</h1>";
+        ?>
+            <p>.</p>
+            <h2 class="title">RESPALDO DE SEGURIDAD</h2>
+            <p>Ésta fase no tiene la opción de respaldo de seguridad de sus datos.</p>
+        <?php
+        }
+
+        public static function admin_surveys()
+        {
+            echo "<h1>" . get_admin_page_title() . "</h1>";
+        ?>
+            <p>En esta fase no tiene encuestas generadas automáticamente. Las encuestas realizadas son fijas y los datos obtenidos son guarados como en la versión básica de este CRM.</p>
+            <h2 class="title">¡PIDE TU COTIZACIÓN AHORA Y DALE ESE IMPULSO A TU CRM!</h2>
+
+        <?php
+        }
+
+        public static function admin_reports()
+        {
+            echo "<h1>" . get_admin_page_title() . "</h1>";
+        ?>
+            <p>
+                No tienes reportes. :(
+            </p>
+            <p>Recuerda que algo muy importante para las grandes empresas es conocer los datos de sus clientes,
+                los reportes te ayudarán a conocer cuántos, cuándo, cómo y qué servicios son más requerido, ayudará
+                a la toma de decisiones para el crecimiento de tu empresa y te ayudará a prevenir conflictos y
+                hacer proyecciones de venta.
+            </p>
+
+            <h2 class="title">¡PIDE TU COTIZACIÓN AHORA!</h2>
+        <?php
+        }
+
+        public static function admin_api()
+        {
+            echo "<h1>" . get_admin_page_title() . "</h1>";
+        ?>
+            <p>La tecnología avanza, y nosotros con ella. ¿Sabías que podrías trabajar en el CRM aunque o se te valla el internet?,
+                ¿Sabías que los diseños más actuales hacen uso de REST API para llevar los CRM a aplicaciónes al móvil?. </p>
+            <h2 class="title">¡TU CMR ESTÁ LISTO PARA CRECER!</h2>
+            <p>Así es, éste CRM está listo para una pronta implementación de su API, aquí puedes ver un ejemplo de los datos:
+                <a href="<?= get_home_url() . "/wp-json/alea-crm/customer/12"; ?>" target="_blank">ALEA CRM Customer Endpoint API</a>.
+                Con esta API puedes implementar tu CRM con tecnologías WPA, SPW o crear una APP que se conecte a éste servicio.
+            </p>
+
+            <h2 class="title">¡PREGÚNTANOS CÓMO!</h2>
+
+<?php
+        }
+
+
+        // Shortcodes section
+        /**
+         * shortodes
+         */
         function shortcode_request($atts = [], $content = null, $tag = '')
         {
             ob_start();
 
             var_dump($_GET);
-            global $wp_query;    
-            if( isset( $wp_query->query['test'] ) ) { 
+            global $wp_query;
+            if (isset($wp_query->query['test'])) {
                 echo "entro";
-            }                
+            }
             echo "<h1>Pruebita de Shortcode</h1>";
-    
+
             $url = get_rest_url() . 'alea-crm/customer/1/2/';
             print_r($url);
             echo "<br />";
@@ -78,10 +206,10 @@ namespace JWR\Alea {
                 echo $response_results->data[0]->email;
                 echo "</pre>";
             }
-    
+
             $atts = array_change_key_case((array) $atts, CASE_LOWER);
             echo "<h1>Customer TEST</h1>";
-    
+
             $data = array(
                 'sexo' => 1,
                 'telefono' => 'telefono',
@@ -98,19 +226,19 @@ namespace JWR\Alea {
                 'ciudad' => 'ciudad',
                 'provincia' => 'provincia'
             );
-    
+
             $customer  = new Customer($data);
             echo "<br />";
             echo $customer->getNombre();
-    
+
             echo "<br />";
             $newCustomer = $customer->getCustomerById($customer->save());
             echo "<pre>";
             var_dump($newCustomer);
             echo "</pre>";
-    
+
             echo "<h1>Factura TEST</h1>";
-    
+
             $data = array(
                 'id' => null,
                 'referencia' => 'referencia',
@@ -132,28 +260,28 @@ namespace JWR\Alea {
                 'total' => 21.21,
                 'state' => 0
             );
-    
+
             $invoice  = new Factura($data);
             echo "<br />";
             echo $invoice->getNombre();
             $invoice->save();
             echo "<br />";
-    
+
             $invoices = $invoice->getFacturasByCustomerId("44608");
             echo "<pre>";
             var_dump($invoices);
             echo "<pre>";
 
-            $invoices = $invoice->getFacturasByTrimestreFiltered(1,"2021", 0);
+            $invoices = $invoice->getFacturasByTrimestreFilteredPaged(1, "2021", 0, 4);
             echo "<pre>";
             var_dump($invoices);
             echo "<pre>";
 
-            
-    
-    
+
+
+
             echo "<h1>Dieta TEST</h1>";
-    
+
             $data = array(
                 'id' => null,
                 'cliente' => 1,
@@ -169,21 +297,31 @@ namespace JWR\Alea {
                 'tipoDieta' => 0,
                 'nuevoModelo' => 0
             );
-    
+
             $diet  = new Dieta($data);
             echo "<br />";
             echo $diet->getOrder();
             $diet->save();
             echo "<br />";
-    
+
             $diets = $diet->getDietsByCustomerId("44608");
             echo "<pre>";
             var_dump($diets);
             echo "<pre>";
-    
+
             $output = ob_get_clean();
-    
+
             return $output;
+        }
+
+        function shortcode_invoices_online($atts = [], $content = null, $tag = '')
+        {
+            AleaCRMInvoice::invoicePages(0);
+        }
+
+        function shortcode_invoices_physical($atts = [], $content = null, $tag = '')
+        {
+            AleaCRMInvoice::invoicePages(1);
         }
     } //EOC
 }// namespace

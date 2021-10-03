@@ -1,4 +1,5 @@
 <?php
+
 /**
  * JwR-Alea-CRM
  *
@@ -31,11 +32,13 @@ require_once('autoloader.php');
 // include_once "classes/AleaCRM.php";
 // include_once "API/AleaCRMAPI.php";
 
-use JWR\Alea\{AleaCRM,ALeaAPI};
+use JWR\Alea\{AleaCRM, ALeaAPI};
 
-$API = new ALeaAPI();
-add_action('rest_api_init', array($API, 'register_routes'));
 
+function validate_JwR_Theme()
+{
+    return true;
+}
 
 /**
  * Activate the plugin.
@@ -61,63 +64,21 @@ register_deactivation_hook(__FILE__, 'crm_deactivation');
 /**
  * Setup the configuration when you start the plugin
  */
-function create_menu()
-{
-    add_menu_page(
-        'JwR Alea CRM', //get_plugin_data(__FILE__),
-        'Alea CRM',
-        'manage_options',
-        'jwr-crm-config',
-        'mostrar_contenido',
-        null,
-        55
-    );
 
-    add_submenu_page(
-        'jwr-crm-config',
-        'Formularios de consulta',
-        'Formularios de consulta',
-        'manage_options',
-        'pagina-1',
-        'mostrar_contenido2',
-        1
-    );
-}
-add_action('admin_menu', 'create_menu');
+add_action('admin_menu', array(AleaCRM::class, 'create_menu_admin'));
 
+$API = new ALeaAPI();
 
-
-
-function mostrar_contenido()
-{
-    echo "<h1>".get_admin_page_title()."</h1>";
-    echo "<br>";
-    echo get_page_template('pag1');
-    echo "<br>";
-    echo plugin_dir_path(__FILE__) . 'admin/pag1.php';
-    echo "<br>";
-    echo plugins_url( 'admin/pag1.php', __FILE__ );
-    echo "<br>";
-    echo get_template_directory();
-}
-
-function mostrar_contenido2()
-{
-    echo "<h1>".get_admin_page_title()."</h1>";
-}
-
+add_action('rest_api_init', array($API, 'register_routes'));
 
 /**
  * Central location to create all shortcodes.
  */
-function jwr_crm_shortcodes_init() {
+function jwr_crm_shortcodes_init()
+{
     $aleaCRM = new AleaCRM();
     add_shortcode("alea-request", array($aleaCRM, 'shortcode_request'));
+    add_shortcode("alea-invoice-online", array($aleaCRM, 'shortcode_invoices_online'));
+    add_shortcode("alea-invoice-physical", array($aleaCRM, 'shortcode_invoices_physical'));
 }
-add_action( 'init', 'jwr_crm_shortcodes_init' );
-
-
-function validate_JwR_Theme()
-{
-    return true;
-}
+add_action('init', 'jwr_crm_shortcodes_init');
