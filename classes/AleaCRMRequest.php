@@ -8,7 +8,7 @@ namespace JWR\Alea {
     {
         public static function createRequestPages()
         {
-            Utils::createPage("Alea CRM Request", "request", "alea-request", "jwr-alea-crm-request-id");
+            Utils::createPage("Alea CRM Request", "request", "alea-request", "jwr-alea-crm-request-id", "templates/page-crm.php");
         }
         public static function deleteRequestPages()
         {
@@ -17,7 +17,7 @@ namespace JWR\Alea {
 
         public static function requestPages()
         {
-            ob_start();
+            //ob_start();
 
             if (isset($_GET['customer']) && $_GET['customer'] != '') { // p.e. 44608
 

@@ -27,10 +27,21 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-require_once('autoloader.php');
+function JwR_Alea_CRM_dependencies()
+{
+    $theme = wp_get_theme();
+    if ($theme->name != 'JwR-Alea') {
+        echo '<div class="error"><p>' . __('Atención: El plugin JwR Alea CRM requiere del tema JwR-Alea y estas usando: ', 'jwr-alea-crm') . "" . $theme->name . '</p></div>';
+        return true;
+    }
+}
+add_action('admin_notices', 'JwR_Alea_CRM_dependencies');
 
-// include_once "classes/AleaCRM.php";
-// include_once "API/AleaCRMAPI.php";
+if (JwR_Alea_CRM_dependencies()) {
+    exit;
+}
+
+require_once('autoloader.php');
 
 use JWR\Alea\{AleaCRM, ALeaAPI};
 
@@ -57,6 +68,7 @@ function crm_deactivation()
 {
     AleaCRM::deleteCRMPages();
     AleaCRM::deleteTables();
+    deleteMenu();
 }
 register_deactivation_hook(__FILE__, 'crm_deactivation');
 
@@ -77,10 +89,51 @@ add_action('rest_api_init', array($API, 'register_routes'));
 function jwr_crm_shortcodes_init()
 {
     $aleaCRM = new AleaCRM();
-//    add_shortcode("alea-request", array($aleaCRM, 'shortcode_request'));
+    //    add_shortcode("alea-request", array($aleaCRM, 'shortcode_request'));
     add_shortcode("alea-invoice-online", array($aleaCRM, 'shortcode_invoices_online'));
     add_shortcode("alea-invoice-physical", array($aleaCRM, 'shortcode_invoices_physical'));
     add_shortcode("alea-diet", array($aleaCRM, 'shortcode_diets'));
     add_shortcode("alea-request", array($aleaCRM, 'shortcode_request'));
 }
 add_action('init', 'jwr_crm_shortcodes_init');
+
+function addMenu()
+{
+
+    $menu_name = 'CRM Pages';
+    $menu_id = null;
+    $menu_exists = wp_get_nav_menu_object($menu_name);
+    if (!$menu_exists) {
+        $menu_id = wp_create_nav_menu($menu_name);
+        wp_update_nav_menu_item($menu_id, 0, array(
+            'menu-item-title' => 'Alea CRM Request',
+            'menu-item-object-id' => get_page_by_path('request')->ID,
+            'menu-item-object' => 'page',
+            'menu-item-status' => 'publish',
+            'menu-item-type' => 'post_type'
+        ));
+        wp_update_nav_menu_item($menu_id, 0, array(
+            'menu-item-title' => 'Online Invoices',
+            'menu-item-object-id' => get_page_by_path('online-invoices')->ID,
+            'menu-item-object' => 'page',
+            'menu-item-status' => 'publish',
+            'menu-item-type' => 'post_type'
+        ));
+        wp_update_nav_menu_item($menu_id, 0, array(
+            'menu-item-title' => 'Physical Invoices',
+            'menu-item-object-id' => get_page_by_path('physical-invoices')->ID,
+            'menu-item-object' => 'page',
+            'menu-item-status' => 'publish',
+            'menu-item-type' => 'post_type'
+        ));
+        $locations = get_theme_mod('nav_menu_locations');
+        $locations['lateral-menu'] = $menu_id;
+        set_theme_mod('nav_menu_locations', $locations);
+    }
+}
+add_action('init', 'addMenu');
+
+function deleteMenu()
+{
+    wp_delete_nav_menu('CRM Pages');
+}

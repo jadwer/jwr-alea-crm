@@ -3,7 +3,7 @@
 namespace JWR\Alea {
     class Utils
     {
-        public static function createPage($title, $slug, $shortcode, $option)
+        public static function createPage($title, $slug, $shortcode, $option, $template)
         {
             if (!post_exists($title, '', '', 'page', 'publish')) {
                 $newCRMPage = array(
@@ -12,6 +12,7 @@ namespace JWR\Alea {
                     'post_content' => '[' . $shortcode . ']',
                     'post_status' => 'publish',
                     'post_type' => 'page',
+                    'page_template' => $template,
                     'post_author' => 1,
                     'post_date' => date('Y-m-d H:i:s')
                 );

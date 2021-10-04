@@ -9,7 +9,7 @@ namespace JWR\Alea {
     {
         public static function createDietPages()
         {
-            Utils::createPage("Alea CRM Diet", "diet", "alea-diet", "jwr-alea-crm-diet-id");
+            Utils::createPage("Alea CRM Diet", "diet", "alea-diet", "jwr-alea-crm-diet-id", "templates/page-crm.php");
         }
         public static function deleteDietPages()
         {
