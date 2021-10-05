@@ -6,17 +6,6 @@ namespace JWR\Alea {
         exit;
     }
 
-    // require_once "AleaCRMRequest.php";
-    // require_once "AleaCRMInvoice.php";
-    // require_once "AleaModel.php";
-    // require_once "AleaSurvey.php";
-    // require_once "AleaExportXLS.php";
-    // require_once "../model/Customer.php";
-    // require_once "../model/Factura.php";
-    // require_once "../model/Dieta.php";
-    // require_once "Utils.php";
-
-
     use JWR\Alea\{AleaCRMRequest, AleaCRMDiet, AleaCRMInvoice, AleaModel, AleaSurvey, AleaExportXLS, Customer, Factura, Dieta, Utils};
     use WP_Query;
 
@@ -33,6 +22,7 @@ namespace JWR\Alea {
             AleaCRMDiet::createDietPages();
             AleaCRMInvoice::createInvoicePages();
             AleaSurvey::createSurveyPages();
+            AleaExportXLS::createExportPage();
         }
 
         public static function deleteCRMPages()
@@ -41,6 +31,7 @@ namespace JWR\Alea {
             AleaCRMDiet::deleteDietPages();
             AleaCRMInvoice::deleteInvoicePages();
             AleaSurvey::deleteSurveyPages();
+            AleaExportXLS::deleteExportPage();
         }
 
         public static function testModel()
@@ -332,6 +323,10 @@ namespace JWR\Alea {
         function shortcode_request($atts = [], $content = null, $tag = '')
         {
             AleaCRMRequest::requestPages();
+        }
+        function shortcode_export($atts = [], $content = null, $tag = '')
+        {
+            AleaExportXLS::exportPage();
         }
 
     } //EOC

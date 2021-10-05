@@ -141,6 +141,17 @@ namespace JWR\Alea {
 
 
         // Getters and Setters
+        public function getDireccion()
+        {
+            $direccion =
+                $this->calle . " " .
+                $this->numero . " " .
+                $this->pisoLetra . " " .
+                $this->cp . " " .
+                $this->ciudad . " " .
+                $this->provincia;
+            return $direccion;
+        }
         public function getId()
         {
             return $this->id;
@@ -159,7 +170,8 @@ namespace JWR\Alea {
         }
         public function getFecha()
         {
-            return $this->fecha;
+            $rawDate = strtotime($this->fecha);
+            return date('d/m/Y', $rawDate);
         }
         public function setFecha($fecha)
         {
@@ -263,7 +275,7 @@ namespace JWR\Alea {
         }
         public function getPrecio()
         {
-            return $this->precio;
+            return number_format($this->precio, 2);
         }
         public function setPrecio($precio)
         {
@@ -271,7 +283,7 @@ namespace JWR\Alea {
         }
         public function getIVA()
         {
-            return $this->iva;
+            return number_format($this->iva, 2);
         }
         public function setIVA($iva)
         {
@@ -279,7 +291,7 @@ namespace JWR\Alea {
         }
         public function getTotal()
         {
-            return $this->total;
+            return number_format($this->total, 2);
         }
         public function setTotal($total)
         {

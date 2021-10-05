@@ -1,0 +1,17 @@
+{
+    "name": "gabino/jwr-alea-crm",
+    "require": {
+        "phpoffice/phpspreadsheet": "^1.18"
+    },
+    "autoload": {
+        "psr-4": {
+            "Gabino\\JwrAleaCrm\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Rodrigo G Ramirez M",
+            "email": "jadwer@msn.com"
+        }
+    ]
+}
