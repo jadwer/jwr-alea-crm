@@ -129,7 +129,6 @@ namespace JWR\Alea {
         {
             $dates = Utils::returnTrimestre($period, $year);
 
-
             $data = $this->getObjectsBetweenDatesFilteredPaged(SELF::TABLE_NAME, "fecha", $dates['start'], $dates['end'], "state", $state, $page, 100);
             $invoices = array();
             foreach ($data as $invoice) {
@@ -139,13 +138,45 @@ namespace JWR\Alea {
             return $invoices;
         }
 
+        public function getTotalByTrimestre($period, $year, $state)
+        {
+            $dates = Utils::returnTrimestre($period, $year);
+
+            return $this->getSumDataByPeriodFiltered(SELF::TABLE_NAME, "total", "fecha", $dates['start'], $dates['end'], "state", $state);
+        }
+
+        public function getBaseByTrimestre($period, $year, $state)
+        {
+            $dates = Utils::returnTrimestre($period, $year);
+
+            return $this->getSumDataByPeriodFiltered(SELF::TABLE_NAME, "precio", "fecha", $dates['start'], $dates['end'], "state", $state);
+        }
+
+        public function getIVAByTrimestre($period, $year, $state)
+        {
+            $dates = Utils::returnTrimestre($period, $year);
+
+            return $this->getSumDataByPeriodFiltered(SELF::TABLE_NAME, "iva", "fecha", $dates['start'], $dates['end'], "state", $state);
+        }
+
 
         // Getters and Setters
+        public static function paginatorData($period, $year, $state){
+            $dates = Utils::returnTrimestre($period, $year);
+
+            return SELF::getPaginatorPeriodData(SELF::TABLE_NAME, array('field' => 'state', 'value' => $state), "fecha", $dates['start'], $dates['end'], 100);
+        }
+        public function getInvoicesYears()
+        {
+            $years = $this->getYears(SELF::TABLE_NAME);
+            return $years;
+        }
         public function getDireccion()
         {
+            $numero = ($this->numero == 0) ? '' : $this->numero;
             $direccion =
                 $this->calle . " " .
-                $this->numero . " " .
+                $numero . " " .
                 $this->pisoLetra . " " .
                 $this->cp . " " .
                 $this->ciudad . " " .
@@ -171,11 +202,21 @@ namespace JWR\Alea {
         public function getFecha()
         {
             $rawDate = strtotime($this->fecha);
-            return date('d/m/Y', $rawDate);
+            $date = date('d/m/Y', $rawDate);
+            
+            return $date;
         }
         public function setFecha($fecha)
         {
-            $this->fecha = $fecha;
+            if(Utils::validateDate($fecha)){
+                $this->fecha = $fecha;
+            } else {
+                list($dia, $mes, $anio) = explode('/', "$fecha//");
+                $american_date = $anio . "-" . $mes . "-" . $dia;
+                $phpdate = strtotime($american_date);
+                $mysqldate = date('Y-m-d H:i:s', $phpdate);
+                $this->fecha = $mysqldate;    
+            }
         }
         public function getCliente()
         {
@@ -391,7 +432,7 @@ namespace JWR\Alea {
         {
             $this->id = $id;
             $this->referencia = $referencia;
-            $this->fecha = $fecha;
+            $this->setFecha($fecha);
             $this->cliente = $cliente;
             $this->dietaid = $dietaid;
             $this->nombre = $nombre;
@@ -420,7 +461,7 @@ namespace JWR\Alea {
         {
             $this->id = null;
             $this->referencia = "";
-            $this->fecha = "";
+            $this->fecha = date("Y-m-d H:i:s");
             $this->cliente = 0;
             $this->dietaid = 0;
             $this->nombre = "";

@@ -1,13 +1,16 @@
 <?php
 
 namespace JWR\Alea {
+
+    use IntlChar;
+
     class AleaCRMInvoice
     {
         public static function createInvoicePages()
         {
             Utils::createPage("Alea CRM Online Invoice", "online-invoices", "alea-invoice-online", "jwr-alea-crm-invoice-online-id", "templates/page-crm.php");
             Utils::createPage("Alea CRM Physical Invoice", "physical-invoices", "alea-invoice-physical", "jwr-alea-crm-invoice-physical-id", "templates/page-crm.php");
-            Utils::createPage("Alea CRM New Invoice", "invoice", "alea-invoice-new", "jwr-alea-crm-invoice-new-id", "templates/page-crm.php");
+            Utils::createPage("Alea CRM New Invoice", "new-invoice", "alea-invoice-new", "jwr-alea-crm-invoice-new-id", "templates/page-crm.php");
         }
         public static function deleteInvoicePages()
         {
@@ -37,54 +40,204 @@ namespace JWR\Alea {
         }
 
 
+        public static function invoiceNew()
+        {
+            $msg = "";
+            if (isset($_POST['submit']) && $_POST['submit'] == 'send') {
+                $invoice = new Factura();
+
+
+                $invoice->setId((int)UTILS::escape($_POST['id_invoice']));
+                $invoice->setReferencia(UTILS::escape($_POST['invoice_number']));
+                $invoice->setFecha(UTILS::escape($_POST['date']));
+                $invoice->setNombre(UTILS::escape($_POST['fname']));
+                $invoice->setApellidos(UTILS::escape($_POST['last_name']));
+                $invoice->setNif(UTILS::escape($_POST['nif_number']));
+                $invoice->setCalle(UTILS::escape($_POST['address']));
+                $invoice->setConcepto(UTILS::escape($_POST['concepto']));
+                $invoice->setPrecio(UTILS::escape($_POST['price']));
+                $invoice->setTotal(UTILS::escape($_POST['price']));
+                $invoice->setState(UTILS::escape($_POST['state_invoice']));
+
+                $invoice->save();
+                $msg = "Factura guardada exitosamente";
+            }
+
+            SELF::newInvoice($msg);
+        }
+
+        private static function editInvoice($invoice_id)
+        {
+            $invoice = new Factura();
+            $costumer_invoice = $invoice->getFacturaById($invoice_id);
+
+            $msg = "";
+            if (isset($_POST['submit']) && $_POST['submit'] == 'send') {
+
+                $costumer_invoice->setId((int)UTILS::escape($_POST['id_invoice']));
+                $costumer_invoice->setReferencia(UTILS::escape($_POST['invoice_number']));
+                $costumer_invoice->setFecha(UTILS::escape($_POST['date']));
+                $costumer_invoice->setNombre(UTILS::escape($_POST['fname']));
+                $costumer_invoice->setApellidos(UTILS::escape($_POST['last_name']));
+                $costumer_invoice->setNif(UTILS::escape($_POST['nif_number']));
+                $costumer_invoice->setCalle(UTILS::escape($_POST['address']));
+                $costumer_invoice->setConcepto(UTILS::escape($_POST['concepto']));
+                $costumer_invoice->setPrecio(UTILS::escape($_POST['price']));
+                $costumer_invoice->setTotal(UTILS::escape($_POST['price']));
+                $costumer_invoice->setState(UTILS::escape($_POST['state_invoice']));
+
+                $costumer_invoice->save();
+                $msg = "Factura guardada exitosamente";
+            }
+
+            SELF::invoiceForm($costumer_invoice, $msg);
+        }
+
+        private static function paginator($pag, $period, $year, $state)
+        {
+            global $wp;
+            $data = Factura::paginatorData($period, $year, $state);
+?>
+            <div class="flex justify-center space-x-8">
+                <a href="<?= home_url($wp->request) . '/?pag=1&period=' . $period . '&year_selected=' . $year; ?>">
+                    <div>
+                        << </div>
+                </a>
+                <?php for ($i = 1; $i <= $data['num_pags']; $i++) : ?>
+                    <a href="<?= home_url($wp->request) . '/?pag=' . $i . '&period=' . $period . '&year_selected=' . $year; ?>" class=" <?php echo ($pag == $i) ? 'selected' : ''; ?>">
+                        <div><?= $i; ?></div>
+                    </a>
+                <?php endfor; ?>
+                <a href="<?= home_url($wp->request) . '/?pag=' . $data['num_pags'] . '&period=' . $period . '&year_selected=' . $year; ?>">
+                    <div> >> </div>
+                </a>
+            </div>
+            <div class="flex justify-center text-center">
+                <?= $data['total']; ?> registros en el trimestre.
+            </div>
+        <?php
+
+        }
+        private static function newInvoice($msg)
+        {
+            $invoice = new Factura;
+            $invoice->setFecha(date("Y-m-d H:i:s"));
+            $invoice->setState(1);
+            SELF::invoiceForm($invoice, $msg);
+        }
+
+        private static function invoiceForm($invoice, $msg)
+        {
+            global $wp;
+        ?>
+            <div class="container">
+                <div class=""><?= $msg ?></div>
+                <form id="facturas" action="" method="post" class="" enctype="multipart/form-data">
+                    <input type="hidden" name="id_invoice" value="<?= $invoice->getId() ?>">
+                    <input type="hidden" name="state_invoice" value="<?= $invoice->getState() ?>">
+
+                    <div class="">
+                        <div class="">
+                            <label>Número de factura</label>
+                            <input type="text" required name="invoice_number" id="invoice_number" value="<?= $invoice->getReferencia() ?>" class="" />
+                        </div>
+
+                        <div class="">
+                            <div class="">
+                                <label>Fecha *</label>
+                                <input type="text" id="datepicker" name="date" value="<?= $invoice->getFecha() ?>" class="input-medium" required="required" autocomplete="off" />
+                            </div>
+
+                            <div class="">
+                                <label>Nombre *</label>
+                                <input type="text" name="fname" id="fname" value="<?= $invoice->getNombre() ?>" class="" required="required" />
+                            </div>
+                            <div class="">
+                                <label>Apellidos *</label>
+                                <input type="text" name="last_name" id="last_name" value="<?= $invoice->getApellidos() ?>" class="" required="required" />
+                            </div>
+                            <div class="">
+                                <label>NIF *</label>
+                                <input type="text" name="nif_number" id="nif_number" value="<?= $invoice->getNif() ?>" class=" required" required="required" />
+                            </div>
+                        </div>
+                        <div class="">
+                            <label class="required">Dirección *</label>
+                            <input type="text" name="address" id="address" value="<?= $invoice->getDireccion() ?>" class=" required" required="required">
+                        </div>
+                        <div class="">
+                            <label>Concepto</label>
+                            <input type="text" name="concepto" id="concepto" value="<?= $invoice->getConcepto() ?>" class="" size="50" />
+                        </div>
+                        <div class="">
+                            <label>Precio *</label>
+                            <input type="text" name="price" id="price" value="<?= $invoice->getPrecio() ?>" class=" required" required="required" />
+                        </div>
+
+                        <div class="">
+                            <button type="submit" name="submit" value="send" class="">Guardar</button>
+                            <a class="" href="<?= home_url('request') ?>" title="Cancel">Regresar</a>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        <?php
+        }
+
         private static function listInvoices($state, $page)
         {
+            $year_selected = (get_query_var('year_selected')) ? get_query_var('year_selected') : "2021";
+            $period = (get_query_var('period')) ? get_query_var('period') : 1;
+
             global $wp_query;
             global $wp;
-            $invoice  = new Factura();
+            $invoice = new Factura();
 
-            $invoices = $invoice->getFacturasByTrimestreFilteredPaged(1, "2021", $state, $page);
+            $invoices = $invoice->getFacturasByTrimestreFilteredPaged($period, $year_selected, $state, $page);
+            $years = $invoice->getInvoicesYears();
 
-
-?>
-            <form target="_blank" action="<?=home_url('export')?>" method="post">
+        ?>
+            <form target="_blank" action="<?= home_url('export') ?>" method="post">
                 <div class="flex justify-around bg-gray-100 rounded-2xl shadow-md mb-8">
 
                     <input type="hidden" name="type" value="<?= $state; ?>" />
                     <div class="flex space-x-8">
                         <div>
-                            <a href="<?=home_url('invoice'); ?>" class="flex">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                                </svg>
-                                <spam>
-                                    Añadir
-                                </spam>
-                            </a>
+                            <?php if ($state == 1) : ?>
+                                <a href="<?= home_url('new-invoice'); ?>" class="flex">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                                    </svg>
+                                    <spam>
+                                        Añadir
+                                    </spam>
+                                </a>
+                            <?php endif; ?>
                         </div>
                         <div>
                             <button class="flex" type="submit" name="export" value="true">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                                </svg> <span>
+                                </svg>
+                                <span>
                                     Exportar
                                 </span>
                             </button>
                         </div>
                     </div>
                     <div class="flex space-x-8">
-                        <select name="period">
-                            <option value="1" selected="selected">Primer trimestre</option>
-                            <option value="2">Segundo trimestre</option>
-                            <option value="3">Tercer trimestre</option>
-                            <option value="4">Cuarto trimestre</option>
+                        <select name="period" id="period" onChange="updatePage()">
+                            <option value="1" <?php echo ($period == 1) ? 'selected="selected"' : ''; ?>>Primer trimestre</option>
+                            <option value="2" <?php echo ($period == 2) ? 'selected="selected"' : ''; ?>>Segundo trimestre</option>
+                            <option value="3" <?php echo ($period == 3) ? 'selected="selected"' : ''; ?>>Tercer trimestre</option>
+                            <option value="4" <?php echo ($period == 4) ? 'selected="selected"' : ''; ?>>Cuarto trimestre</option>
                         </select>
 
-                        <select name="anio">
-                            <option value="2021" selected="selected">2021</option>
-                            <option value="2020">2020</option>
-                            <option value="2019">2019</option>
-                            <option value="2018">2018</option>
+                        <select name="anio" id="anio" onChange="updatePage()">
+                            <?php foreach ($years as $year) : ?>
+                                <option vaule="$year->year" <?php echo ($year_selected == $year->year) ? 'selected="selected"' : ''; ?>><?= $year->year; ?></option>
+                            <?php endforeach; ?>
                         </select>
 
                     </div>
@@ -133,19 +286,29 @@ namespace JWR\Alea {
                 <?php endforeach; ?>
             </div>
 
+            <?php SELF::paginator($page, $period, $year_selected, $state); ?>
+
             <div class="flex justify-around bg-gray-100 rounded-2xl shadow-md mt-8">
                 <div class="">
-                    Total base
+                    Total base: <?= $invoice->getBaseByTrimestre($period, $year_selected, $state); ?>
+
                 </div>
                 <div class="">
-                    IVA
+                    IVA <?= $invoice->getIVAByTrimestre($period, $year_selected, $state); ?>
                 </div>
                 <div class="">
-                    Total
+                    Total <?= $invoice->getTotalByTrimestre($period, $year_selected, $state); ?>
                 </div>
             </div>
             <script type="text/javascript">
                 var siteurl = '<?php echo site_url(); ?>';
+
+                function updatePage() {
+                    var anio = document.getElementById('anio').value;
+                    var period = document.getElementById('period').value;
+
+                    window.location = '<?= home_url($wp->request); ?>/?period=' + period + '&year_selected=' + anio
+                }
 
                 function printOption(id) {
                     console.log(id);
@@ -167,7 +330,7 @@ namespace JWR\Alea {
         private static function listInvoicesPerCusomer($customer)
         {
             global $wp_query;
-            $invoice  = new Factura();
+            $invoice = new Factura();
 
 
             $invoices = $invoice->getFacturasByCustomerId($customer);
@@ -179,18 +342,7 @@ namespace JWR\Alea {
         private static function showInvoice($invoice_id)
         {
             global $wp_query;
-            $invoice  = new Factura();
-
-            $invoices = $invoice->getFacturaById($invoice_id);
-            echo "<pre>";
-            var_dump($invoices);
-            echo "<pre>";
-        }
-
-        private static function editInvoice($invoice_id)
-        {
-            global $wp_query;
-            $invoice  = new Factura();
+            $invoice = new Factura();
 
             $invoices = $invoice->getFacturaById($invoice_id);
             echo "<pre>";

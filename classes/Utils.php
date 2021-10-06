@@ -20,40 +20,42 @@ namespace JWR\Alea {
                 add_option($option, $post_id);
             }
         }
-    
+
         public static function deletePage($option)
         {
             wp_delete_post(get_option($option));
             delete_option($option);
         }
-    
-        public static function set_object_vars($object, array $vars) {
+
+        public static function set_object_vars($object, array $vars)
+        {
             $has = get_object_vars($object);
             foreach ($has as $name => $oldValue) {
                 $object->$name = isset($vars[$name]) ? $vars[$name] : NULL;
             }
         }
 
-        public static function returnTrimestre($period, $year){
-            $start = $year."-";
-            $end = $year."-";
+        public static function returnTrimestre($period, $year)
+        {
+            $start = $year . "-";
+            $end = $year . "-";
             switch ($period) {
                 case '1':
                     $start .= "01-01";
                     $end .= "03-31";
-                            break;
+                    break;
                 case '2':
                     $start .= "04-01";
                     $end .= "06-30";
-                            break;
+                    break;
                 case '3':
                     $start .= "07-01";
                     $end .= "09-30";
-                            break;
+                    break;
                 case '4':
                     $start .= "10-01";
                     $end .= "12-31";
-                            break;
+                    break;
                 default:
             }
 
@@ -65,9 +67,15 @@ namespace JWR\Alea {
             );
             return $dates;
         }
-        public static function escape($html){
+        public static function escape($html)
+        {
             return htmlspecialchars($html, ENT_QUOTES | ENT_SUBSTITUTE, "UTF-8");
+        }
+
+        public static function validateDate($date, $format = 'Y-m-d H:i:s')
+        {
+            $d = \DateTime::createFromFormat($format, $date);
+            return $d && $d->format($format) == $date;
         }
     } // EOF
 } // namespace
-

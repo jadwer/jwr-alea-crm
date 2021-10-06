@@ -4,6 +4,8 @@ namespace JWR\Alea {
 
     class ContinueSurvey
     {
+        const NUM_FIELDS = 23;
+
         private $order;
         private $estricta;
         private $pesado;
@@ -27,6 +29,20 @@ namespace JWR\Alea {
         private $per_ca;
         private $comentarios;
         private $paciente_nif;
+
+        public function __construct()
+        {
+            $params = func_get_args();
+            $num_params = func_num_args();
+
+            if ($num_params == 1) {
+                call_user_func_array(array($this, '__construct_array'), $params);
+            } else if ($num_params == static::NUM_FIELDS) {
+                call_user_func_array(array($this, '__construct_data'), $params);
+            } else {
+                call_user_func_array(array($this, '__construct_void'), $params);
+            }
+        }
 
         private function __construct_void()
         {
@@ -55,7 +71,7 @@ namespace JWR\Alea {
             $this->paciente_nif = "";
         }
 
-        public function __construct($data)
+        public function __construct_array($data)
         {
             $this->__construct_void();
             if (is_array($data)) {

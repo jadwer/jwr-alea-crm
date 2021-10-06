@@ -92,6 +92,7 @@ function jwr_crm_shortcodes_init()
     //    add_shortcode("alea-request", array($aleaCRM, 'shortcode_request'));
     add_shortcode("alea-invoice-online", array($aleaCRM, 'shortcode_invoices_online'));
     add_shortcode("alea-invoice-physical", array($aleaCRM, 'shortcode_invoices_physical'));
+    add_shortcode("alea-invoice-new", array($aleaCRM, 'shortcode_invoice'));
     add_shortcode("alea-diet", array($aleaCRM, 'shortcode_diets'));
     add_shortcode("alea-request", array($aleaCRM, 'shortcode_request'));
     add_shortcode("export", array($aleaCRM, 'shortcode_export'));
@@ -138,3 +139,11 @@ function deleteMenu()
 {
     wp_delete_nav_menu('CRM Pages');
 }
+
+function add_query_vars_filter( $vars ){
+    $vars[] = "year_selected";
+    $vars[] = "period";
+    $vars[] = "pag";
+    return $vars;
+  }
+  add_filter( 'query_vars', 'add_query_vars_filter' );

@@ -311,10 +311,13 @@ namespace JWR\Alea {
         {
             AleaCRMInvoice::invoicePages(0);
         }
-
         function shortcode_invoices_physical($atts = [], $content = null, $tag = '')
         {
             AleaCRMInvoice::invoicePages(1);
+        }
+        function shortcode_invoice($atts = [], $content = null, $tag = '')
+        {
+            AleaCRMInvoice::invoiceNew();
         }
         function shortcode_diets($atts = [], $content = null, $tag = '')
         {

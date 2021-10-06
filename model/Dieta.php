@@ -62,17 +62,26 @@ namespace JWR\Alea {
             return $this->setObject($this->toArray(), SELF::TABLE_NAME);
         }
 
+        //-------------
+
+        public static function paginatorData()
+        {
+            $where = "1";
+
+            return SELF::getPaginatorData(SELF::TABLE_NAME, $where, 100);
+        }
+
+
         public function getDietasPaged($page)
         {
 
-            $data = $this->getObjectsPaged(SELF::TABLE_NAME, array('fecha','DESC'), $page, 100);
+            $data = $this->getObjectsPaged(SELF::TABLE_NAME, array('fecha', 'DESC'), $page, 100);
             $diets = array();
             foreach ($data as $diet) {
                 $obj = new $this($diet);
                 $diets[] = $obj;
             }
             return $diets;
-
         }
 
         public function getDietaById($id)
@@ -87,7 +96,7 @@ namespace JWR\Alea {
         {
             $data = $this->getObjectsByField(SELF::TABLE_NAME, "cliente", $customer_id);
             $diets = array();
-            foreach($data as &$diet){
+            foreach ($data as &$diet) {
                 $this->__construct_array($diet);
                 $diets[] = $this;
             }

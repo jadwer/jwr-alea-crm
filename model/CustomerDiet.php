@@ -59,6 +59,23 @@ namespace JWR\Alea {
             return;
         }
 
+        //-------------------
+        public static function paginatorData()
+        {
+            global $wpdb;
+
+            $table1 = $wpdb->prefix . SELF::TABLE_NAME;
+            $table2 = $wpdb->prefix . SELF::TABLE_NAME2;
+            $selected = "{$table1}.*, $table2.nombre,$table2.apellidos";
+            $where = "
+            INNER JOIN {$table2} 
+            ON {$table1}.cliente = {$table2}.id";
+
+
+            return SELF::getPaginatorData(SELF::TABLE_NAME, $where, 100);
+        }
+
+
         public function getCustomerDietPaged($page)
         {
             global $wpdb;
@@ -98,7 +115,7 @@ namespace JWR\Alea {
             $customer_diet = $diet->getDietaById($diet_id);
             $customer_data = $customer->getCustomerById($customer_diet->getCliente());
 
-            return array($customer_data, $customer_diet);
+            return array('customer' => $customer_data, 'diet' => $customer_diet);
         }
 
         // Getters and Setters
