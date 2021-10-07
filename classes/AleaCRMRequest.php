@@ -75,12 +75,14 @@ namespace JWR\Alea {
         {
         ?>
             <div class="flex flex-wrap w-full bg-gray-100 rounded-xl shadow-xl">
-
                 <div class="flex justify-center lateral w-2/12">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 17l-5-5m0 0l5-5m-5 5h12" />
+                    </svg>
                     REGRESAR
                 </div>
                 <div class="lateral w-10/12">
-                    Espaciador
+
                 </div>
                 <div class="flex justify-end w-2/12">
                     Paciente:
@@ -95,34 +97,22 @@ namespace JWR\Alea {
                     </div>
                 </div>
                 <div class="flex justify-end w-2/12">
-                    <label>tipoDieta: </label>
+                    <label>Tipo de solicitud: </label>
                 </div>
                 <div class="w-10/12 justify-start">
                     <?= $tipoDieta; ?>
                 </div>
                 <div class="flex justify-end w-2/12">
-                    <label>fechaConsulta: </label>
+                    <label>fecha de consulta: </label>
                 </div>
                 <div class="w-10/12 justify-start">
                     <?= $fechaConsulta; ?>
                 </div>
                 <div class="flex justify-end w-2/12">
-                    <label>dietaId: </label>
+                    <label>ID de consulta: </label>
                 </div>
                 <div class="w-10/12 justify-start">
                     <?= $dietaId; ?>
-                </div>
-                <div class="flex justify-end w-2/12">
-                    <label>customer: </label>
-                </div>
-                <div class="w-10/12 justify-start">
-                    <?= $customer->getNacimiento(); ?>
-                </div>
-                <div class="flex justify-end w-2/12">
-                    <label>customer: </label>
-                </div>
-                <div class="w-10/12 justify-start">
-                    <?= $customer->getSexo(); ?>
                 </div>
             </div>
 
@@ -138,20 +128,16 @@ namespace JWR\Alea {
             $survey = ($diet->getTipo() == 1) ? new StartSurvey($surveyData) :  new ContinueSurvey($surveyData);
 
             SELF::customerInfoForm($diet->getTipo(), $diet->getFecha(), $diet->getId(), $customer);
-        ?>
-
-            <?php
+            
             if ($diet->getTipo() == 1) {
-                //AleaSurvey::startSurvey($survey);
+                AleaSurvey::startSurvey($survey);
             } elseif ($diet->getTipo() == 2) {
 
-                //AleaSurvey::continueSurvey($survey);
+                AleaSurvey::continueSurvey($survey);
             } else {
                 echo "Sorry, we don't have any template for this critearia.";
             }
-            ?>
-            </div>
-
+        ?>
         <?php
         }
 

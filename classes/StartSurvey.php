@@ -416,7 +416,6 @@ namespace JWR\Alea {
                     $this->newsletter = $data['newsletter'];
                 }
             }
-
         }
 
         public function getorder()
@@ -428,6 +427,14 @@ namespace JWR\Alea {
             $this->order = $order;
         }
         public function getedad()
+        {
+            $birthDate = explode("-", $this->edad);
+            $age = (date("md", date("U", mktime(0, 0, 0, $birthDate[2], $birthDate[1], $birthDate[0]))) > date("md")
+                ? ((date("Y") - $birthDate[0]) - 1)
+                : (date("Y") - $birthDate[0]));
+            return $age;
+        }
+        public function getFechaNacimiento()
         {
             return $this->edad;
         }
