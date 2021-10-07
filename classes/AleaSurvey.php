@@ -53,11 +53,33 @@ namespace JWR\Alea {
                 );
 
                 $survey = new ContinueSurvey($data);
-                $jsurvey = json_encode($survey->toArray());
+                $customer = new Customer();
+                $customer->getCustomerByNIF($survey->getpaciente_nif());
+
+                $dietData = array(
+                    'id' => null,
+                    'cliente' => $customer->getId(),
+                    'nif' => $customer->getNif(),
+                    'tipo' => 2,
+                    'fecha' => date("Y-m-d H:i:s"),
+                    'parametros' => $survey->toJsonEncode(),
+                    'state' => 1,
+                    'order' => $survey->getorder(),
+                    'enviado' => 0,
+                    'opc' => 0,
+                    'recordar' => 0,
+                    'tipoDieta' => 0,
+                    'nuevoModelo' => 1
+                );
+                $diet = new Dieta($dietData);
+                $diet->save();
+
                 echo "<pre>";
                 print_r($survey);
                 print_r($survey->toArray());
                 print_r($survey->toJsonEncode());
+                print_r($customer);
+                print_r($diet);
                 echo "</pre>";
                 
                 
@@ -103,6 +125,7 @@ namespace JWR\Alea {
         private static function customerInfoForm($customer)
         {
             ?>
+            <input type="hidden" name="paciente_nif" value="<?=$customer->getNif();?>">
             <div class="flex flex-wrap w-full bg-gray-100 rounded-xl shadow-xl">
                 <a href="<?= home_url() ?>" class="flex justify-center lateral w-2/12">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
