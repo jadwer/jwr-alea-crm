@@ -146,7 +146,7 @@ namespace JWR\Alea {
         }
         public function getTipo()
         {
-            return $this->tipo;
+            return ($this->tipo == 1)? "Comienza" : "Continúa";
         }
         public function setTipo($tipo)
         {

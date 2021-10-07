@@ -75,12 +75,12 @@ namespace JWR\Alea {
         {
         ?>
             <div class="flex flex-wrap w-full bg-gray-100 rounded-xl shadow-xl">
-                <div class="flex justify-center lateral w-2/12">
+                <a href="<?=home_url('request').'/?customer='.$customer->getId();?>" class="flex justify-center lateral w-2/12">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 17l-5-5m0 0l5-5m-5 5h12" />
                     </svg>
                     REGRESAR
-                </div>
+                </a>
                 <div class="lateral w-10/12">
 
                 </div>
@@ -97,10 +97,10 @@ namespace JWR\Alea {
                     </div>
                 </div>
                 <div class="flex justify-end w-2/12">
-                    <label>Tipo de solicitud: </label>
+                    <label>Tipo: </label>
                 </div>
                 <div class="w-10/12 justify-start">
-                    <?= $tipoDieta; ?>
+                    <?= ($tipoDieta == 1) ? "Comienza" : "Continúa"; ?>
                 </div>
                 <div class="flex justify-end w-2/12">
                     <label>fecha de consulta: </label>
@@ -128,7 +128,7 @@ namespace JWR\Alea {
             $survey = ($diet->getTipo() == 1) ? new StartSurvey($surveyData) :  new ContinueSurvey($surveyData);
 
             SELF::customerInfoForm($diet->getTipo(), $diet->getFecha(), $diet->getId(), $customer);
-            
+
             if ($diet->getTipo() == 1) {
                 AleaSurvey::startSurvey($survey);
             } elseif ($diet->getTipo() == 2) {
