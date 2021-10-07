@@ -2,8 +2,8 @@
 
 namespace JWR\Alea {
 
-    use COM;
-    use PhpOffice\PhpSpreadsheet\Writer\Ods\Content;
+    // require_once(WP_PLUGIN_DIR."/jwr-alea-crm/model/ContinueSurvey.php");
+    // require_once(WP_PLUGIN_DIR."/jwr-alea-crm/model/StartSurvey.php");
 
     class AleaSurvey
     {

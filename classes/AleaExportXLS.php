@@ -1,7 +1,7 @@
 <?php
 
 namespace JWR\Alea {
-    require(WP_PLUGIN_DIR . '/jwr-alea-crm/vendor/autoload.php');
+    // require(WP_PLUGIN_DIR . '/jwr-alea-crm/vendor/autoload.php');
 
     use PhpOffice\PhpSpreadsheet\{Spreadsheet, IOFactory, Style\Fill, Style\Alignment};
 

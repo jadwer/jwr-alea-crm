@@ -2,8 +2,6 @@
 
 namespace JWR\Alea {
 
-    use IntlChar;
-
     class AleaCRMInvoice
     {
         public static function createInvoicePages()

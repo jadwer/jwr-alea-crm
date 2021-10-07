@@ -6,7 +6,6 @@ namespace JWR\Alea {
     // include_once "JwRObject.php";
 
     use JWR\Alea\{Utils, JwRObject};
-    use wpdb;
 
     class Dieta extends JwRObject
     {

@@ -2,6 +2,8 @@
 
 namespace JWR\Alea {
 
+    // require_once(WP_PLUGIN_DIR."/jwr-alea-crm/model/JwRObject.php");
+
     use JWR\Alea\{JwRObject};
 
     class CustomerDiet extends JwRObject

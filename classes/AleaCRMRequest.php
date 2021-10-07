@@ -2,6 +2,9 @@
 
 namespace JWR\Alea {
 
+    // require_once(WP_PLUGIN_DIR."/jwr-alea-crm/model/CustomerDiet.php");
+    // require_once(WP_PLUGIN_DIR."/jwr-alea-crm/model/StartSurvey.php");
+
     use JWR\Alea\Utils;
 
     class AleaCRMRequest

@@ -2,11 +2,10 @@
 
 namespace JWR\Alea {
 
-    // require_once "Utils.php";
-    // require_once "JwRObject.php";
+    // require_once WP_PLUGIN_DIR."/jwr-alea-crm/classes/Utils.php";
+    // require_once(WP_PLUGIN_DIR."/jwr-alea-crm/model/JwRObject.php");
 
     use JWR\Alea\{Utils, JwRObject};
-    use wpdb;
 
     class Customer extends JwRObject
     {

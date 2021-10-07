@@ -5,7 +5,6 @@ namespace JWR\Alea {
     // require_once "Utils.php";
 
     use JWR\Alea\Utils;
-    use wpdb;
 
     /**
      * This is a general Model class

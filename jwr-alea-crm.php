@@ -26,6 +26,8 @@
 if (!defined('ABSPATH')) {
     exit;
 }
+require_once "API/AleaAPI.php";
+require_once "classes/AleaCRM.php";
 
 function JwR_Alea_CRM_dependencies()
 {
@@ -43,7 +45,7 @@ if (JwR_Alea_CRM_dependencies()) {
 
 require_once('autoloader.php');
 
-use JWR\Alea\{AleaCRM, ALeaAPI};
+use JWR\Alea\{AleaCRM, AleaAPI};
 
 
 function validate_JwR_Theme()
@@ -79,8 +81,7 @@ register_deactivation_hook(__FILE__, 'crm_deactivation');
 
 add_action('admin_menu', array(AleaCRM::class, 'create_menu_admin'));
 
-$API = new ALeaAPI();
-
+$API = new AleaAPI();
 add_action('rest_api_init', array($API, 'register_routes'));
 
 /**

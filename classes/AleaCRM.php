@@ -6,8 +6,18 @@ namespace JWR\Alea {
         exit;
     }
 
-    use JWR\Alea\{AleaCRMRequest, AleaCRMDiet, AleaCRMInvoice, AleaModel, AleaSurvey, AleaExportXLS, Customer, Factura, Dieta, Utils};
-    use WP_Query;
+    // require_once WP_PLUGIN_DIR."/jwr-alea-crm/classes/AleaCRMDiet.php";
+    // require_once WP_PLUGIN_DIR."/jwr-alea-crm/classes/AleaCRMInvoice.php";
+    // require_once WP_PLUGIN_DIR."/jwr-alea-crm/classes/AleaCRMRequest.php";
+    // require_once WP_PLUGIN_DIR."/jwr-alea-crm/classes/AleaExportXLS.php";
+    // require_once WP_PLUGIN_DIR."/jwr-alea-crm/classes/AleaSurvey.php";
+    // require_once WP_PLUGIN_DIR."/jwr-alea-crm/classes/Utils.php";
+    // require_once(WP_PLUGIN_DIR."/jwr-alea-crm/model/AleaModel.php");
+    // require_once(WP_PLUGIN_DIR."/jwr-alea-crm/model/Customer.php");
+    // require_once(WP_PLUGIN_DIR."/jwr-alea-crm/model/Dieta.php");
+    // require_once(WP_PLUGIN_DIR."/jwr-alea-crm/model/Factura.php");
+
+    use JWR\Alea\{AleaCRMRequest, AleaCRMDiet, AleaCRMInvoice, AleaModel, AleaSurvey, AleaExportXLS, Customer, Factura, Dieta};
 
     class AleaCRM
     {
