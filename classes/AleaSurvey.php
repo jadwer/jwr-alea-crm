@@ -15,6 +15,13 @@ namespace JWR\Alea {
             Utils::deletePage("jwr-alea-crm-survey-continue-id");
         }
 
+
+        public static function startSurveyApply(){
+            
+        }
+        public static function continueSurveyApply(){
+            
+        }
         public static function startSurvey($survey)
         {
 ?>

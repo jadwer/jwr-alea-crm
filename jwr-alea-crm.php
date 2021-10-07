@@ -95,6 +95,8 @@ function jwr_crm_shortcodes_init()
     add_shortcode("alea-invoice-new", array($aleaCRM, 'shortcode_invoice'));
     add_shortcode("alea-diet", array($aleaCRM, 'shortcode_diets'));
     add_shortcode("alea-request", array($aleaCRM, 'shortcode_request'));
+    add_shortcode("alea-survey-start", array($aleaCRM, 'shortcode_start'));
+    add_shortcode("alea-survey-continue", array($aleaCRM, 'shortcode_continue'));
     add_shortcode("export", array($aleaCRM, 'shortcode_export'));
 }
 add_action('init', 'jwr_crm_shortcodes_init');

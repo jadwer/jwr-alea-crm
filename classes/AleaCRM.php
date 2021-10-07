@@ -331,6 +331,14 @@ namespace JWR\Alea {
         {
             AleaExportXLS::exportPage();
         }
+        function shortcode_start($atts = [], $content = null, $tag = '')
+        {
+            AleaSurvey::startSurveyApply();
+        }
+        function shortcode_continue($atts = [], $content = null, $tag = '')
+        {
+            AleaSurvey::continueSurveyApply();
+        }
 
     } //EOC
 }// namespace
