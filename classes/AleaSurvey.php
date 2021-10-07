@@ -2,6 +2,7 @@
 
 namespace JWR\Alea {
 
+    use COM;
     use PhpOffice\PhpSpreadsheet\Writer\Ods\Content;
 
     class AleaSurvey
@@ -20,7 +21,161 @@ namespace JWR\Alea {
 
         public static function startSurveyApply()
         {
+
+            global $wp;
+
+            if (isset($_POST['submit']) && $_POST['submit'] == 'Guardar') {
+                $customerData = array(
+                    'id' => null,
+                    'sexo' => (isset($_POST['sexo'])) ? $_POST['sexo'] : "",
+                    'telefono' => (isset($_POST['telefono'])) ? $_POST['telefono'] : "",
+                    'nacimiento' => (isset($_POST['nacimiento'])) ? $_POST['nacimiento'] : "",
+                    'state' => (isset($_POST['state'])) ? $_POST['state'] : "",
+                    'nif' => (isset($_POST['nif'])) ? $_POST['nif'] : "",
+                    'email' => (isset($_POST['email'])) ? $_POST['email'] : "",
+                    'nombre' => (isset($_POST['nombre'])) ? $_POST['nombre'] : "",
+                    'apellidos' => (isset($_POST['apellidos'])) ? $_POST['apellidos'] : "",
+                    'calle' => (isset($_POST['calle'])) ? $_POST['calle'] : "",
+                    'numero' => (isset($_POST['numero'])) ? $_POST['numero'] : "",
+                    'pisoLetra' => (isset($_POST['pisoLetra'])) ? $_POST['pisoLetra'] : "",
+                    'cp' => (isset($_POST['cp'])) ? $_POST['cp'] : "",
+                    'ciudad' => (isset($_POST['ciudad'])) ? $_POST['ciudad'] : "",
+                    'provincia' => (isset($_POST['provincia'])) ? $_POST['provincia'] : "",
+                );
+                $customer = new Customer($customerData);
+                $customer->setId($customer->save());
+
+                $surveyData = array(
+                    'order' => (isset($_POST['order'])) ? $_POST['order'] : "",
+                    'edad' => $customer->getNacimiento(),
+                    'sexo' => $customer->getSexo(),
+                    'altura' => (isset($_POST['altura'])) ? $_POST['altura'] : "",
+                    'peso' => (isset($_POST['peso'])) ? $_POST['peso'] : "",
+                    'per_m' => (isset($_POST['per_m'])) ? $_POST['per_m'] : "",
+                    'per_ci' => (isset($_POST['per_ci'])) ? $_POST['per_ci'] : "",
+                    'per_ca' => (isset($_POST['per_ca'])) ? $_POST['per_ca'] : "",
+                    'peso_infancia' => (isset($_POST['peso_infancia'])) ? $_POST['peso_infancia'] : "",
+                    'peso_adulto_estable' => (isset($_POST['peso_adulto_estable'])) ? $_POST['peso_adulto_estable'] : "",
+                    'peso_adulto_minimo' => (isset($_POST['peso_adulto_minimo'])) ? $_POST['peso_adulto_minimo'] : "",
+                    'peso_adulto_maximo' => (isset($_POST['peso_adulto_maximo'])) ? $_POST['peso_adulto_maximo'] : "",
+                    'peso_ultimo' => (isset($_POST['peso_ultimo'])) ? $_POST['peso_ultimo'] : "",
+                    'dieta_ultimo' => (isset($_POST['dieta_ultimo'])) ? $_POST['dieta_ultimo'] : "",
+                    'embarazada' => (isset($_POST['embarazada'])) ? $_POST['embarazada'] : "",
+                    'embarazada_tiempo_bebe' => (isset($_POST['embarazada_tiempo_bebe'])) ? $_POST['embarazada_tiempo_bebe'] : "",
+                    'causa_kilos' => (isset($_POST['causa_kilos'])) ? $_POST['causa_kilos'] : "",
+                    'peso_comodo' => (isset($_POST['peso_comodo'])) ? $_POST['peso_comodo'] : "",
+                    'ultima_analitica' => (isset($_POST['ultima_analitica'])) ? $_POST['ultima_analitica'] : "",
+                    'ultima_analitica_txt' => (isset($_POST['ultima_analitica_txt'])) ? $_POST['ultima_analitica_txt'] : "",
+                    'estado_general' => (isset($_POST['estado_general'])) ? $_POST['estado_general'] : "",
+                    'estado_general_txt' => (isset($_POST['estado_general_txt'])) ? $_POST['estado_general_txt'] : "",
+                    'medicamento' => (isset($_POST['medicamento'])) ? $_POST['medicamento'] : "",
+                    'medicamento_txt' => (isset($_POST['medicamento_txt'])) ? $_POST['medicamento_txt'] : "",
+                    'quirofano' => (isset($_POST['quirofano'])) ? $_POST['quirofano'] : "",
+                    'quirofano_txt' => (isset($_POST['quirofano_txt'])) ? $_POST['quirofano_txt'] : "",
+                    'reglas' => (isset($_POST['reglas'])) ? $_POST['reglas'] : "",
+                    'tension' => (isset($_POST['tension'])) ? $_POST['tension'] : "",
+                    'digestiones' => (isset($_POST['digestiones'])) ? $_POST['digestiones'] : "",
+                    'bano' => (isset($_POST['bano'])) ? $_POST['bano'] : "",
+                    'alcohol' => (isset($_POST['alcohol'])) ? $_POST['alcohol'] : "",
+                    'tabaco' => (isset($_POST['tabaco'])) ? $_POST['tabaco'] : "",
+                    'rutina' => (isset($_POST['rutina'])) ? $_POST['rutina'] : "",
+                    'cama' => (isset($_POST['cama'])) ? $_POST['cama'] : "",
+                    'caminar' => (isset($_POST['caminar'])) ? $_POST['caminar'] : "",
+                    'deporte' => (isset($_POST['deporte'])) ? $_POST['deporte'] : "",
+                    'deporte_txt' => (isset($_POST['deporte_txt'])) ? $_POST['deporte_txt'] : "",
+                    'desayunos_txt' => (isset($_POST['desayunos_txt'])) ? $_POST['desayunos_txt'] : "",
+                    'media_manana_txt' => (isset($_POST['media_manana_txt'])) ? $_POST['media_manana_txt'] : "",
+                    'meriendas_txt' => (isset($_POST['meriendas_txt'])) ? $_POST['meriendas_txt'] : "",
+                    'postre_txt' => (isset($_POST['postre_txt'])) ? $_POST['postre_txt'] : "",
+                    'postcena_txt' => (isset($_POST['postcena_txt'])) ? $_POST['postcena_txt'] : "",
+                    'bebida_en_comidas' => (isset($_POST['bebida_en_comidas'])) ? $_POST['bebida_en_comidas'] : "",
+                    'veces_fuera_casa' => (isset($_POST['veces_fuera_casa'])) ? $_POST['veces_fuera_casa'] : "",
+                    'fuera_casa_trabajo' => (isset($_POST['fuera_casa_trabajo'])) ? $_POST['fuera_casa_trabajo'] : "",
+                    'picoteas' => (isset($_POST['picoteas'])) ? $_POST['picoteas'] : "",
+                    'ansiedad_comida' => (isset($_POST['ansiedad_comida'])) ? $_POST['ansiedad_comida'] : "",
+                    'leche' => (isset($_POST['leche'])) ? $_POST['leche'] : "",
+                    'carne_roja' => (isset($_POST['carne_roja'])) ? $_POST['carne_roja'] : "",
+                    'pescado' => (isset($_POST['pescado'])) ? $_POST['pescado'] : "",
+                    'huevos' => (isset($_POST['huevos'])) ? $_POST['huevos'] : "",
+                    'verduras' => (isset($_POST['verduras'])) ? $_POST['verduras'] : "",
+                    'fruta' => (isset($_POST['fruta'])) ? $_POST['fruta'] : "",
+                    'legumbres' => (isset($_POST['legumbres'])) ? $_POST['legumbres'] : "",
+                    'patatas' => (isset($_POST['patatas'])) ? $_POST['patatas'] : "",
+                    'pan' => (isset($_POST['pan'])) ? $_POST['pan'] : "",
+                    'comida_rapida' => (isset($_POST['comida_rapida'])) ? $_POST['comida_rapida'] : "",
+                    'precocinada' => (isset($_POST['precocinada'])) ? $_POST['precocinada'] : "",
+                    'snacks' => (isset($_POST['snacks'])) ? $_POST['snacks'] : "",
+                    'bolleria' => (isset($_POST['bolleria'])) ? $_POST['bolleria'] : "",
+                    'intolerancia_txt' => (isset($_POST['intolerancia_txt'])) ? $_POST['intolerancia_txt'] : "",
+                    'vegetariana_txt' => (isset($_POST['vegetariana_txt'])) ? $_POST['vegetariana_txt'] : "",
+                    'sin_gracia' => (isset($_POST['sin_gracia'])) ? $_POST['sin_gracia'] : "",
+                    'con_gracia' => (isset($_POST['con_gracia'])) ? $_POST['con_gracia'] : "",
+                    'trabajo' => (isset($_POST['trabajo'])) ? $_POST['trabajo'] : "",
+                    'unico' => (isset($_POST['unico'])) ? $_POST['unico'] : "",
+                    'comentarios' => (isset($_POST['comentarios'])) ? $_POST['comentarios'] : "",
+                    'paciente_nombre' => $customer->getNombre(),
+                    'paciente_apellidos' => $customer->getApellidos(),
+                    'paciente_nif' => $customer->getNif(),
+                    'paciente_email' => $customer->getEmail(),
+                    'paciente_repite' => $customer->getEmail(),
+                    'paciente_telefono' => $customer->getTelefono(),
+                    'paciente_calle' => $customer->getCalle(),
+                    'paciente_numero' => $customer->getNumero(),
+                    'paciente_piso_letra' => $customer->getPisoLetra(),
+                    'paciente_cp' => $customer->getCp(),
+                    'paciente_ciudad' => $customer->getCiudad(),
+                    'paciente_provincia' => $customer->getProvincia(),
+                    'newsletter' => (isset($_POST['newsletter'])) ? $_POST['newsletter'] : "off"
+                );
+
+                $survey = new StartSurvey($surveyData);
+
+                $dietData = array(
+                    'id' => null,
+                    'cliente' => $customer->getId(),
+                    'nif' => $customer->getNif(),
+                    'tipo' => 1,
+                    'fecha' => date("Y-m-d H:i:s"),
+                    'parametros' => $survey->toJsonEncode(),
+                    'state' => 1,
+                    'order' => $survey->getorder(),
+                    'enviado' => 0,
+                    'opc' => 0,
+                    'recordar' => 0,
+                    'tipoDieta' => 0,
+                    'nuevoModelo' => 1
+                );
+                $diet = new Dieta($dietData);
+                $diet->save();
+
+                SELF::graciasForm();
+
+            } else {
+?>
+                <form action="" method="POST">
+                <a href="<?= home_url() ?>" class="flex justify-center lateral w-2/12">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 17l-5-5m0 0l5-5m-5 5h12" />
+                    </svg>
+                    REGRESAR
+                </a>
+                <div class="lateral w-10/12">
+
+                </div>
+
+                    <?php
+                    $survey = new StartSurvey();
+                    $customer = new Customer();
+                    SELF::startSurvey($survey);
+                    SELF::newCustomerForm($customer);
+                    ?>
+                    <input type="submit" name="submit" value="Guardar">
+                </form>
+                <?php
+            }
         }
+
+
         public static function continueSurveyApply()
         {
             global $wp;
@@ -74,15 +229,8 @@ namespace JWR\Alea {
                 $diet = new Dieta($dietData);
                 $diet->save();
 
-                echo "<pre>";
-                print_r($survey);
-                print_r($survey->toArray());
-                print_r($survey->toJsonEncode());
-                print_r($customer);
-                print_r($diet);
-                echo "</pre>";
-                
-                
+                SELF::graciasForm();
+
             } elseif (isset($_POST['submit']) && $_POST['submit'] == 'nif') {
 
                 $customer = new Customer();
@@ -94,7 +242,7 @@ namespace JWR\Alea {
                 }
                 if ($customer->getId() != '') {
                     $survey = new ContinueSurvey();
-?>
+                ?>
                     <form action="" method="POST">
                         <?php
                         SELF::customerInfoForm($customer);
@@ -122,10 +270,59 @@ namespace JWR\Alea {
             }
         }
 
-        private static function customerInfoForm($customer)
+        private static function graciasForm(){
+            ?>
+            <h2>¡Muchas gracias, tu solicitud ha sido correctamente registrada!</h2>
+            <?php
+        }
+        private static function newCustomerForm($customer)
         {
             ?>
-            <input type="hidden" name="paciente_nif" value="<?=$customer->getNif();?>">
+            <div class="flex-col flex-wrap bg-red-100 rounded-xl shadow-xl space-y-4">
+                
+                <input type="hidden" name="id" value="<?= $customer->getId(); ?>" />
+                <div class="flex"><label>Sexo: </label></div>
+                <div class="flex-row">
+                    <fieldset>
+                        <label><input type="radio" name="sexo" value="0" <?= ($customer->getsexo() == 0) ? "checked" : ""; ?>>Hombre</label>
+                        <label><input type="radio" name="sexo" value="1" <?= ($customer->getsexo() == 1) ? "checked" : ""; ?>>Mujer</label>
+                    </fieldset>
+                </div>
+                <div class="flex"><label>telefono:</label></div>
+                <div class="flex"><input type="text" name="telefono" value="<?= $customer->getTelefono(); ?>"></div>
+                <div class="flex"><label>nacimiento:</label></div>
+                <div class="flex"><input type="text" name="nacimiento" value="<?= $customer->getNacimiento(); ?>" placeholder="dd/mm/aaa"></div>
+                <div class="flex"><label>state:</label></div>
+                <div class="flex"><input type="text" name="state" value="<?= $customer->getState(); ?>"></div>
+                <div class="flex"><label>nif:</label></div>
+                <div class="flex"><input type="text" name="nif" value="<?= $customer->getNif(); ?>"></div>
+                <div class="flex"><label>email:</label></div>
+                <div class="flex"><input type="text" name="email" value="<?= $customer->getEmail(); ?>"></div>
+                <div class="flex"><label>nombre:</label></div>
+                <div class="flex"><input type="text" name="nombre" value="<?= $customer->getNombre(); ?>"></div>
+                <div class="flex"><label>apellidos:</label></div>
+                <div class="flex"><input type="text" name="apellidos" value="<?= $customer->getApellidos(); ?>"></div>
+                <div class="flex"><label>calle:</label></div>
+                <div class="flex"><input type="text" name="calle" value="<?= $customer->getCalle(); ?>"></div>
+                <div class="flex"><label>numero:</label></div>
+                <div class="flex"><input type="text" name="numero" value="<?= $customer->getNumero(); ?>"></div>
+                <div class="flex"><label>pisoLetra:</label></div>
+                <div class="flex"><input type="text" name="pisoLetra" value="<?= $customer->getPisoLetra(); ?>"></div>
+                <div class="flex"><label>cp:</label></div>
+                <div class="flex"><input type="text" name="cp" value="<?= $customer->getCp(); ?>"></div>
+                <div class="flex"><label>ciudad:</label></div>
+                <div class="flex"><input type="text" name="ciudad" value="<?= $customer->getCiudad(); ?>"></div>
+                <div class="flex"><label>provincia:</label></div>
+                <div class="flex"><input type="text" name="provincia" value="<?= $customer->getProvincia(); ?>"></div>
+                <br/>
+            </div>
+        <?php
+
+        }
+        private static function customerInfoForm($customer)
+        {
+        ?>
+            <input type="hidden" name="paciente_nif" value="<?= $customer->getNif(); ?>">
             <div class="flex flex-wrap w-full bg-gray-100 rounded-xl shadow-xl">
                 <a href="<?= home_url() ?>" class="flex justify-center lateral w-2/12">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -161,15 +358,6 @@ namespace JWR\Alea {
 
 
             <div class="flex-col flex-wrap bg-red-100 rounded-xl shadow-xl space-y-4">
-                <div class="flex"><label>Fecha de nacimiento: </label></div>
-                <div class="flex"><input type="text" name="edad" id="edad" value="<?php echo  $survey->getFechaNacimiento() . ' (' . $survey->getedad() . ') años.'; ?>"></div>
-                <div class="flex"><label>Sexo: </label></div>
-                <div class="flex-row">
-                    <fieldset>
-                        <label><input type="radio" name="sexo" value="0" <?= ($survey->getsexo() == 0) ? "checked" : ""; ?>>Hombre</label>
-                        <label><input type="radio" name="sexo" value="1" <?= ($survey->getsexo() == 1) ? "checked" : ""; ?>>Mujer</label>
-                    </fieldset>
-                </div>
                 <div class="flex"><label>Altura (cm): </label></div>
                 <div class="flex"><input type="text" name="altura" id="altura" value="<?= $survey->getaltura(); ?>"></div>
                 <div class="flex"><label>Peso (Kg): </label></div>

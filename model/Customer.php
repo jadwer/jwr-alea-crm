@@ -60,7 +60,6 @@ namespace JWR\Alea {
         public function save()
         {
             return $this->setCustomer();
-
         }
 
         private function setCustomer()
@@ -79,7 +78,7 @@ namespace JWR\Alea {
         public function getCustomerByNIF($nif)
         {
             $data = $this->getObjectsByField(SELF::TABLE_NAME, "nif", $nif);
-            return (isset($data[0]))? $this->__construct_array($data[0]): $this;
+            return (isset($data[0])) ? $this->__construct_array($data[0]) : $this;
         }
 
 
@@ -95,6 +94,14 @@ namespace JWR\Alea {
         public function getTelefono()
         {
             return $this->telefono;
+        }
+        public function getEdad()
+        {
+            $birthDate = explode("-", $this->nacimiento);
+            $age = (date("md", date("U", mktime(0, 0, 0, $birthDate[2], $birthDate[1], $birthDate[0]))) > date("md")
+                ? ((date("Y") - $birthDate[0]) - 1)
+                : (date("Y") - $birthDate[0]));
+            return $age;
         }
         public function getNacimiento()
         {
@@ -159,6 +166,16 @@ namespace JWR\Alea {
         }
         public function setNacimiento($nacimiento)
         {
+            if(Utils::validateDate($nacimiento)){
+                $this->nacimiento = $nacimiento;
+            } else {
+                list($dia, $mes, $anio) = explode('/', "$nacimiento//");
+                $american_date = $anio . "-" . $mes . "-" . $dia;
+                $phpdate = strtotime($american_date);
+                $mysqldate = date('Y-m-d H:i:s', $phpdate);
+                $this->nacimiento = $mysqldate;    
+            }
+
             $this->nacimiento = $nacimiento;
         }
         public function setState($state)

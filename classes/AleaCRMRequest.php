@@ -114,6 +114,19 @@ namespace JWR\Alea {
                 <div class="w-10/12 justify-start">
                     <?= $dietaId; ?>
                 </div>
+                <div class="flex justify-end w-2/12">
+                    <label>Fecha de Nacimiento: </label>
+                </div>
+                <div class="w-10/12 justify-start">
+                <?php echo  $customer->getNacimiento() . ' (' . $customer->getedad() . ') años.'; ?>
+                </div>
+                <div class="flex justify-end w-2/12">
+                    <label>Sexo: </label>
+                </div>
+                <div class="w-10/12 justify-start">
+                    <?= ($customer->getSexo() == 0) ? "Hombre" : "Mujer"; ?>
+                </div>
+
             </div>
 
         <?php
