@@ -167,7 +167,7 @@ namespace JWR\Alea {
         {
             global $wpdb;
             $table_name = $wpdb->prefix . $table;
-            $query = "SELECT * FROM {$table_name} WHERE {$field} = {$value};";
+            $query = "SELECT * FROM {$table_name} WHERE {$field} = '{$value}';";
             $result = $wpdb->get_results($query, ARRAY_A);
             return $result;
         }

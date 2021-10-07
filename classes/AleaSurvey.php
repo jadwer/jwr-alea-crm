@@ -2,6 +2,8 @@
 
 namespace JWR\Alea {
 
+    use PhpOffice\PhpSpreadsheet\Writer\Ods\Content;
+
     class AleaSurvey
     {
         public static function createSurveyPages()
@@ -16,15 +18,120 @@ namespace JWR\Alea {
         }
 
 
-        public static function startSurveyApply(){
-            
+        public static function startSurveyApply()
+        {
         }
-        public static function continueSurveyApply(){
-            
+        public static function continueSurveyApply()
+        {
+            global $wp;
+
+            if (isset($_POST['submit']) && $_POST['submit'] == 'Guardar') {
+                $data = array(
+                    'order'         => (isset($_POST['order'])) ? $_POST['order'] : '',
+                    'estricta'      => (isset($_POST['estricta'])) ? $_POST['estricta'] : '',
+                    'pesado'        => (isset($_POST['pesado'])) ? $_POST['pesado'] : '',
+                    'fuera_casa'    => (isset($_POST['fuera_casa'])) ? $_POST['fuera_casa'] : '',
+                    'picoteado'     => (isset($_POST['picoteado'])) ? $_POST['picoteado'] : '',
+                    'cocinado'      => (isset($_POST['cocinado'])) ? $_POST['cocinado'] : '',
+                    'cambios'       => (isset($_POST['cambios'])) ? $_POST['cambios'] : '',
+                    'hambre'        => (isset($_POST['hambre'])) ? $_POST['hambre'] : '',
+                    'ansiedad'      => (isset($_POST['ansiedad'])) ? $_POST['ansiedad'] : '',
+                    'echas_menos'   => (isset($_POST['echas_menos'])) ? $_POST['echas_menos'] : '',
+                    'gustado'       => (isset($_POST['gustado'])) ? $_POST['gustado'] : '',
+                    'gustado_txt'   => (isset($_POST['gustado_txt'])) ? $_POST['gustado_txt'] : '',
+                    'menores'       => (isset($_POST['menores'])) ? $_POST['menores'] : '',
+                    'menores_txt'   => (isset($_POST['menores_txt'])) ? $_POST['menores_txt'] : '',
+                    'digestiones'   => (isset($_POST['digestiones'])) ? $_POST['digestiones'] : '',
+                    'bano'          => (isset($_POST['bano'])) ? $_POST['bano'] : '',
+                    'ejercicio'     => (isset($_POST['ejercicio'])) ? $_POST['ejercicio'] : '',
+                    'altura'        => (isset($_POST['altura'])) ? $_POST['altura'] : '',
+                    'peso'          => (isset($_POST['peso'])) ? $_POST['peso'] : '',
+                    'per_ci'        => (isset($_POST['per_ci'])) ? $_POST['per_ci'] : '',
+                    'per_ca'        => (isset($_POST['per_ca'])) ? $_POST['per_ca'] : '',
+                    'comentarios'   => (isset($_POST['comentarios'])) ? $_POST['comentarios'] : '',
+                    'paciente_nif'  => (isset($_POST['paciente_nif'])) ? $_POST['paciente_nif'] : ''
+                );
+
+                $survey = new ContinueSurvey($data);
+                $jsurvey = json_encode($survey->toArray());
+                echo "<pre>";
+                print_r($survey);
+                print_r($survey->toArray());
+                print_r($survey->toJsonEncode());
+                echo "</pre>";
+                
+                
+            } elseif (isset($_POST['submit']) && $_POST['submit'] == 'nif') {
+
+                $customer = new Customer();
+                $nif = (isset($_POST['numeric_nif'])) ? $_POST['numeric_nif'] : "";
+                $nif .= (isset($_POST['alpha_nif'])) ? $_POST['alpha_nif'] : "";
+
+                if ($nif != '') {
+                    $customer->getCustomerByNIF($nif);
+                }
+                if ($customer->getId() != '') {
+                    $survey = new ContinueSurvey();
+?>
+                    <form action="" method="POST">
+                        <?php
+                        SELF::customerInfoForm($customer);
+                        SELF::continueSurvey($survey);
+                        ?>
+                        <input type="submit" name="submit" value="Guardar">
+                    </form>
+                <?php
+                } else {
+                ?>
+                    <h2><a href="<?= home_url('comienza') ?>">¡Inicia ahora!</a></h2>
+                <?php
+                }
+            } else {
+                ?>
+                <form action="<?= home_url($wp->request); ?>" method="POST">
+                    <div class="flex justify-center w-full gb-gray-100 shadow-xl">
+                        <label>Ingrese su NIF</label>
+                        <input type="text" name="numeric_nif" id="numeric_nif">
+                        <input type="text" name="alpha_nif" id="alpha_nif">
+                        <input type="submit" name="submit" value="nif">
+                    </div>
+                </form>
+            <?php
+            }
         }
+
+        private static function customerInfoForm($customer)
+        {
+            ?>
+            <div class="flex flex-wrap w-full bg-gray-100 rounded-xl shadow-xl">
+                <a href="<?= home_url() ?>" class="flex justify-center lateral w-2/12">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 17l-5-5m0 0l5-5m-5 5h12" />
+                    </svg>
+                    REGRESAR
+                </a>
+                <div class="lateral w-10/12">
+
+                </div>
+                <div class="flex justify-end w-2/12">
+                    Paciente:
+                </div>
+                <div class="w-10/12 justify-star">
+                    <div class="flex">
+                        <?= $customer->getApellidos(); ?>
+                        <?= $customer->getNombre(); ?>
+                        <?= $customer->getNif(); ?>
+                        <?= $customer->getTelefono(); ?>
+                        <?= $customer->getEmail(); ?>
+                    </div>
+                </div>
+            </div>
+        <?php
+        }
+
         public static function startSurvey($survey)
         {
-?>
+        ?>
             <div class="flex justify-center w-full bg-gray-100 shadow-xl">
                 Datos de la consulta:
             </div>

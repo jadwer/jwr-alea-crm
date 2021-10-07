@@ -44,6 +44,40 @@ namespace JWR\Alea {
             }
         }
 
+        public function toArray()
+        {
+            return array(
+                'order' => $this->order,
+                'estricta' => $this->estricta,
+                'pesado' => $this->pesado,
+                'fuera_casa' => $this->fuera_casa,
+                'picoteado' => $this->picoteado,
+                'cocinado' => $this->cocinado,
+                'cambios' => $this->cambios,
+                'hambre' => $this->hambre,
+                'ansiedad' => $this->ansiedad,
+                'echas_menos' => $this->echas_menos,
+                'gustado' => $this->gustado,
+                'gustado_txt' => $this->gustado_txt,
+                'menores' => $this->menores,
+                'menores_txt' => $this->menores_txt,
+                'digestiones' => $this->digestiones,
+                'bano' => $this->bano,
+                'ejercicio' => $this->ejercicio,
+                'altura' => $this->altura,
+                'peso' => $this->peso,
+                'per_ci' => $this->per_ci,
+                'per_ca' => $this->per_ca,
+                'comentarios' => $this->comentarios,
+                'paciente_nif' => $this->paciente_nif
+            );
+        }
+
+        public function toJsonEncode()
+        {
+            return Utils::jsonEnconder($this->toArray());
+        }
+
         private function __construct_void()
         {
             $this->order = "";

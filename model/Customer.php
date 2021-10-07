@@ -79,7 +79,7 @@ namespace JWR\Alea {
         public function getCustomerByNIF($nif)
         {
             $data = $this->getObjectsByField(SELF::TABLE_NAME, "nif", $nif);
-            return $this->__construct_array($data[0]);
+            return (isset($data[0]))? $this->__construct_array($data[0]): $this;
         }
 
 

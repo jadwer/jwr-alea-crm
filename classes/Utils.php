@@ -77,5 +77,11 @@ namespace JWR\Alea {
             $d = \DateTime::createFromFormat($format, $date);
             return $d && $d->format($format) == $date;
         }
+
+        public static function jsonEnconder($array){
+            $json = json_encode($array);
+            $encoded = str_replace('"', '#', $json);
+            return $encoded;
+        }
     } // EOF
 } // namespace

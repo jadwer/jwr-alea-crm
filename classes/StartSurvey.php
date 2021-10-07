@@ -4,6 +4,8 @@ namespace JWR\Alea {
 
     class StartSurvey
     {
+        const NUM_FIELDS = 80;
+
         public $order;
         public $edad;
         public $sexo;
@@ -84,6 +86,111 @@ namespace JWR\Alea {
         public $paciente_ciudad;
         public $paciente_provincia;
         public $newsletter;
+
+        public function __construct()
+        {
+            $params = func_get_args();
+            $num_params = func_num_args();
+
+            if ($num_params == 1) {
+                call_user_func_array(array($this, '__construct_array'), $params);
+            } else if ($num_params == static::NUM_FIELDS) {
+                call_user_func_array(array($this, '__construct_data'), $params);
+            } else {
+                call_user_func_array(array($this, '__construct_void'), $params);
+            }
+        }
+
+        public function toArray()
+        {
+            return array(
+                'order' => $this->order,
+                'edad' => $this->edad,
+                'sexo' => $this->sexo,
+                'altura' => $this->altura,
+                'peso' => $this->peso,
+                'per_m' => $this->per_m,
+                'per_ci' => $this->per_ci,
+                'per_ca' => $this->per_ca,
+                'peso_infancia' => $this->peso_infancia,
+                'peso_adulto_estable' => $this->peso_adulto_estable,
+                'peso_adulto_minimo' => $this->peso_adulto_minimo,
+                'peso_adulto_maximo' => $this->peso_adulto_maximo,
+                'peso_ultimo' => $this->peso_ultimo,
+                'dieta_ultimo' => $this->dieta_ultimo,
+                'embarazada' => $this->embarazada,
+                'embarazada_tiempo_bebe' => $this->embarazada_tiempo_bebe,
+                'causa_kilos' => $this->causa_kilos,
+                'peso_comodo' => $this->peso_comodo,
+                'ultima_analitica' => $this->ultima_analitica,
+                'ultima_analitica_txt' => $this->ultima_analitica_txt,
+                'estado_general' => $this->estado_general,
+                'estado_general_txt' => $this->estado_general_txt,
+                'medicamento' => $this->medicamento,
+                'medicamento_txt' => $this->medicamento_txt,
+                'quirofano' => $this->quirofano,
+                'quirofano_txt' => $this->quirofano_txt,
+                'reglas' => $this->reglas,
+                'tension' => $this->tension,
+                'digestiones' => $this->digestiones,
+                'bano' => $this->bano,
+                'alcohol' => $this->alcohol,
+                'tabaco' => $this->tabaco,
+                'rutina' => $this->rutina,
+                'cama' => $this->cama,
+                'caminar' => $this->caminar,
+                'deporte' => $this->deporte,
+                'deporte_txt' => $this->deporte_txt,
+                'desayunos_txt' => $this->desayunos_txt,
+                'media_manana_txt' => $this->media_manana_txt,
+                'meriendas_txt' => $this->meriendas_txt,
+                'postre_txt' => $this->postre_txt,
+                'postcena_txt' => $this->postcena_txt,
+                'bebida_en_comidas' => $this->bebida_en_comidas,
+                'veces_fuera_casa' => $this->veces_fuera_casa,
+                'fuera_casa_trabajo' => $this->fuera_casa_trabajo,
+                'picoteas' => $this->picoteas,
+                'ansiedad_comida' => $this->ansiedad_comida,
+                'leche' => $this->leche,
+                'carne_roja' => $this->carne_roja,
+                'pescado' => $this->pescado,
+                'huevos' => $this->huevos,
+                'verduras' => $this->verduras,
+                'fruta' => $this->fruta,
+                'legumbres' => $this->legumbres,
+                'patatas' => $this->patatas,
+                'pan' => $this->pan,
+                'comida_rapida' => $this->comida_rapida,
+                'precocinada' => $this->precocinada,
+                'snacks' => $this->snacks,
+                'bolleria' => $this->bolleria,
+                'intolerancia_txt' => $this->intolerancia_txt,
+                'vegetariana_txt' => $this->vegetariana_txt,
+                'sin_gracia' => $this->sin_gracia,
+                'con_gracia' => $this->con_gracia,
+                'trabajo' => $this->trabajo,
+                'unico' => $this->unico,
+                'comentarios' => $this->comentarios,
+                'paciente_nombre' => $this->paciente_nombre,
+                'paciente_apellidos' => $this->paciente_apellidos,
+                'paciente_nif' => $this->paciente_nif,
+                'paciente_email' => $this->paciente_email,
+                'paciente_repite' => $this->paciente_repite,
+                'paciente_telefono' => $this->paciente_telefono,
+                'paciente_calle' => $this->paciente_calle,
+                'paciente_numero' => $this->paciente_numero,
+                'paciente_piso_letra' => $this->paciente_piso_letra,
+                'paciente_cp' => $this->paciente_cp,
+                'paciente_ciudad' => $this->paciente_ciudad,
+                'paciente_provincia' => $this->paciente_provincia,
+                'newsletter' => $this->newsletter
+            );
+        }
+
+        public function toJsonEncode()
+        {
+            return Utils::jsonEnconder($this->toArray());
+        }
 
         private function __construct_void()
         {
@@ -169,7 +276,7 @@ namespace JWR\Alea {
             $this->newsletter = "";
         }
 
-        public function __construct($data)
+        public function __construct_array($data)
         {
             $this->__construct_void();
 
