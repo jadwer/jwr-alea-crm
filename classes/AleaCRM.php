@@ -319,11 +319,11 @@ namespace JWR\Alea {
 
         function shortcode_invoices_online($atts = [], $content = null, $tag = '')
         {
-            AleaCRMInvoice::invoicePages(0);
+            AleaCRMInvoice::invoicePages(1);
         }
         function shortcode_invoices_physical($atts = [], $content = null, $tag = '')
         {
-            AleaCRMInvoice::invoicePages(1);
+            AleaCRMInvoice::invoicePages(0);
         }
         function shortcode_invoice($atts = [], $content = null, $tag = '')
         {

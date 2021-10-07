@@ -20,14 +20,14 @@ namespace JWR\Alea {
         public static function invoicePages($state)
         {
             if (isset($_GET['customer']) && $_GET['customer'] != '') {
-                $customer = UTILS::escape($_GET['customer']);
+                $customer = Utils::escape($_GET['customer']);
                 SELF::listInvoicesPerCusomer($customer);
             } else if (isset($_GET['invoice']) && $_GET['invoice'] != '') {
-                $invoice_id = UTILS::escape($_GET['invoice']);
+                $invoice_id = Utils::escape($_GET['invoice']);
 
                 SELF::showInvoice($invoice_id);
             } else if (isset($_GET['edit']) && $_GET['edit'] != '') {
-                $invoice_id = UTILS::escape($_GET['edit']);
+                $invoice_id = Utils::escape($_GET['edit']);
 
                 SELF::editInvoice($invoice_id);
             } else {
@@ -45,17 +45,17 @@ namespace JWR\Alea {
                 $invoice = new Factura();
 
 
-                $invoice->setId((int)UTILS::escape($_POST['id_invoice']));
-                $invoice->setReferencia(UTILS::escape($_POST['invoice_number']));
-                $invoice->setFecha(UTILS::escape($_POST['date']));
-                $invoice->setNombre(UTILS::escape($_POST['fname']));
-                $invoice->setApellidos(UTILS::escape($_POST['last_name']));
-                $invoice->setNif(UTILS::escape($_POST['nif_number']));
-                $invoice->setCalle(UTILS::escape($_POST['address']));
-                $invoice->setConcepto(UTILS::escape($_POST['concepto']));
-                $invoice->setPrecio(UTILS::escape($_POST['price']));
-                $invoice->setTotal(UTILS::escape($_POST['price']));
-                $invoice->setState(UTILS::escape($_POST['state_invoice']));
+                $invoice->setId((int)Utils::escape($_POST['id_invoice']));
+                $invoice->setReferencia(Utils::escape($_POST['invoice_number']));
+                $invoice->setFecha(Utils::escape($_POST['date']));
+                $invoice->setNombre(Utils::escape($_POST['fname']));
+                $invoice->setApellidos(Utils::escape($_POST['last_name']));
+                $invoice->setNif(Utils::escape($_POST['nif_number']));
+                $invoice->setCalle(Utils::escape($_POST['address']));
+                $invoice->setConcepto(Utils::escape($_POST['concepto']));
+                $invoice->setPrecio(Utils::escape($_POST['price']));
+                $invoice->setTotal(Utils::escape($_POST['price']));
+                $invoice->setState(Utils::escape($_POST['state_invoice']));
 
                 $invoice->save();
                 $msg = "Factura guardada exitosamente";
@@ -72,17 +72,17 @@ namespace JWR\Alea {
             $msg = "";
             if (isset($_POST['submit']) && $_POST['submit'] == 'send') {
 
-                $costumer_invoice->setId((int)UTILS::escape($_POST['id_invoice']));
-                $costumer_invoice->setReferencia(UTILS::escape($_POST['invoice_number']));
-                $costumer_invoice->setFecha(UTILS::escape($_POST['date']));
-                $costumer_invoice->setNombre(UTILS::escape($_POST['fname']));
-                $costumer_invoice->setApellidos(UTILS::escape($_POST['last_name']));
-                $costumer_invoice->setNif(UTILS::escape($_POST['nif_number']));
-                $costumer_invoice->setCalle(UTILS::escape($_POST['address']));
-                $costumer_invoice->setConcepto(UTILS::escape($_POST['concepto']));
-                $costumer_invoice->setPrecio(UTILS::escape($_POST['price']));
-                $costumer_invoice->setTotal(UTILS::escape($_POST['price']));
-                $costumer_invoice->setState(UTILS::escape($_POST['state_invoice']));
+                $costumer_invoice->setId((int)Utils::escape($_POST['id_invoice']));
+                $costumer_invoice->setReferencia(Utils::escape($_POST['invoice_number']));
+                $costumer_invoice->setFecha(Utils::escape($_POST['date']));
+                $costumer_invoice->setNombre(Utils::escape($_POST['fname']));
+                $costumer_invoice->setApellidos(Utils::escape($_POST['last_name']));
+                $costumer_invoice->setNif(Utils::escape($_POST['nif_number']));
+                $costumer_invoice->setCalle(Utils::escape($_POST['address']));
+                $costumer_invoice->setConcepto(Utils::escape($_POST['concepto']));
+                $costumer_invoice->setPrecio(Utils::escape($_POST['price']));
+                $costumer_invoice->setTotal(Utils::escape($_POST['price']));
+                $costumer_invoice->setState(Utils::escape($_POST['state_invoice']));
 
                 $costumer_invoice->save();
                 $msg = "Factura guardada exitosamente";
@@ -120,7 +120,7 @@ namespace JWR\Alea {
         {
             $invoice = new Factura;
             $invoice->setFecha(date("Y-m-d H:i:s"));
-            $invoice->setState(1);
+            $invoice->setState(0);
             SELF::invoiceForm($invoice, $msg);
         }
 
@@ -137,7 +137,7 @@ namespace JWR\Alea {
                     <div class="">
                         <div class="">
                             <label>Número de factura</label>
-                            <input type="text" required name="invoice_number" id="invoice_number" value="<?= $invoice->getReferencia() ?>" class="" />
+                            <input type="text" required name="invoice_number" id="invoice_number" value="<?= ($invoice->getId() != null || $invoice->getId() != '')? $invoice->getReferencia() : $invoice->getLastInvoiceNumber($invoice->getState()) ?>" class="" />
                         </div>
 
                         <div class="">
@@ -186,7 +186,7 @@ namespace JWR\Alea {
         private static function listInvoices($state, $page)
         {
             $year_selected = (get_query_var('year_selected')) ? get_query_var('year_selected') : "2021";
-            $period = (get_query_var('period')) ? get_query_var('period') : 1;
+            $period = (get_query_var('period')) ? get_query_var('period') : Utils::returnCurrentQuarter();
 
             global $wp_query;
             global $wp;
@@ -202,7 +202,7 @@ namespace JWR\Alea {
                     <input type="hidden" name="type" value="<?= $state; ?>" />
                     <div class="flex space-x-8">
                         <div>
-                            <?php if ($state == 1) : ?>
+                            <?php if ($state == 0) : ?>
                                 <a href="<?= home_url('new-invoice'); ?>" class="flex">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />

@@ -1,7 +1,7 @@
 <?php
 $logo = get_theme_mod( 'custom_logo' );
 $image = wp_get_attachment_image_src( $logo , 'full' );
-$image_url = $image[0];
+$image_url = (isset($image[0]))? $image[0] : "" ;
 ?>
 <div id="DivIdToPrint<?= $customer_invoice->getid();?>" style="display:none">
 

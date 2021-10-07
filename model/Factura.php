@@ -76,6 +76,15 @@ namespace JWR\Alea {
             return $this->setObject($this->toArray(), SELF::TABLE_NAME);
         }
 
+        public function getLastInvoiceNumber($state)
+        {
+            $invoice = $this->getFirstObjectFiltered(SELF::TABLE_NAME, array('field' => 'state', 'value' => $state));
+            list($code, $consecutive) = explode('/', $invoice["referencia"]);
+            $number = (int)filter_var($consecutive, FILTER_SANITIZE_NUMBER_INT) + 1;
+            $year = date('Y');
+            return ($state == 0) ? $year . "/ACD" . $number : $year . "/AD" . $number;
+        }
+
         public function getFacturaById($id)
         {
             $data = $this->getObjectById(SELF::TABLE_NAME, $id);
@@ -160,7 +169,8 @@ namespace JWR\Alea {
 
 
         // Getters and Setters
-        public static function paginatorData($period, $year, $state){
+        public static function paginatorData($period, $year, $state)
+        {
             $dates = Utils::returnTrimestre($period, $year);
 
             return SELF::getPaginatorPeriodData(SELF::TABLE_NAME, array('field' => 'state', 'value' => $state), "fecha", $dates['start'], $dates['end'], 100);
@@ -202,19 +212,19 @@ namespace JWR\Alea {
         {
             $rawDate = strtotime($this->fecha);
             $date = date('d/m/Y', $rawDate);
-            
+
             return $date;
         }
         public function setFecha($fecha)
         {
-            if(Utils::validateDate($fecha)){
+            if (Utils::validateDate($fecha)) {
                 $this->fecha = $fecha;
             } else {
                 list($dia, $mes, $anio) = explode('/', "$fecha//");
                 $american_date = $anio . "-" . $mes . "-" . $dia;
                 $phpdate = strtotime($american_date);
                 $mysqldate = date('Y-m-d H:i:s', $phpdate);
-                $this->fecha = $mysqldate;    
+                $this->fecha = $mysqldate;
             }
         }
         public function getCliente()

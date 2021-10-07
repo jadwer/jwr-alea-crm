@@ -1,7 +1,7 @@
 <?php
 
 namespace JWR\Alea {
-    // require(WP_PLUGIN_DIR . '/jwr-alea-crm/vendor/autoload.php');
+    require(WP_PLUGIN_DIR . '/jwr-alea-crm/vendor/autoload.php');
 
     use PhpOffice\PhpSpreadsheet\{Spreadsheet, IOFactory, Style\Fill, Style\Alignment};
 
@@ -21,9 +21,9 @@ namespace JWR\Alea {
             if (isset($_POST['export']) && $_POST['export'] != '') {
                 ob_start();
 
-                $period = UTILS::escape($_POST['period']);
-                $anio = UTILS::escape($_POST['anio']);
-                $type = UTILS::escape($_POST['type']);
+                $period = Utils::escape($_POST['period']);
+                $anio = Utils::escape($_POST['anio']);
+                $type = Utils::escape($_POST['type']);
 
                 $data = ob_get_clean();
                 SELF::exportXLS($period, $anio, $type);

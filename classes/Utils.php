@@ -83,5 +83,11 @@ namespace JWR\Alea {
             $encoded = str_replace('"', '#', $json);
             return $encoded;
         }
+
+        public static function returnCurrentQuarter()
+        {
+            $month = date('m');
+            return ceil($month / 3);
+        }
     } // EOF
 } // namespace

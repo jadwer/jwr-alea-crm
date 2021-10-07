@@ -139,6 +139,17 @@ namespace JWR\Alea {
             return $result;
         }
 
+        protected function getFirstObjectFiltered($table, $filter = array('field' => 'id', 'value' => '1'), $field = "id", $order = "DESC"){
+            global $wpdb;
+            $table_name = $wpdb->prefix . $table;
+            $query = "SELECT * FROM {$table_name}
+            WHERE {$filter['field']} = {$filter['value']}
+            ORDER BY {$field} $order
+            LIMIT 1";
+            $result = $wpdb->get_results($query, ARRAY_A);
+            return (isset($result[0])) ? $result[0] : array();
+        }
+
         public function getObjectsPaged($table, $orderBy = null, $page, $rows)
         {
             $field = (isset($orderBy['field'])) ? Utils::escape($orderBy['field']) : 'id';
