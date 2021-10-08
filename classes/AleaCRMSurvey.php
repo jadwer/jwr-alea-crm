@@ -5,25 +5,91 @@ namespace JWR\Alea {
     // require_once(WP_PLUGIN_DIR."/jwr-alea-crm/model/ContinueSurvey.php");
     // require_once(WP_PLUGIN_DIR."/jwr-alea-crm/model/StartSurvey.php");
 
-    class AleaSurvey
+    class AleaCRMSurvey
     {
         public static function createSurveyPages()
         {
             Utils::createPage("Alea CRM Start", "comienza", "alea-survey-start", "jwr-alea-crm-survey-start-id", "");
             Utils::createPage("Alea CRM Continue", "continua", "alea-survey-continue", "jwr-alea-crm-survey-continue-id", "");
+            Utils::createPage("Alea CRM Payment", "registrado", "alea-survey-register", "jwr-alea-crm-survey-register-id", "");
         }
         public static function deleteSurveyPages()
         {
             Utils::deletePage("jwr-alea-crm-survey-start-id");
             Utils::deletePage("jwr-alea-crm-survey-continue-id");
+            Utils::deletePage("jwr-alea-crm-survey-register-id");
         }
 
 
+        public static function registerSurveyApply()
+        {
+            $payment = new AleaCRMPayment();
+            $response = $payment->get_response();
+
+            $descripcion = (isset($response['decodec']['Ds_MerchantData'])) ? json_decode(urldecode($response['decodec']['Ds_MerchantData']), true)['description'] : "Dieta";
+
+            if ($response['OK']) {
+
+                $customerArray = json_decode($_SESSION['customer'], true);
+                $surveyArray = json_decode($_SESSION['survey'], true);
+
+                $customer = new  Customer($customerArray);
+                $survey = new  startSurvey($surveyArray);
+                $customer->save();
+
+                $tipo = $_SESSION['tipo'];
+                $customer->setId($customer->save());
+                $dietData = array(
+                    'id' => null,
+                    'cliente' => $customer->getId(),
+                    'nif' => $customer->getNif(),
+                    'tipo' => $tipo,
+                    'fecha' => date("Y-m-d H:i:s"),
+                    'parametros' => $survey->toJsonEncode(),
+                    'state' => 0,
+                    'order' => $survey->getorder(),
+                    'enviado' => 0,
+                    'opc' => 0,
+                    'recordar' => 0,
+                    'tipoDieta' => 0,
+                    'nuevoModelo' => 1
+                );
+                $diet = new Dieta($dietData);
+                $diet->save();
+
+                $invoice = new Factura;
+                $invoiceData = array(
+                    'referencia' => $invoice->getLastInvoiceNumber(1),
+                    'fecha' => date("Y-m-d H:i:s"),
+                    'cliente' => $customer->getId(),
+                    'dietaid' => $diet->getId(),
+                    'nombre' => $customer->getNombre(),
+                    'apellidos' => $customer->getApellidos(),
+                    'nif' => $customer->getNif(),
+                    'calle' => $customer->getCalle(),
+                    'numero' => $customer->getNumero(),
+                    'pisoLetra' => $customer->getPisoLetra(),
+                    'cp' => $customer->getCp(),
+                    'ciudad' => $customer->getCiudad(),
+                    'provincia' => $customer->getProvincia(),
+                    'concepto' => $descripcion,
+                    'precio' => $response['decodec']['Ds_Amount'] / 100,
+                    'iva' => 0,
+                    'total' => $response['decodec']['Ds_Amount'] / 100,
+                    'state' => 1 // online
+                );
+                $invoice = new Factura($invoiceData);
+                $invoice->save();
+
+
+                SELF::graciasForm();
+
+                echo '<a href="' . home_url('online-invoices') . '">Clic</a>';
+            }
+        }
         public static function startSurveyApply()
         {
-
-            global $wp;
-
+            $_SESSION['tipo'] = "1";
             if (isset($_POST['submit']) && $_POST['submit'] == 'Guardar') {
                 $customerData = array(
                     'id' => null,
@@ -42,10 +108,11 @@ namespace JWR\Alea {
                     'ciudad' => (isset($_POST['ciudad'])) ? $_POST['ciudad'] : "",
                     'provincia' => (isset($_POST['provincia'])) ? $_POST['provincia'] : "",
                 );
+                $_SESSION['customer'] = json_encode($customerData);
                 $customer = new Customer($customerData);
-                $customer->setId($customer->save());
 
                 $surveyData = array(
+                    'id' => null,
                     'order' => (isset($_POST['order'])) ? $_POST['order'] : "",
                     'edad' => $customer->getNacimiento(),
                     'sexo' => $customer->getSexo(),
@@ -127,41 +194,25 @@ namespace JWR\Alea {
                     'paciente_provincia' => $customer->getProvincia(),
                     'newsletter' => (isset($_POST['newsletter'])) ? $_POST['newsletter'] : "off"
                 );
+                $_SESSION['survey'] = json_encode($surveyData);
 
-                $survey = new StartSurvey($surveyData);
 
-                $dietData = array(
-                    'id' => null,
-                    'cliente' => $customer->getId(),
-                    'nif' => $customer->getNif(),
-                    'tipo' => 1,
-                    'fecha' => date("Y-m-d H:i:s"),
-                    'parametros' => $survey->toJsonEncode(),
-                    'state' => 1,
-                    'order' => $survey->getorder(),
-                    'enviado' => 0,
-                    'opc' => 0,
-                    'recordar' => 0,
-                    'tipoDieta' => 0,
-                    'nuevoModelo' => 1
-                );
-                $diet = new Dieta($dietData);
-                $diet->save();
-
-                SELF::graciasForm();
-
+                $payment = new AleaCRMPayment("999008881", "1", "978", "0", home_url('registrado'));
+                $payment->pay_data(time(), "5000", "Solicitud de consulta inicial");
+                $json_data = '{"description": "Solicitud de consulta inicial"}';
+                $payment->request_pay($json_data);
             } else {
 ?>
                 <form action="" method="POST">
-                <a href="<?= home_url() ?>" class="flex justify-center lateral w-2/12">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 17l-5-5m0 0l5-5m-5 5h12" />
-                    </svg>
-                    REGRESAR
-                </a>
-                <div class="lateral w-10/12">
+                    <a href="<?= home_url() ?>" class="flex justify-center lateral w-2/12">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 17l-5-5m0 0l5-5m-5 5h12" />
+                        </svg>
+                        REGRESAR
+                    </a>
+                    <div class="lateral w-10/12">
 
-                </div>
+                    </div>
 
                     <?php
                     $survey = new StartSurvey();
@@ -178,10 +229,12 @@ namespace JWR\Alea {
 
         public static function continueSurveyApply()
         {
+
             global $wp;
+            $_SESSION['tipo'] = "2";
 
             if (isset($_POST['submit']) && $_POST['submit'] == 'Guardar') {
-                $data = array(
+                $surveyData = array(
                     'order'         => (isset($_POST['order'])) ? $_POST['order'] : '',
                     'estricta'      => (isset($_POST['estricta'])) ? $_POST['estricta'] : '',
                     'pesado'        => (isset($_POST['pesado'])) ? $_POST['pesado'] : '',
@@ -206,30 +259,18 @@ namespace JWR\Alea {
                     'comentarios'   => (isset($_POST['comentarios'])) ? $_POST['comentarios'] : '',
                     'paciente_nif'  => (isset($_POST['paciente_nif'])) ? $_POST['paciente_nif'] : ''
                 );
+                $_SESSION['survey'] = json_encode($surveyData);
 
-                $survey = new ContinueSurvey($data);
+                $survey = new ContinueSurvey($surveyData);
                 $customer = new Customer();
                 $customer->getCustomerByNIF($survey->getpaciente_nif());
+                $_SESSION['customer'] = json_encode($customer->toArray());
 
-                $dietData = array(
-                    'id' => null,
-                    'cliente' => $customer->getId(),
-                    'nif' => $customer->getNif(),
-                    'tipo' => 2,
-                    'fecha' => date("Y-m-d H:i:s"),
-                    'parametros' => $survey->toJsonEncode(),
-                    'state' => 1,
-                    'order' => $survey->getorder(),
-                    'enviado' => 0,
-                    'opc' => 0,
-                    'recordar' => 0,
-                    'tipoDieta' => 0,
-                    'nuevoModelo' => 1
-                );
-                $diet = new Dieta($dietData);
-                $diet->save();
 
-                SELF::graciasForm();
+                $payment = new AleaCRMPayment("999008881", "1", "978", "0", home_url('registrado'));
+                $payment->pay_data(time(), "2500", "Solicitud de consulta de seguimiento");
+                $json_data = '{"description": "Solicitud de consulta de seguimiento"}';
+                $payment->request_pay($json_data);
 
             } elseif (isset($_POST['submit']) && $_POST['submit'] == 'nif') {
 
@@ -270,16 +311,17 @@ namespace JWR\Alea {
             }
         }
 
-        private static function graciasForm(){
+        private static function graciasForm()
+        {
             ?>
             <h2>¡Muchas gracias, tu solicitud ha sido correctamente registrada!</h2>
-            <?php
+        <?php
         }
         private static function newCustomerForm($customer)
         {
-            ?>
+        ?>
             <div class="flex-col flex-wrap bg-red-100 rounded-xl shadow-xl space-y-4">
-                
+
                 <input type="hidden" name="id" value="<?= $customer->getId(); ?>" />
                 <div class="flex"><label>Sexo: </label></div>
                 <div class="flex-row">
@@ -314,7 +356,7 @@ namespace JWR\Alea {
                 <div class="flex"><input type="text" name="ciudad" value="<?= $customer->getCiudad(); ?>"></div>
                 <div class="flex"><label>provincia:</label></div>
                 <div class="flex"><input type="text" name="provincia" value="<?= $customer->getProvincia(); ?>"></div>
-                <br/>
+                <br />
             </div>
         <?php
 

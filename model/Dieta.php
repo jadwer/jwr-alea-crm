@@ -53,7 +53,9 @@ namespace JWR\Alea {
          */
         public function save()
         {
-            return $this->setDieta();
+            $this->id = $this->setDieta();
+            return $this->id;
+
         }
 
         private function setDieta()

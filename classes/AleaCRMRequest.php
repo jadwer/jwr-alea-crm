@@ -146,10 +146,10 @@ namespace JWR\Alea {
             SELF::customerInfoForm($diet->getTipo(), $diet->getFecha(), $diet->getId(), $customer);
 
             if ($diet->getTipo() == 1) {
-                AleaSurvey::startSurvey($survey);
+                AleaCRMSurvey::startSurvey($survey);
             } elseif ($diet->getTipo() == 2) {
 
-                AleaSurvey::continueSurvey($survey);
+                AleaCRMSurvey::continueSurvey($survey);
             } else {
                 echo "Sorry, we don't have any template for this critearia.";
             }

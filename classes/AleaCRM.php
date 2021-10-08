@@ -10,14 +10,14 @@ namespace JWR\Alea {
     // require_once WP_PLUGIN_DIR."/jwr-alea-crm/classes/AleaCRMInvoice.php";
     // require_once WP_PLUGIN_DIR."/jwr-alea-crm/classes/AleaCRMRequest.php";
     // require_once WP_PLUGIN_DIR."/jwr-alea-crm/classes/AleaExportXLS.php";
-    // require_once WP_PLUGIN_DIR."/jwr-alea-crm/classes/AleaSurvey.php";
+    // require_once WP_PLUGIN_DIR."/jwr-alea-crm/classes/AleaCRMSurvey.php";
     // require_once WP_PLUGIN_DIR."/jwr-alea-crm/classes/Utils.php";
     // require_once(WP_PLUGIN_DIR."/jwr-alea-crm/model/AleaModel.php");
     // require_once(WP_PLUGIN_DIR."/jwr-alea-crm/model/Customer.php");
     // require_once(WP_PLUGIN_DIR."/jwr-alea-crm/model/Dieta.php");
     // require_once(WP_PLUGIN_DIR."/jwr-alea-crm/model/Factura.php");
 
-    use JWR\Alea\{AleaCRMRequest, AleaCRMDiet, AleaCRMInvoice, AleaModel, AleaSurvey, AleaExportXLS, Customer, Factura, Dieta};
+    use JWR\Alea\{AleaCRMRequest, AleaCRMDiet, AleaCRMInvoice, AleaModel, AleaCRMSurvey, AleaExportXLS, Customer, Factura, Dieta};
 
     class AleaCRM
     {
@@ -31,7 +31,7 @@ namespace JWR\Alea {
             AleaCRMRequest::createRequestPages();
             AleaCRMDiet::createDietPages();
             AleaCRMInvoice::createInvoicePages();
-            AleaSurvey::createSurveyPages();
+            AleaCRMSurvey::createSurveyPages();
             AleaExportXLS::createExportPage();
         }
 
@@ -40,7 +40,7 @@ namespace JWR\Alea {
             AleaCRMRequest::deleteRequestPages();
             AleaCRMDiet::deleteDietPages();
             AleaCRMInvoice::deleteInvoicePages();
-            AleaSurvey::deleteSurveyPages();
+            AleaCRMSurvey::deleteSurveyPages();
             AleaExportXLS::deleteExportPage();
         }
 
@@ -343,12 +343,15 @@ namespace JWR\Alea {
         }
         function shortcode_start($atts = [], $content = null, $tag = '')
         {
-            AleaSurvey::startSurveyApply();
+            AleaCRMSurvey::startSurveyApply();
         }
         function shortcode_continue($atts = [], $content = null, $tag = '')
         {
-            AleaSurvey::continueSurveyApply();
+            AleaCRMSurvey::continueSurveyApply();
         }
-
+        function shortcode_register($atts = [], $content = null, $tag = '')
+        {
+            AleaCRMSurvey::registerSurveyApply();
+        }
     } //EOC
 }// namespace

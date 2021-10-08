@@ -58,7 +58,8 @@ namespace JWR\Alea {
          */
         public function save()
         {
-            return $this->setCustomer();
+            $this->id = $this->setCustomer();
+            return $this->id;
         }
 
         private function setCustomer()

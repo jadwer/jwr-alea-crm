@@ -67,7 +67,11 @@ namespace JWR\Alea {
          */
         public function save()
         {
-            return $this->setFactura();
+            if ($this->getReferencia() == "") {
+                $this->getLastInvoiceNumber($this->state);
+            }
+            $this->id = $this->setFactura();
+            return $this->id;
         }
 
         private function setFactura()
@@ -76,10 +80,21 @@ namespace JWR\Alea {
             return $this->setObject($this->toArray(), SELF::TABLE_NAME);
         }
 
+        public function mailInvoice($email)
+        {
+            include(WP_PLUGIN_DIR . '/jwr-alea-crm/inc/invoice-mail.php');
+            $to = $email;
+            $subject = 'ALEA Consulta dietética - Confirmación de pago realizado';
+            $body = createBodyMail($this);
+            $headers = array('Content-Type: text/html; charset=UTF-8');
+            wp_mail($to, $subject, $body, $headers);
+        }
+
         public function getLastInvoiceNumber($state)
         {
             $invoice = $this->getFirstObjectFiltered(SELF::TABLE_NAME, array('field' => 'state', 'value' => $state));
-            list($code, $consecutive) = explode('/', $invoice["referencia"]);
+            $referencia = (isset($invoice["referencia"]))? $invoice["referencia"] : "a/10";
+            list($code, $consecutive) = explode('/', $referencia);
             $number = (int)filter_var($consecutive, FILTER_SANITIZE_NUMBER_INT) + 1;
             $year = date('Y');
             return ($state == 0) ? $year . "/ACD" . $number : $year . "/AD" . $number;
