@@ -13,21 +13,21 @@ namespace JWR\Alea {
         const TABLE_NAME = "alea_clientes";
         const NUM_FIELDS = 15;
 
-        private ?int $id;
-        private ?int $sexo;
-        private ?string $telefono;
-        private ?string $nacimiento;
-        private ?int $state;
-        private ?string $nif;
-        private ?string $email;
-        private ?string $nombre;
-        private ?string $apellidos;
-        private ?string $calle;
-        private ?int $numero;
-        private ?string $pisoLetra;
-        private ?string $cp;
-        private ?string $ciudad;
-        private ?string $provincia;
+        private $id;
+        private $sexo;
+        private $telefono;
+        private $nacimiento;
+        private $state;
+        private $nif;
+        private $email;
+        private $nombre;
+        private $apellidos;
+        private $calle;
+        private $numero;
+        private $pisoLetra;
+        private $cp;
+        private $ciudad;
+        private $provincia;
 
 
         // Methods of use
@@ -97,15 +97,18 @@ namespace JWR\Alea {
         }
         public function getEdad()
         {
-            $birthDate = explode("-", $this->nacimiento);
-            $age = (date("md", date("U", mktime(0, 0, 0, $birthDate[2], $birthDate[1], $birthDate[0]))) > date("md")
-                ? ((date("Y") - $birthDate[0]) - 1)
-                : (date("Y") - $birthDate[0]));
+            $bdate = strtotime($this->nacimiento);
+            $age = (date("md", date("U", $bdate)) > date("md")
+                ? ((date("Y") - date('Y', $bdate)) - 1)
+                : (date("Y") - date('Y', $bdate)));
             return $age;
         }
         public function getNacimiento()
         {
-            return $this->nacimiento;
+            $rawDate = strtotime($this->nacimiento);
+            $date = date('d/m/Y', $rawDate);
+
+            return $date;
         }
         public function getState()
         {
@@ -166,14 +169,16 @@ namespace JWR\Alea {
         }
         public function setNacimiento($nacimiento)
         {
-            if(Utils::validateDate($nacimiento)){
+            if (Utils::validateDate($nacimiento)) {
                 $this->nacimiento = $nacimiento;
+                return $nacimiento;
             } else {
                 list($dia, $mes, $anio) = explode('/', "$nacimiento//");
                 $american_date = $anio . "-" . $mes . "-" . $dia;
                 $phpdate = strtotime($american_date);
                 $mysqldate = date('Y-m-d H:i:s', $phpdate);
-                $this->nacimiento = $mysqldate;    
+                $this->nacimiento = $mysqldate;
+                return $mysqldate;
             }
 
             $this->nacimiento = $nacimiento;
@@ -247,7 +252,7 @@ namespace JWR\Alea {
                     $this->telefono = $data['telefono'];
                 }
                 if (isset($data['nacimiento'])) {
-                    $this->nacimiento = $data['nacimiento'];
+                    $this->setNacimiento($data['nacimiento']);
                 }
                 if (isset($data['state'])) {
                     $this->state = $data['state'];
@@ -296,7 +301,7 @@ namespace JWR\Alea {
             $this->id = $id;
             $this->sexo = $sexo;
             $this->telefono = $telefono;
-            $this->nacimiento = $nacimiento;
+            $this->setNacimiento($nacimiento);
             $this->state = $state;
             $this->nif = $nif;
             $this->email = $email;
@@ -319,9 +324,9 @@ namespace JWR\Alea {
         protected function __construct_void()
         {
             $this->id = NULL;
-            $this->sexo = 0;
+            $this->sexo = NULL;
             $this->telefono = '';
-            $this->nacimiento = '';
+            $this->nacimiento = date("Y-m-d H:i:s");
             $this->state = 0;
             $this->nif = '';
             $this->email = '';

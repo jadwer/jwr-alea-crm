@@ -13,21 +13,21 @@ namespace JWR\Alea {
         const TABLE_NAME2 = "alea_clientes";
         const NUM_FIELDS = 13;
 
-        private ?int $id;
-        private ?int $cliente;
-        private ?string $nif;
-        private ?int $tipo;
-        private ?string $fecha;
-        private ?string $parametros;
-        private ?int $state;
-        private ?string $order;
-        private ?int $enviado;
-        private ?int $opc;
-        private ?int $recordar;
-        private ?int $tipoDieta;
-        private ?int $nuevoModelo;
-        private ?string $nombre;
-        private ?string $apellidos;
+        private $id;
+        private $cliente;
+        private $nif;
+        private $tipo;
+        private $fecha;
+        private $parametros;
+        private $state;
+        private $order;
+        private $enviado;
+        private $opc;
+        private $recordar;
+        private $tipoDieta;
+        private $nuevoModelo;
+        private $nombre;
+        private $apellidos;
 
 
         // Methods of use

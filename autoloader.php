@@ -16,7 +16,8 @@ function jwr_autoloader($class) {
         "admin",
         "API",
         "classes",
-        "model"
+        "model",
+        "survey"
     );
     foreach($directories as $dir){
         $path = $directory . DIRECTORY_SEPARATOR . $dir . DIRECTORY_SEPARATOR . $class;

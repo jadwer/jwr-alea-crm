@@ -14,25 +14,25 @@ namespace JWR\Alea {
         const NUM_FIELDS = 19;
 
 
-        private ?int $id;
-        private ?string $referencia;
-        private ?string $fecha;
-        private ?int $cliente;
-        private ?int $dietaid;
-        private ?string $nombre;
-        private ?string $apellidos;
-        private ?string $nif;
-        private ?string $calle;
-        private ?int $numero;
-        private ?string $pisoLetra;
-        private ?string $cp;
-        private ?string $ciudad;
-        private ?string $provincia;
-        private ?string $concepto;
-        private ?float $precio;
-        private ?float $iva;
-        private ?float $total;
-        private ?int $state;
+        private $id;
+        private $referencia;
+        private $fecha;
+        private $cliente;
+        private $dietaid;
+        private $nombre;
+        private $apellidos;
+        private $nif;
+        private $calle;
+        private $numero;
+        private $pisoLetra;
+        private $cp;
+        private $ciudad;
+        private $provincia;
+        private $concepto;
+        private $precio;
+        private $iva;
+        private $total;
+        private $state;
 
 
         // Methods of use
@@ -234,12 +234,14 @@ namespace JWR\Alea {
         {
             if (Utils::validateDate($fecha)) {
                 $this->fecha = $fecha;
+                return $fecha;
             } else {
                 list($dia, $mes, $anio) = explode('/', "$fecha//");
                 $american_date = $anio . "-" . $mes . "-" . $dia;
                 $phpdate = strtotime($american_date);
                 $mysqldate = date('Y-m-d H:i:s', $phpdate);
                 $this->fecha = $mysqldate;
+                return $mysqldate;
             }
         }
         public function getCliente()
@@ -393,7 +395,7 @@ namespace JWR\Alea {
                     $this->referencia = $data['referencia'];
                 }
                 if (isset($data['fecha'])) {
-                    $this->fecha = $data['fecha'];
+                    $this->setFecha($data['fecha']);
                 }
                 if (isset($data['cliente'])) {
                     $this->cliente = $data['cliente'];
