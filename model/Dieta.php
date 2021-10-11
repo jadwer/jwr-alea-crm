@@ -140,7 +140,12 @@ namespace JWR\Alea {
         }
         public function getFecha()
         {
-            return $this->fecha;
+            $rawDate = strtotime($this->fecha);
+            $date = date('d/m/Y', $rawDate);
+
+            return $date;
+
+//            return $this->fecha;
         }
         public function setFecha($fecha)
         {

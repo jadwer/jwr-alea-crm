@@ -145,10 +145,11 @@ function deleteMenu()
     wp_delete_nav_menu('CRM Pages');
 }
 
-function add_query_vars_filter( $vars ){
+function add_query_vars_filter($vars)
+{
     $vars[] = "year_selected";
     $vars[] = "period";
     $vars[] = "pag";
     return $vars;
-  }
-  add_filter( 'query_vars', 'add_query_vars_filter' );
+}
+add_filter('query_vars', 'add_query_vars_filter');

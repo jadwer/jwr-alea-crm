@@ -28,7 +28,7 @@ $customer_profile = function ($customer) {
                     <option value="<?= $i; ?>" <?= (($anio == $i) ? 'selected="selected"' : ''); ?>> <?= $i ?> </option>
                 <?php endfor; ?>
             </select>
-            <input type="hidden" name="nacimiento" id="nacimiento" value="" required>
+            <input type="hidden" name="nacimiento" id="nacimiento" value="<?= $customer->getNacimiento(); ?>" required>
         </div>
         <div class="flex"><label>Sexo: </label></div>
         <div class="flex-row">

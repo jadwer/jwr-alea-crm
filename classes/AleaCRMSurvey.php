@@ -90,10 +90,12 @@ namespace JWR\Alea {
                 $invoice->save();
                 $invoice->mailInvoice($customer->getEmail());
 
-
+                // echo "<pre>";
+                // print_r($customer);
+                // print_r($survey);
+                // print_r($diet);
+                // echo "</pre>";
                 SELF::graciasForm();
-
-                echo '<a href="' . home_url('online-invoices') . '">Clic</a>';
             }
         }
         public static function startSurveyApply()
@@ -325,11 +327,11 @@ namespace JWR\Alea {
 
         public static function startSurveyData($survey, $customer)
         {
-            SurveyController::SurveySection(0, 5, false, false, false, '', SurveyController::customer_profile($customer) . SurveyController::start_bodyMeasures($survey) . SurveyController::start_weightEvolution($survey));
+            SurveyController::SurveySection(0, 5, false, false, false, '', SurveyController::start_bodyMeasures($survey) . SurveyController::start_weightEvolution($survey));
             SurveyController::SurveySection(0, 5, false, false, false, '', SurveyController::start_analitycs($survey) . SurveyController::start_pathology($survey) . SurveyController::start_unhealthy($survey) . SurveyController::start_exercise($survey));
             SurveyController::SurveySection(0, 5, false, false, false, '', SurveyController::start_nutrition($survey) . SurveyController::start_foodFreq($survey));
             SurveyController::SurveySection(0, 5, false, false, false, '', SurveyController::start_desiredDiet($survey));
-            SurveyController::SurveySection(0, 5, false, false, false, '', SurveyController::customer_data($customer) . SurveyController::discountCode($survey) . SurveyController::privacy_terms() . SurveyController::newsletter($survey));
+            SurveyController::SurveySection(0, 5, false, false, false, '', SurveyController::customer_data($customer) . SurveyController::discountCode($survey));
         }
 
         public static function continueSurvey($survey, $customer)

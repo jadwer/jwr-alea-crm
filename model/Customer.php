@@ -172,6 +172,9 @@ namespace JWR\Alea {
             if (Utils::validateDate($nacimiento)) {
                 $this->nacimiento = $nacimiento;
                 return $nacimiento;
+            }else if (Utils::validateDate($nacimiento, 'Y-m-d')) {
+                $this->nacimiento = $nacimiento;
+                return $nacimiento;
             } else {
                 list($dia, $mes, $anio) = explode('/', "$nacimiento//");
                 $american_date = $anio . "-" . $mes . "-" . $dia;

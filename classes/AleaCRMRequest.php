@@ -56,11 +56,12 @@ namespace JWR\Alea {
                         <div class="w-6/12 text-center"><a href="<?= home_url($wp->request) . '?' . $link_arg; ?>"><?= $diet->getNombre() . " " . $diet->getApellidos(); ?></a></div>
                         <div class="w-2/12"><?= $diet->getTipo(); ?></div>
                         <div class="w-2/12">
-                            <button class="printOption" onclick="printOption('<?= $diet->getId(); ?>')" data-id="<? $diet->getId(); ?>">
+                            <button class="printOption" onclick="setEnviado('<?= $diet->getId(); ?>')" data-id="<?= $diet->getId(); ?>" id="<?= $diet->getId(); ?>">
                                 <?php if ($diet->getEnviado() == 1) : ?>
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
-                                    </svg> <?php else : ?>
+                                    </svg>
+                                <?php else : ?>
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                                     </svg>
@@ -78,7 +79,7 @@ namespace JWR\Alea {
         {
         ?>
             <div class="flex flex-wrap w-full bg-gray-100 rounded-xl shadow-xl">
-                <a href="<?=home_url('request').'/?customer='.$customer->getId();?>" class="flex justify-center lateral w-2/12">
+                <a href="<?= home_url('request') . '/?customer=' . $customer->getId(); ?>" class="flex justify-center lateral w-2/12">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 17l-5-5m0 0l5-5m-5 5h12" />
                     </svg>
@@ -121,7 +122,7 @@ namespace JWR\Alea {
                     <label>Fecha de Nacimiento: </label>
                 </div>
                 <div class="w-10/12 justify-start">
-                <?php echo  $customer->getNacimiento() . ' (' . $customer->getedad() . ') años.'; ?>
+                    <?php echo  $customer->getNacimiento() . ' (' . $customer->getedad() . ') años.'; ?>
                 </div>
                 <div class="flex justify-end w-2/12">
                     <label>Sexo: </label>
@@ -142,7 +143,6 @@ namespace JWR\Alea {
             $diet = $customerDiet['diet'];
             $surveyData = json_decode(str_replace("#", "\"", $diet->getParametros()), true);;
             $survey = ($diet->getTipo() == 1) ? new StartSurvey($surveyData) :  new ContinueSurvey($surveyData);
-
             SELF::customerInfoForm($diet->getTipo(), $diet->getFecha(), $diet->getId(), $customer);
 
             if ($diet->getTipo() == 1) {
@@ -217,6 +217,7 @@ namespace JWR\Alea {
         {
             $customerDiet  = new CustomerDiet;
             $customerData = $customerDiet->getCustomerDietById($diet_id);
+
             SELF::customerDietDetail($customerData);
         }
     } // EOC

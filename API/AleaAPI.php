@@ -2,7 +2,7 @@
 
 namespace JWR\Alea {
 
-//    include_once "AleaModel.php";
+    //    include_once "AleaModel.php";
 
     use JWR\Alea\AleaModel;
 
@@ -70,6 +70,17 @@ namespace JWR\Alea {
                     'permission_callback' => '__return_true'
                 )
             );
+
+            // get the diet and info from an specific customer
+            register_rest_route(
+                $namespace,
+                'send-status',
+                array(
+                    'methods' => 'POST',
+                    'callback' => array($this, 'set_status'),
+                    'permission_callback' => '__return_true'
+                )
+            );
         }
 
         function get_customersData(\WP_REST_Request $request)
@@ -83,8 +94,18 @@ namespace JWR\Alea {
                 return wp_send_json(rest_ensure_response($response->getCustomers($request->get_param('start'), $request->get_param('offset'))));
             }
         }
-        function set_customer()
+        function set_status(\WP_REST_Request $request)
         {
+            $diet = new Dieta;
+            if ($request->get_param("diet_id") != null) {
+                $id = $request->get_param("diet_id");
+                $dieta = $diet->getDietaById($id);
+                if ($dieta->getEnviado() == 0) {
+                    $diet->setEnviado(1);
+                    $diet->save();
+                }
+                    return wp_send_json(rest_ensure_response(array('status' => $diet->getEnviado())));
+            }
         }
     } // EOC
 

@@ -21,10 +21,10 @@ namespace JWR\Alea {
             echo '
             <div class="flex justify-between items-end">';
             if ($back) {
-                echo '<div onClick="changeStep(\'pag-' . ($page - 1) . '\', \'pag-' . ($page) . '\')" class="flex p-3 my-2 bg-red-400 justify-end  text-white  rounded-xl">Anterior</div>';
+                echo '<div onClick="changeStep(\'pag-' . ($page - 1) . '\', \'pag-' . ($page) . '\')" class="flex p-3 my-2 bg-red-400 justify-end  text-white  rounded-xl cursor-pointer">Anterior</div>';
             }
             if ($next) {
-                echo '<div onClick="changeStep(\'pag-' . ($page + 1) . '\', \'pag-' . ($page) . '\')" class="flex p-3 my-2 bg-red-400 justify-end  text-white  rounded-xl">Siguiente</div>';
+                echo '<div onClick="changeStep(\'pag-' . ($page + 1) . '\', \'pag-' . ($page) . '\')" class="flex p-3 my-2 bg-red-400 justify-end  text-white  rounded-xl cursor-pointer">Siguiente</div>';
             }
             echo '
                 </div>
