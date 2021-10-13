@@ -33,8 +33,8 @@ $customer_profile = function ($customer) {
         <div class="flex"><label>Sexo: </label></div>
         <div class="flex-row">
             <fieldset>
-                <label><input type="radio" name="sexo" value="0" <?= ($customer->getSexo() == 0) ? "checked" : ""; ?> required>Hombre</label>
-                <label><input type="radio" name="sexo" value="1" <?= ($customer->getSexo() == 1) ? "checked" : ""; ?> required>Mujer</label>
+                <label><input type="radio" name="sexo" value="0" onchange="toggleWomanQuestions();" <?= ($customer->getSexo() === 0 ) ? "checked" : ""; ?> required>Hombre</label>
+                <label><input type="radio" name="sexo" value="1" onchange="toggleWomanQuestions();" <?= ($customer->getSexo() === 1) ? "checked" : ""; ?> required>Mujer</label>
             </fieldset>
         </div>
     </div>

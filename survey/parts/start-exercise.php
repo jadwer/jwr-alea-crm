@@ -31,12 +31,14 @@ $exercise = function ($survey) {
     <div class="flex"><label>¿Haces deporte regularmente?: </label></div>
     <div class="flex-row">
         <fieldset>
-            <label><input required type="radio" name="deporte" value="1" <?= ($survey->getdeporte() == 1) ? "checked" : ""; ?>>Si</label>
-            <label><input required type="radio" name="deporte" value="2" <?= ($survey->getdeporte() == 2) ? "checked" : ""; ?>>No</label>
+            <label><input required onchange="toggleExercise()" type="radio" name="deporte" value="1" <?= ($survey->getdeporte() == 1) ? "checked" : ""; ?>>Si</label>
+            <label><input required  onchange="toggleExercise()" type="radio" name="deporte" value="2" <?= ($survey->getdeporte() == 2) ? "checked" : ""; ?>>No</label>
         </fieldset>
     </div>
-    <div class="flex"><label>Cuéntanos qué haces, ¿cuánto tiempo y cuántas veces a la semana haces deporte?: </label></div>
-    <div class="flex"><input required type="text" name="deporte_txt" id="deporte_txt" value="<?= $survey->getdeporte_txt(); ?>"></div>
+    <div id="exercise_section">
+        <div class="flex"><label>Cuéntanos qué haces, ¿cuánto tiempo y cuántas veces a la semana haces deporte?: </label></div>
+        <div class="flex"><input type="text" name="deporte_txt" id="deporte_txt" value="<?= $survey->getdeporte_txt(); ?>"></div>
+    </div>
 
 <?php
     return ob_get_clean();

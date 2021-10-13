@@ -33,15 +33,42 @@ $weight_evolution = function ($survey) {
             <label><input required type="radio" name="dieta_ultimo" value="2" <?= ($survey->getdieta_ultimo() == 2) ? "checked" : ""; ?>>No</label>
         </fieldset>
     </div>
-    <div class="flex"><label>¿Haz estado embarazada?: </label></div>
-    <div class="flex-row">
-        <fieldset>
-            <label><input required type="radio" name="embarazada" value="1" <?= ($survey->getembarazada() == 1) ? "checked" : ""; ?>>Si</label>
-            <label><input required type="radio" name="embarazada" value="2" <?= ($survey->getembarazada() == 2) ? "checked" : ""; ?>>No</label>
-        </fieldset>
+    <div id="women_pregnant">
+        <div class="flex"><label>¿Haz estado embarazada?: </label></div>
+        <div class="flex-row">
+            <fieldset>
+                <label><input required type="radio" name="embarazada" onchange="togglePregnantQuestions()" value="1" <?= ($survey->getembarazada() == 1) ? "checked" : ""; ?>>Si</label>
+                <label><input required type="radio" name="embarazada" onchange="togglePregnantQuestions()" value="2" <?= ($survey->getembarazada() == 2) ? "checked" : ""; ?>>No</label>
+            </fieldset>
+        </div>
     </div>
-    <div class="flex"><label>embarazada_tiempo_bebe: </label></div>
-    <div class="flex"><input required type="text" name="embarazada_tiempo_bebe" id="embarazada_tiempo_bebe" value="<?= $survey->getembarazada_tiempo_bebe(); ?>"></div>
+    <div id="pregnant_true">
+        <div class="flex"><label>¿Cuántos kilos incrementaste de media?: </label></div>
+        <div class="flex-row">
+            <fieldset>
+                <label><input  type="radio" name="embarazada_kilos" value="1" <?= ($survey->getembarazada_kilos() == 1) ? "checked" : ""; ?>>12 kg o menos</label>
+                <label><input type="radio" name="embarazada_kilos" value="2" <?= ($survey->getembarazada_kilos() == 2) ? "checked" : ""; ?>>Más de 12 kg</label>
+            </fieldset>
+        </div>
+        <div class="flex"><label>¿Recuperaste luego el peso anterior al embarazo? </label></div>
+        <div class="flex-row">
+            <fieldset>
+                <label><input  type="radio" name="embarazada_anterior" value="1" <?= ($survey->getembarazada_anterior() == 1) ? "checked" : ""; ?>>Si</label>
+                <label><input  type="radio" name="embarazada_anterior" value="2" <?= ($survey->getembarazada_anterior() == 2) ? "checked" : ""; ?>>No</label>
+            </fieldset>
+        </div>
+        <div class="flex"><label>¿Estás dando actualmente el pecho? </label></div>
+        <div class="flex-row">
+            <fieldset>
+                <label><input  type="radio" name="embarazada_pecho" onchange="togglePecho()" value="1" <?= ($survey->getembarazada_pecho() == 1) ? "checked" : ""; ?>>Si</label>
+                <label><input  type="radio" name="embarazada_pecho" onchange="togglePecho()" value="2" <?= ($survey->getembarazada_pecho() == 2) ? "checked" : ""; ?>>No</label>
+            </fieldset>
+        </div>
+        <div id="pecho">
+            <div class="flex"><label>¿Qué tiempo tiene el bebé al que estás dando el pecho?</label></div>
+            <div class="flex"><input  type="text" name="embarazada_tiempo_bebe" id="embarazada_tiempo_bebe" value="<?= $survey->getembarazada_tiempo_bebe(); ?>"></div>
+        </div>
+    </div>
     <div class="flex"><label>Según tu, ¿Cuál es la principal causa de tus kilos de más?: </label></div>
     <div class="flex-row">
         <fieldset>

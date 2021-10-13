@@ -21,6 +21,9 @@ namespace JWR\Alea {
         public $peso_ultimo;
         public $dieta_ultimo;
         public $embarazada;
+        public $embarazada_kilos;
+        public $embarazada_anterior;
+        public $embarazada_pecho;
         public $embarazada_tiempo_bebe;
         public $causa_kilos;
         public $peso_comodo;
@@ -119,6 +122,9 @@ namespace JWR\Alea {
                 'peso_ultimo' => $this->peso_ultimo,
                 'dieta_ultimo' => $this->dieta_ultimo,
                 'embarazada' => $this->embarazada,
+                'embarazada_kilos' => $this->embarazada_kilos,
+                'embarazada_anterior' => $this->embarazada_anterior,
+                'embarazada_pecho' => $this->embarazada_pecho,
                 'embarazada_tiempo_bebe' => $this->embarazada_tiempo_bebe,
                 'causa_kilos' => $this->causa_kilos,
                 'peso_comodo' => $this->peso_comodo,
@@ -209,6 +215,9 @@ namespace JWR\Alea {
             $this->peso_ultimo = "";
             $this->dieta_ultimo = "";
             $this->embarazada = "";
+            $this->embarazada_kilos = "";
+            $this->embarazada_anterior = "";
+            $this->embarazada_pecho = "";
             $this->embarazada_tiempo_bebe = "";
             $this->causa_kilos = "";
             $this->peso_comodo = "";
@@ -326,6 +335,15 @@ namespace JWR\Alea {
                 }
                 if (isset($data['embarazada'])) {
                     $this->embarazada = $data['embarazada'];
+                }
+                if (isset($data['embarazada_kilos'])) {
+                    $this->embarazada_kilos = $data['embarazada_kilos'];
+                }
+                if (isset($data['embarazada_anterior'])) {
+                    $this->embarazada_anterior = $data['embarazada_anterior'];
+                }
+                if (isset($data['embarazada_pecho'])) {
+                    $this->embarazada_pecho = $data['embarazada_pecho'];
                 }
                 if (isset($data['embarazada_tiempo_bebe'])) {
                     $this->embarazada_tiempo_bebe = $data['embarazada_tiempo_bebe'];
@@ -648,6 +666,30 @@ namespace JWR\Alea {
         public function setembarazada($embarazada)
         {
             $this->embarazada = $embarazada;
+        }
+        public function getembarazada_kilos()
+        {
+            return $this->embarazada_kilos;
+        }
+        public function setembarazada_kilos($embarazada_kilos)
+        {
+            $this->embarazada_kilos = $embarazada_kilos;
+        }
+        public function getembarazada_anterior()
+        {
+            return $this->embarazada_anterior;
+        }
+        public function setembarazada_anterior($embarazada_anterior)
+        {
+            $this->embarazada_anterior = $embarazada_anterior;
+        }
+        public function getembarazada_pecho()
+        {
+            return $this->embarazada_pecho;
+        }
+        public function setembarazada_pecho($embarazada_pecho)
+        {
+            $this->embarazada_pecho = $embarazada_pecho;
         }
         public function getembarazada_tiempo_bebe()
         {

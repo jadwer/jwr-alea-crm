@@ -135,6 +135,16 @@ namespace JWR\Alea {
             include WP_PLUGIN_DIR . "/jwr-alea-crm/survey/parts/continue-comments.php";
             return $comments($survey);
         }
+        public static function start_script_counter()
+        {
+            include WP_PLUGIN_DIR . "/jwr-alea-crm/survey/parts/start-scriptCounter.php";
+            return $counter_script();
+        }
+        public static function continue_script_counter()
+        {
+            include WP_PLUGIN_DIR . "/jwr-alea-crm/survey/parts/continue-scriptCounter.php";
+            return $counter_script();
+        }
 
     }
 } //namespace
