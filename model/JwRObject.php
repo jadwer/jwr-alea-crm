@@ -199,7 +199,7 @@ namespace JWR\Alea {
             $table_name = $wpdb->prefix . $table;
             $query = "SELECT * FROM {$table_name}
             WHERE ({$field} BETWEEN '{$startDate}' AND '{$endDate}') 
-            ORDER BY {$field} DESC;";
+            ORDER BY id DESC;";
             $result = $wpdb->get_results($query, ARRAY_A);
 
 
@@ -212,7 +212,7 @@ namespace JWR\Alea {
             $query = "SELECT * FROM {$table_name} 
             WHERE ({$filter} = {$value}) 
             AND ({$field} BETWEEN '{$startDate}' AND '{$endDate}') 
-            ORDER BY {$field} DESC;";
+            ORDER BY id DESC;";
             $result = $wpdb->get_results($query, ARRAY_A);
 
             return $result;
@@ -225,7 +225,7 @@ namespace JWR\Alea {
             $query = "SELECT * FROM {$table_name} 
             WHERE ({$filter} = {$value}) 
             AND ({$field} BETWEEN '{$startDate}' AND '{$endDate}')
-            ORDER BY {$field} DESC
+            ORDER BY id DESC
             LIMIT {$page},{$rows};";
             $result = $wpdb->get_results($query, ARRAY_A);
 

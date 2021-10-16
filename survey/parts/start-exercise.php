@@ -37,7 +37,7 @@ $exercise = function ($survey) {
     </div>
     <div id="exercise_section">
         <div class="flex"><label>Cuéntanos qué haces, ¿cuánto tiempo y cuántas veces a la semana haces deporte?: </label></div>
-        <div class="flex"><input type="text" name="deporte_txt" id="deporte_txt" value="<?= $survey->getdeporte_txt(); ?>"></div>
+        <div class="flex"><textarea  name="deporte_txt" id="deporte_txt" value="<?= $survey->getdeporte_txt(); ?>"  class="w-full h-52"><?= $survey->getdeporte_txt(); ?></textarea></div>
     </div>
 
 <?php

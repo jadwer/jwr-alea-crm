@@ -3,8 +3,11 @@ $comments = function ($survey) {
     ob_start();
 
 ?>
-    <div class="flex"><input type="text" name="comentarios" id="comentarios" value="<?= $survey->getcomentarios(); ?>"></div>
-    Al hacer clic en finalizar serás redirigido a la tpv virtual de Caja Rural para proceder al pago de forma segura.
+    <div class="flex">
+        <textarea name="comentarios" id="comentarios" value="<?= $survey->getcomentarios(); ?>" class="w-full h-52">
+        <?= $survey->getcomentarios(); ?>
+        </textarea>
+    </div>
 <?php
     return ob_get_clean();
 };

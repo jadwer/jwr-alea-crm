@@ -5,6 +5,17 @@ $counter_script = function () {
 
     <script src=<?= home_url() . "/wp-content/themes/JwR-Alea/assets/js/dcounts-js.min.js"; ?>></script>
     <script type="text/javascript">
+
+        document.getElementById('women_pregnant').style.display = 'none';
+        document.getElementById('pregnant_true').style.display = 'none';
+        document.getElementById('pecho').style.display = 'none'
+        document.getElementById('analytics_section').style.display = 'none'
+
+        document.getElementById('patology_general').style.display = 'none'
+        document.getElementById('drugs_section').style.display = 'none'
+        document.getElementById('surgy_section').style.display = 'none'
+        document.getElementById('exercise_section').style.display = 'none'
+
         function toggleWomanQuestions() {
             var sexo = document.getElementsByName("sexo");
             var gender = '';
@@ -93,10 +104,10 @@ $counter_script = function () {
             radios.forEach((i) => {
                 if (i.checked == true) answer = i.value;
             });
-            if (answer == 2) {
+            if (answer == 1) {
                 document.getElementById('analytics_section').style.display = 'block'
                 document.getElementById("ultima_analitica_txt").required = true;
-            } else if (answer == 1) {
+            } else if (answer == 2) {
                 document.getElementById('analytics_section').style.display = 'none'
                 document.getElementById("ultima_analitica_txt").required = false;
 
@@ -109,70 +120,65 @@ $counter_script = function () {
             radios.forEach((i) => {
                 if (i.checked == true) answer = i.value;
             });
-            if (answer == 2) {
+            if (answer == 1) {
                 document.getElementById('patology_general').style.display = 'block'
                 document.getElementById("estado_general_txt").required = true;
-            } else if (answer == 1) {
+            } else if (answer == 2) {
                 document.getElementById('patology_general').style.display = 'none'
                 document.getElementById("estado_general_txt").required = false;
 
             }
         }
+
         function toggleDrugs() {
             var radios = document.getElementsByName("medicamento");
             var answer = '';
             radios.forEach((i) => {
                 if (i.checked == true) answer = i.value;
             });
-            if (answer == 2) {
+            if (answer == 1) {
                 document.getElementById('drugs_section').style.display = 'block'
                 document.getElementById("medicamento_txt").required = true;
-            } else if (answer == 1) {
+            } else if (answer == 2) {
                 document.getElementById('drugs_section').style.display = 'none'
                 document.getElementById("medicamento_txt").required = false;
 
             }
         }
+
         function toggleSurgy() {
             var radios = document.getElementsByName("quirofano");
             var answer = '';
             radios.forEach((i) => {
                 if (i.checked == true) answer = i.value;
             });
-            if (answer == 2) {
+            if (answer == 1) {
                 document.getElementById('surgy_section').style.display = 'block'
                 document.getElementById("quirofano_txt").required = true;
-            } else if (answer == 1) {
+            } else if (answer == 2) {
                 document.getElementById('surgy_section').style.display = 'none'
                 document.getElementById("quirofano_txt").required = false;
 
             }
         }
+
         function toggleExercise() {
             var radios = document.getElementsByName("deporte");
             var answer = '';
             radios.forEach((i) => {
                 if (i.checked == true) answer = i.value;
             });
-            if (answer == 2) {
+            if (answer == 1) {
                 document.getElementById('exercise_section').style.display = 'block'
                 document.getElementById("deporte_txt").required = true;
-            } else if (answer == 1) {
+            } else if (answer == 2) {
                 document.getElementById('exercise_section').style.display = 'none'
                 document.getElementById("deporte_txt").required = false;
 
             }
         }
 
-        document.getElementById('women_pregnant').style.display = 'none';
-        document.getElementById('pregnant_true').style.display = 'none';
-        document.getElementById('pecho').style.display = 'none'
-        document.getElementById('analytics_section').style.display = 'none'
 
-        document.getElementById('patology_general').style.display = 'none'
-        document.getElementById('drugs_section').style.display = 'none'
-        document.getElementById('surgy_section').style.display = 'none'
-        document.getElementById('exercise_section').style.display = 'none'
 
         dCounts('ultima_analitica_txt', 20);
         dCounts('peso_adulto_estable', 20);

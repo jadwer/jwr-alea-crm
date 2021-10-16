@@ -318,11 +318,11 @@ namespace JWR\Alea {
         public static function startSurvey($survey, $customer)
         {
             SurveyController::SurveySection(0, 5, false, false, true, '', SurveyController::start_welcome());
-            SurveyController::SurveySection(1, 5, false, true, true, 'Vamos a empezar con algunos datos de tu salud', SurveyController::customer_profile($customer) . SurveyController::start_bodyMeasures($survey) . SurveyController::start_weightEvolution($survey));
-            SurveyController::SurveySection(2, 5, false, true, true, 'Ahora charlaremos de otros aspectos importantes', SurveyController::start_analitycs($survey) . SurveyController::start_pathology($survey) . SurveyController::start_unhealthy($survey) . SurveyController::start_exercise($survey));
-            SurveyController::SurveySection(3, 5, false, true, true, 'Es hora de que nos cuentes cómo te alimentas', SurveyController::start_nutrition($survey) . SurveyController::start_foodFreq($survey));
-            SurveyController::SurveySection(4, 5, false, true, true, '¿Cómo te gustaría que fuera tu dieta?', SurveyController::start_desiredDiet($survey));
-            SurveyController::SurveySection(5, 5, false, true, false, 'Por último, tus datos personales', SurveyController::customer_data($customer) . SurveyController::discountCode($survey) . SurveyController::privacy_terms() . SurveyController::newsletter($survey) . SurveyController::send());
+            SurveyController::SurveySection(1, 5, true, true, true, 'Vamos a empezar con algunos datos de tu salud', SurveyController::customer_profile($customer) . SurveyController::start_bodyMeasures($survey) . SurveyController::start_weightEvolution($survey));
+            SurveyController::SurveySection(2, 5, true, true, true, 'Ahora charlaremos de otros aspectos importantes', SurveyController::start_analitycs($survey) . SurveyController::start_pathology($survey) . SurveyController::start_unhealthy($survey) . SurveyController::start_exercise($survey));
+            SurveyController::SurveySection(3, 5, true, true, true, 'Es hora de que nos cuentes cómo te alimentas', SurveyController::start_nutrition($survey) . SurveyController::start_foodFreq($survey));
+            SurveyController::SurveySection(4, 5, true, true, true, '¿Cómo te gustaría que fuera tu dieta?', SurveyController::start_desiredDiet($survey));
+            SurveyController::SurveySection(5, 5, true, true, false, 'Por último, tus datos personales', SurveyController::customer_data($customer) . SurveyController::discountCode($survey) . SurveyController::privacy_terms() . SurveyController::newsletter($survey) . SurveyController::send());
             echo SurveyController::start_script_counter();
         }
 
@@ -338,8 +338,8 @@ namespace JWR\Alea {
         public static function continueSurvey($survey, $customer)
         {
             SurveyController::SurveySection(1, 3, false, false, true, $customer->getNombre() . ', ¿Cómo te ha ido?', SurveyController::continue_seguimiento($survey));
-            SurveyController::SurveySection(2, 3, false, true, true, 'Los datos de tu evolución', SurveyController::continue_bodyMeasures($survey));
-            SurveyController::SurveySection(3, 3, false, true, false, '¿Quieres comentarnos alguna cosa más?', SurveyController::continue_comments($survey) . SurveyController::privacy_terms($survey) . SurveyController::send());
+            SurveyController::SurveySection(2, 3, true, true, true, 'Los datos de tu evolución', SurveyController::continue_bodyMeasures($survey));
+            SurveyController::SurveySection(3, 3, true, true, false, '¿Quieres comentarnos alguna cosa más?', SurveyController::continue_comments($survey) . SurveyController::privacy_terms($survey) . SurveyController::send());
             echo SurveyController::continue_script_counter();
         }
         public static function continueSurveyData($survey, $customer)

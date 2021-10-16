@@ -243,7 +243,7 @@ namespace JWR\Alea {
             </form>
 
             <div class="container bg-gray-100 shadow-xl">
-                <div class="flex justify-around text-center bg-red-400 rounded-lg text-gray-50">
+                <div class="flex justify-around bg-red-400 rounded-lg text-gray-50">
                     <div class="w-1/12">Fecha</div>
                     <div class="w-1/12 justify-center">Nº De Factura</div>
                     <div class="w-3/12">Nombre Completo</div>
@@ -258,7 +258,7 @@ namespace JWR\Alea {
                     <div class="container flex justify-around align-middle text-gray-800 text-xs">
                         <div class="w-1/12"><?= $customer_invoice->getFecha(); ?></div>
                         <div class="w-1/12 justify-center"><?= $customer_invoice->getReferencia(); ?></div>
-                        <div class="w-3/12 text-center"><?= $customer_invoice->getNombre() . " " . $customer_invoice->getApellidos(); ?></div>
+                        <div class="w-3/12"><?= $customer_invoice->getNombre() . " " . $customer_invoice->getApellidos(); ?></div>
                         <div class="w-1/12"><?= $customer_invoice->getNif(); ?></div>
                         <div class="w-2/12"><?= $customer_invoice->getDireccion(); ?></div>
                         <div class="w-1/12"><?= $customer_invoice->getPrecio(); ?>€</div>

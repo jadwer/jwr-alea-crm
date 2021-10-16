@@ -37,8 +37,8 @@ $weight_evolution = function ($survey) {
         <div class="flex"><label>¿Haz estado embarazada?: </label></div>
         <div class="flex-row">
             <fieldset>
-                <label><input required type="radio" name="embarazada" onchange="togglePregnantQuestions()" value="1" <?= ($survey->getembarazada() == 1) ? "checked" : ""; ?>>Si</label>
-                <label><input required type="radio" name="embarazada" onchange="togglePregnantQuestions()" value="2" <?= ($survey->getembarazada() == 2) ? "checked" : ""; ?>>No</label>
+                <label><input type="radio" name="embarazada" onchange="togglePregnantQuestions()" value="1" <?= ($survey->getembarazada() == 1) ? "checked" : ""; ?>>Si</label>
+                <label><input type="radio" name="embarazada" onchange="togglePregnantQuestions()" value="2" <?= ($survey->getembarazada() == 2) ? "checked" : ""; ?>>No</label>
             </fieldset>
         </div>
     </div>

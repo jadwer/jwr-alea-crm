@@ -170,12 +170,12 @@ namespace JWR\Alea {
             $data = CustomerDiet::paginatorData();
         ?>
             <div class="flex justify-center space-x-8">
-                <a href="<?= home_url($wp->request) . '/?pag=1' ?>">
+                <a href="<?= home_url($wp->request) . '/request/?pag=1' ?>">
                     <div>
                         << </div>
                 </a>
                 <?php if ($pag >= 25) : ?>
-                    <a href="<?= home_url($wp->request) . '/?pag=' . ($pag - 20) ?>">
+                    <a href="<?= home_url($wp->request) . '/request/?pag=' . ($pag - 20) ?>">
                         <div>
                             << </div>
                     </a>
@@ -186,17 +186,17 @@ namespace JWR\Alea {
                 ?>
 
                 <?php for ($i = $inicia; $i <= $fin; $i++) : ?>
-                    <a href="<?= home_url($wp->request) . '/?pag=' . $i; ?>" class=" <?php echo ($pag == $i) ? 'selected' : ''; ?>">
+                    <a href="<?= home_url($wp->request) . '/request/?pag=' . $i; ?>" class=" <?php echo ($pag == $i) ? 'selected' : ''; ?>">
                         <div><?= $i; ?></div>
                     </a>
                 <?php endfor; ?>
                 <?php if ($data['num_pags'] >= ($pag + 25)) : ?>
-                    <a href="<?= home_url($wp->request) . '/?pag=' . ($pag + 20) ?>">
+                    <a href="<?= home_url($wp->request) . '/request/?pag=' . ($pag + 20) ?>">
                         <div>
                             >> </div>
                     </a>
                 <?php endif; ?>
-                <a href="<?= home_url($wp->request) . '/?pag=' . $data['num_pags']; ?>">
+                <a href="<?= home_url($wp->request) . '/request/?pag=' . $data['num_pags']; ?>">
                     <div> >> </div>
                 </a>
             </div>

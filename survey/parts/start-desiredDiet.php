@@ -28,7 +28,7 @@ $desired_diet = function ($survey) {
         </fieldset>
     </div>
     <div class="flex"><label>¿Se nos olvida preguntarte algo? ¿Hay algo que nos quieras comentar o puntualizar? ¡Ahora es el momento!: </label></div>
-    <div class="flex"><input required type="text" name="comentarios" id="comentarios" value="<?= $survey->getcomentarios(); ?>"></div>
+    <div class="flex"> <textarea name="comentarios" id="comentarios" value="<?= $survey->getcomentarios(); ?>" class="w-full h-52"  class="w-full h-52"><?= $survey->getcomentarios(); ?></textarea></div>
 
 <?php
     return ob_get_clean();
